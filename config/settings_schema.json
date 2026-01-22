@@ -115,5 +115,84 @@
                 "default": 4
             }
         ]
+    },
+    {
+        "name": "Checkout",
+        "settings": [
+            {
+                "type": "header",
+                "content": "Banner"
+            },
+            {
+                "type": "image_picker",
+                "id": "checkout_banner",
+                "label": "Banner Image"
+            },
+            {
+                "type": "header",
+                "content": "Logo"
+            },
+            {
+                "type": "image_picker",
+                "id": "checkout_logo",
+                "label": "Logo Image"
+            },
+            {
+                "type": "select",
+                "id": "checkout_logo_position",
+                "label": "Logo Position",
+                "options": [
+                    {
+                        "value": "left",
+                        "label": "Left"
+                    },
+                    {
+                        "value": "center",
+                        "label": "Center"
+                    },
+                    {
+                        "value": "right",
+                        "label": "Right"
+                    }
+                ],
+                "default": "center"
+            },
+            {
+                "type": "select",
+                "id": "checkout_logo_size",
+                "label": "Logo Size",
+                "options": [
+                    {
+                        "value": "small",
+                        "label": "Small"
+                    },
+                    {
+                        "value": "medium",
+                        "label": "Medium"
+                    },
+                    {
+                        "value": "large",
+                        "label": "Large"
+                    }
+                ],
+                "default": "medium"
+            },
+            {
+                "type": "header",
+                "content": "Colors"
+            },
+            {
+                "type": "color",
+                "id": "checkout_bg_color",
+                "label": "Background Color",
+                "default": "#FFFFFF"
+            },
+            {
+                "type": "color",
+                "id": "checkout_accent_color",
+                "label": "Accents (Buttons)",
+                "default": "#000000"
+            }
+        ]
     }
 ]
