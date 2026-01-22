@@ -232,6 +232,87 @@
     const input = document.getElementById('bundle-qty-hidden');
     if(input) input.value = qty;
   }
+  
+  /* Variant Selection Handler (Simple) */
+  document.addEventListener('DOMContentLoaded', function() {
+     const variantInputs = document.querySelectorAll('.product-variant-picker input[type="radio"]');
+     variantInputs.forEach(input => {
+        input.addEventListener('change', function() {
+           // Provide a simple way to find the matching variant ID
+           // Note: In a full theme, we'd map JSON options to IDs. 
+           // For now, we assume the value IS the title, but we need the ID.
+           // Since we don't have a massive JSON map here, let's try a simpler approach if possible.
+           // Relying on the typical &variant=URL param update or similar.
+           
+           // For this specific 'Fix', we'll make sure the form SUBMITS the ID.
+           // The liquid loop ensures default.
+           // We need to fetch the ID for the combination.
+        });
+     });
+     
+     // CRITICAL FIX: Ensure the hidden ID input is actually inside the form or linked
+     // The form ID is 'product-form-installment'.
+     // The input line 145 IS inside the form tags in the liquid file.
+     // Is 'product.selected_or_first_available_variant.id' null?
+     
+     // Only other cause: The Variant Picker Block is OUTSIDE the form.
+     // When user clicks a pill, we must update the <input name="id"> value.
+  });
+  
+  // We need to inject the variant map to make this work 100% on client side switch
+  // But first, let's fix the basic "Add" if it's failing on default load.
+  // The error "Parameter Missing: id" means the input is empty or missing.
+  
+</script>
+
+{%- # JSON Map for Variants (Crucial for JS selection) -%}
+<script type="application/json" id="ProductVariants-{{ section.id }}">
+  [
+  {%- for variant in product.variants -%}
+    {
+      "id": {{ variant.id }},
+      "title": "{{ variant.title }}",
+      "options": {{ variant.options | json }}
+    }{% unless forloop.last %},{% endunless %}
+  {%- endfor -%}
+  ]
+</script>
+
+<script>
+  // Robust Variant Switcher
+  document.addEventListener('DOMContentLoaded', () => {
+      const variantData = JSON.parse(document.getElementById('ProductVariants-{{ section.id }}').textContent);
+      const fieldsets = document.querySelectorAll('.product-variant-picker fieldset');
+      
+      function updateVariant() {
+          // Get selected options
+          const selectedOptions = Array.from(fieldsets).map(fieldset => {
+              return fieldset.querySelector('input:checked').value; // value is the option value (e.g. "Red")
+          });
+          
+          // Find matching variant
+          const matchedVariant = variantData.find(variant => {
+              return variant.options.every((option, index) => option === selectedOptions[index]);
+          });
+          
+          if(matchedVariant) {
+              // Update Hidden Input ID
+              const idInput = document.querySelector('form[action*="/cart/add"] input[name="id"]');
+              if(idInput) idInput.value = matchedVariant.id;
+              
+              // Update Price (Optional but good)
+              // ...
+              
+              // Update URL
+              window.history.replaceState({}, '', `?variant=${matchedVariant.id}`);
+          }
+      }
+      
+      // Attach listeners
+      fieldsets.forEach(fs => {
+         fs.addEventListener('change', updateVariant);
+      });
+  });
 </script>
 
 <style>
