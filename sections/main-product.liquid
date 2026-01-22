@@ -355,6 +355,12 @@
               // Ensure ID is up to date just in case
               updateVariant();
               
+              const idInput = form.querySelector('input[name="id"]');
+              // FAILSAFE: If no ID set, set to first variant ID
+              if((!idInput || !idInput.value) && variantData.length > 0) {
+                 updateFormId(variantData[0].id);
+              }
+              
               // Add return_to
               let input = form.querySelector('input[name="return_to"]');
               if(!input) {
@@ -375,6 +381,12 @@
               
               // Ensure ID is up to date
               updateVariant();
+              
+              const idInput = form.querySelector('input[name="id"]');
+              // FAILSAFE: If no ID set, set to first variant ID
+              if((!idInput || !idInput.value) && variantData.length > 0) {
+                 updateFormId(variantData[0].id);
+              }
               
               // Remove return_to if exists (cleanup)
               const returnInput = form.querySelector('input[name="return_to"]');
