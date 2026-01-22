@@ -141,14 +141,19 @@
   
   .product-card__image-wrapper {
     position: relative;
-    aspect-ratio: 1; /* Square */
+    aspect-ratio: 1; /* Keep Square for consistency */
     width: 100%;
     overflow: hidden;
     margin-bottom: 0;
+    background: #fff; /* Ensure background matches card to hide "empty space" */
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
   .product-card__image {
     width: 100%; height: 100%; 
-    object-fit: cover; /* Force cover per user request */
+    object-fit: contain; /* Do not cut image */
+    padding: 4px; /* Slight breathing room if it hits edges */
   }
 
   /* Wishlist Button - Golden Circle */
