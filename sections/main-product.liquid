@@ -92,21 +92,50 @@
                   </ul>
                </div>
 
+            <!-- Bundle Selector (Restored) -->
+            {%- when 'bundle_selector' -%}
+              <div class="bundle-selector" {{ block.shopify_attributes }}>
+                 <h3 class="h4" style="font-size: 1rem; margin-bottom: 0.5rem;">Select Quantity</h3>
+                 
+                 <input type="hidden" name="items[0][quantity]" value="1" form="product-form-installment" id="bundle-qty-hidden">
+                 
+                 <div class="bundle-options">
+                   <label class="bundle-option active" onclick="selectBundle(1, this)">
+                     <span class="radio-circle"></span>
+                     <div class="bundle-details">
+                       <span class="bundle-title">Buy 1</span>
+                       <!-- Using the inflated/fake price logic for consistency if desired, or just raw price -->
+                       <span class="bundle-price">{{ product.price | money }}/each</span>
+                     </div>
+                   </label>
+                   
+                   <label class="bundle-option" onclick="selectBundle(2, this)">
+                     <span class="radio-circle"></span>
+                     <div class="bundle-details">
+                       <div class="flex-between">
+                         <span class="bundle-title">Buy 2 & Save 10%</span>
+                         <span class="badge-best-seller">Best Seller</span>
+                       </div>
+                       <span class="bundle-price">{{ product.price | times: 0.9 | money }}/each</span>
+                     </div>
+                   </label>
+                   
+                   <label class="bundle-option" onclick="selectBundle(3, this)">
+                     <span class="radio-circle"></span>
+                     <div class="bundle-details">
+                       <span class="bundle-title">Buy 3 & Save 20%</span>
+                       <span class="bundle-price">{{ product.price | times: 0.8 | money }}/each</span>
+                     </div>
+                   </label>
+                 </div>
+              </div>
+
             <!-- Buy Actions -->
             {%- when 'buy_buttons' -%}
                <div class="product-block-actions" {{ block.shopify_attributes }}>
                  {% form 'product', product, id: 'product-form-installment', class: 'product-form' %}
                    <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
-                   
-                   <!-- Quantity Stepper -->
-                   <div class="qty-wrapper">
-                      <span class="qty-label">Quantity:</span>
-                      <div class="qty-stepper">
-                        <button type="button" class="qty-btn" onclick="updateQty(-1)">-</button>
-                        <input type="text" name="quantity" id="Quantity-{{ section.id }}" value="1" readonly class="qty-input">
-                        <button type="button" class="qty-btn" onclick="updateQty(1)">+</button>
-                      </div>
-                   </div>
+                   <!-- Quantity handled by Bundle Selector via form attribute -->
 
                    <!-- Buttons -->
                    <div class="action-buttons">
@@ -152,16 +181,44 @@
     el.classList.add('active');
   }
 
-  function updateQty(change) {
-    const input = document.getElementById('Quantity-{{ section.id }}');
-    let val = parseInt(input.value);
-    val += change;
-    if(val < 1) val = 1;
-    input.value = val;
+  function selectBundle(qty, element) {
+    /* Visual */
+    document.querySelectorAll('.bundle-option').forEach(el => el.classList.remove('active'));
+    element.classList.add('active');
+    /* Logic: Update hidden input linked to form */
+    const input = document.getElementById('bundle-qty-hidden');
+    if(input) input.value = qty;
   }
 </script>
 
 <style>
+  /* Bundle Selector CSS */
+  .bundle-selector { margin: 1rem 0; }
+  .bundle-options { display: flex; flex-direction: column; gap: 0.75rem; }
+  .bundle-option {
+    display: flex; align-items: center;
+    border: 2px solid #e0e0e0; border-radius: 8px;
+    padding: 10px; cursor: pointer; transition: all 0.2s;
+    background: #fff;
+  }
+  .bundle-option.active { border-color: #000; background-color: #f9f9f9; }
+  
+  .radio-circle {
+    width: 18px; height: 18px; border: 2px solid #ccc; border-radius: 50%; margin-right: 1rem; position: relative;
+  }
+  .bundle-option.active .radio-circle { border-color: #000; }
+  .bundle-option.active .radio-circle::after {
+    content: ''; position: absolute; top: 3px; left: 3px; width: 8px; height: 8px; background: #000; border-radius: 50%;
+  }
+  
+  .bundle-details { flex: 1; }
+  .bundle-title { font-weight: 700; display: block; font-size: 0.9rem; }
+  .bundle-price { font-size: 0.85rem; color: #555; }
+  .flex-between { display: flex; justify-content: space-between; width: 100%; }
+  
+  .badge-best-seller { background: #FFA41C; color: #000; font-size: 0.7rem; padding: 2px 6px; border-radius: 4px; font-weight: bold; }
+
+  /* Previous Styles... */
   .section-{{ section.id }}-padding {
     padding-top: {{ section.settings.padding_top }}px;
     padding-bottom: {{ section.settings.padding_bottom }}px;
@@ -279,18 +336,20 @@
   "blocks": [
     { "type": "title", "name": "Title", "limit": 1 },
     { "type": "price", "name": "Price", "limit": 1 },
-    { "type": "description", "name": "Description", "limit": 1 },
-    { "type": "specifications", "name": "Specifications", "limit": 1 },
+    { "type": "bundle_selector", "name": "Bundle Selector", "limit": 1 },
     { "type": "buy_buttons", "name": "Buy Actions", "limit": 1 },
-    { "type": "trust_icons", "name": "Trust Badges", "limit": 1 }
+    { "type": "trust_icons", "name": "Trust Badges", "limit": 1 },
+    { "type": "specifications", "name": "Specifications", "limit": 1 },
+    { "type": "description", "name": "Description", "limit": 1 }
   ],
   "default": {
      "blocks": [
        {"type": "title"},
        {"type": "price"},
-       {"type": "specifications"},
+       {"type": "bundle_selector"},
        {"type": "buy_buttons"},
        {"type": "trust_icons"},
+       {"type": "specifications"},
        {"type": "description"}
      ]
   }
