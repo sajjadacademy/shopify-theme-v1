@@ -77,6 +77,31 @@
 </div>
 
 <style>
+  #shopify-section-{{ section.id }} .hero-section {
+    --hero-height-desktop: {{ section.settings.hero_height_desktop }}px;
+    --hero-height-mobile: {{ section.settings.hero_height_mobile }}px;
+    --overlay-opacity: {{ section.settings.overlay_opacity | divided_by: 100.0 }};
+    --overlay-color: {{ section.settings.overlay_color }};
+    --content-max-width: {{ section.settings.content_max_width }}px;
+    --text-color: {{ section.settings.text_color }};
+    
+    /* Button Vars */
+    --btn-radius: {{ section.settings.button_radius }}px;
+    --btn-bg: {{ section.settings.button_color_bg }};
+    --btn-text: {{ section.settings.button_color_text }};
+    
+    /* Padding Vars */
+    --pt: {{ section.settings.padding_top }}px;
+    --pb: {{ section.settings.padding_bottom }}px;
+    --pl: {{ section.settings.padding_left }}px;
+    --pr: {{ section.settings.padding_right }}px;
+    
+    --pt-m: {{ section.settings.padding_top_mobile }}px;
+    --pb-m: {{ section.settings.padding_bottom_mobile }}px;
+    --pl-m: {{ section.settings.padding_left_mobile }}px;
+    --pr-m: {{ section.settings.padding_right_mobile }}px;
+  }
+
   .hero-section {
     position: relative;
     width: 100%;
@@ -85,7 +110,7 @@
   .hero-wrapper {
     position: relative;
     width: 100%;
-    height: {{ section.settings.hero_height_desktop }}px;
+    height: var(--hero-height-desktop);
   }
   .hero-wrapper.container { margin: 0 auto; }
   .hero-wrapper.full-width { max-width: 100%; }
@@ -100,13 +125,15 @@
   /* Overlay */
   .hero-overlay {
     position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 2; pointer-events: none;
+    background-color: var(--overlay-color);
+    opacity: var(--overlay-opacity);
   }
 
   /* Content */
   .hero-content {
     position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 3;
     display: flex; flex-direction: column; 
-    padding: {{ section.settings.padding_top }}px {{ section.settings.padding_right }}px {{ section.settings.padding_bottom }}px {{ section.settings.padding_left }}px;
+    padding: var(--pt) var(--pr) var(--pb) var(--pl);
   }
   
   .position-top { justify-content: flex-start; }
@@ -117,23 +144,22 @@
   .text-center { align-items: center; text-align: center; }
   .text-right { align-items: flex-end; text-align: right; }
 
-  .hero-content-inner { width: 100%; }
+  .hero-content-inner { width: 100%; max-width: var(--content-max-width); }
   
-  .hero-heading { margin-bottom: 1rem; line-height: 1.2; }
-  .hero-subheading { margin-bottom: 2rem; font-size: 1.1rem; }
+  .hero-heading { margin-bottom: 1rem; line-height: 1.2; color: var(--text-color); }
+  .hero-subheading { margin-bottom: 2rem; font-size: 1.1rem; color: var(--text-color); }
 
   /* Buttons */
   .btn-hero {
     display: inline-block; text-decoration: none; font-weight: 700; transition: all 0.3s;
-    border-radius: {{ section.settings.button_radius }}px;
-    border: 2px solid transparent; /* Ensure border box */
+    border-radius: var(--btn-radius);
+    border: 2px solid transparent; 
   }
   
-  /* Button Styles - Using Theme Colors but open to override */
   .btn-solid {
-    background-color: {{ section.settings.button_color_bg | default: '#FFFFFF' }};
-    color: {{ section.settings.button_color_text | default: '#000000' }};
-    border-color: {{ section.settings.button_color_bg | default: '#FFFFFF' }};
+    background-color: var(--btn-bg);
+    color: var(--btn-text);
+    border-color: var(--btn-bg);
   }
   .btn-solid:hover {
      opacity: 0.9; transform: translateY(-2px);
@@ -141,12 +167,12 @@
 
   .btn-outline {
     background-color: transparent;
-    color: {{ section.settings.button_color_text | default: '#FFFFFF' }};
-    border-color: {{ section.settings.button_color_text | default: '#FFFFFF' }};
+    color: var(--text-color);
+    border-color: var(--text-color);
   }
   .btn-outline:hover {
-    background-color: {{ section.settings.button_color_text | default: '#FFFFFF' }};
-    color: {{ section.settings.button_color_bg | default: '#000000' }};
+    background-color: var(--text-color);
+    color: var(--btn-text); /* Usually black or dark on hover */
   }
   
   .btn-small { padding: 8px 20px; font-size: 0.9rem; }
@@ -155,12 +181,12 @@
 
   /* Mobile Responsive */
   @media screen and (max-width: 749px) {
-    .hero-wrapper { height: {{ section.settings.hero_height_mobile }}px; }
+    .hero-wrapper { height: var(--hero-height-mobile); }
     .desktop-img { display: none; }
     .mobile-img { display: block; }
     
     .hero-content {
-      padding: {{ section.settings.padding_top_mobile }}px {{ section.settings.padding_right_mobile }}px {{ section.settings.padding_bottom_mobile }}px {{ section.settings.padding_left_mobile }}px;
+      padding: var(--pt-m) var(--pr-m) var(--pb-m) var(--pl-m);
     }
     
     /* Mobile Alignment Overrides */
