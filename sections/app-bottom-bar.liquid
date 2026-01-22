@@ -20,6 +20,30 @@
   {% endif %}
 </div>
 
+<style>
+  #shopify-section-{{ section.id }} .mobile-nav-wrapper {
+    background-color: {{ section.settings.bg_color }};
+  }
+  #shopify-section-{{ section.id }} .mobile-nav__item.active,
+  #shopify-section-{{ section.id }} .mobile-nav__item.active .mobile-nav__icon svg {
+    color: {{ section.settings.active_color }};
+    fill: {{ section.settings.active_color }};
+  }
+  /* Ensure it is visible and sticky on mobile */
+  @media screen and (max-width: 768px) {
+    #shopify-section-{{ section.id }} .mobile-nav-wrapper {
+      display: block;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      z-index: 99999; /* Force top */
+      box-shadow: 0 -4px 20px rgba(0,0,0,0.1); /* Stronger shadow */
+      border-top: 1px solid rgba(0,0,0,0.05);
+    }
+  }
+</style>
+
 {% schema %}
 {
   "name": "App Bottom Bar",
