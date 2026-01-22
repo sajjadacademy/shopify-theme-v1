@@ -26,9 +26,52 @@
     </a>
     
     {%- if show_wishlist -%}
-      <button class="pcm-wishlist-btn" aria-label="Add to Wishlist">
+      <button class="pcm-wishlist-btn" 
+              aria-label="Add to Wishlist"
+              data-product-handle="{{ product.handle }}"
+              data-product-id="{{ product.selected_or_first_available_variant.id }}"
+              onclick="toggleWishlist(this, '{{ product.handle }}', '{{ product.selected_or_first_available_variant.id }}', '{{ product.title | escape }}', '{{ product.featured_image | image_url: width: 200 }}', '{{ product.price | money_without_currency }}')">
         {% render 'icon-dynamic', icon: 'heart' %}
       </button>
+      
+      <script>
+      // Helper specific to cards to avoid multiple definitions if not careful, 
+      // but ideally this function is global. We will define it safely.
+      if(typeof toggleWishlist === 'undefined') {
+          window.toggleWishlist = function(btn, handle, id, title, image, price) {
+              const wishlistKey = 'shopify-wishlist';
+              let items = JSON.parse(localStorage.getItem(wishlistKey) || '[]');
+              
+              const existingIndex = items.findIndex(item => item.handle === handle);
+              
+              if(existingIndex > -1) {
+                  // Remove
+                  items.splice(existingIndex, 1);
+                  btn.classList.remove('active');
+                  btn.querySelector('svg').style.fill = 'none';
+              } else {
+                  // Add
+                  items.push({ handle, id, title, image, price });
+                  btn.classList.add('active');
+                  btn.querySelector('svg').style.fill = 'currentColor';
+              }
+              
+              localStorage.setItem(wishlistKey, JSON.stringify(items));
+              window.dispatchEvent(new Event('wishlist-updated'));
+          }
+      }
+      
+      // Auto-check state on load
+      document.addEventListener('DOMContentLoaded', function() {
+           const wishlistKey = 'shopify-wishlist';
+           const items = JSON.parse(localStorage.getItem(wishlistKey) || '[]');
+           const btn = document.querySelector(`button[data-product-handle='{{ product.handle }}']`);
+           if(items.some(i => i.handle === '{{ product.handle }}') && btn) {
+               btn.classList.add('active');
+               btn.querySelector('svg').style.fill = 'currentColor';
+           }
+      });
+      </script>
     {%- endif -%}
 
     {%- if show_badge -%}

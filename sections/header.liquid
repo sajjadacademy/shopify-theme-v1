@@ -73,6 +73,53 @@
         </div>
       {% endif %}
 
+      {% if section.settings.enable_wishlist %}
+        <button class="icon-btn wishlist-icon" id="header-wishlist-icon" aria-label="Wishlist">
+          <!-- Heart Icon -->
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="{% if section.settings.wishlist_icon_style == 'fill' %}currentColor{% else %}none{% endif %}" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+          </svg>
+          <span class="wishlist-count bubble hidden" id="wishlist-count">0</span>
+        </button>
+        
+        <script>
+          // Simple Wishlist Logic
+          document.addEventListener('DOMContentLoaded', function() {
+              const wishlistKey = 'shopify-wishlist';
+              
+              function getWishlist() {
+                  return JSON.parse(localStorage.getItem(wishlistKey) || '[]');
+              }
+              
+              function updateBadge() {
+                  const items = getWishlist();
+                  const badge = document.getElementById('wishlist-count');
+                  if(badge) {
+                      badge.innerText = items.length;
+                      if(items.length > 0) badge.classList.remove('hidden');
+                      else badge.classList.add('hidden');
+                  }
+              }
+              
+              // Initial Load
+              updateBadge();
+              
+              // Listen for storage events (if multiple tabs) or custom event
+              window.addEventListener('storage', updateBadge);
+              window.addEventListener('wishlist-updated', updateBadge);
+              
+              // Click Handler (Open Drawer - Placeholder for Step 4)
+              const icon = document.getElementById('header-wishlist-icon');
+              if(icon) {
+                  icon.addEventListener('click', function() {
+                      // Trigger Drawer Open Event
+                      document.dispatchEvent(new CustomEvent('wishlist-drawer:open'));
+                  });
+              }
+          });
+        </script>
+      {% endif %}
+
       <a href="{{ routes.cart_url }}" class="icon-btn cart-icon">
         {% render 'icon-cart' %}
         <span class="cart-count bubble">{{ cart.item_count }}</span>
@@ -213,6 +260,26 @@
         { "value": "bar", "label": "Search Bar" }
       ],
       "default": "bar"
+    },
+    {
+      "type": "header",
+      "content": "Wishlist"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_wishlist",
+      "label": "Enable Wishlist",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "wishlist_icon_style",
+      "label": "Icon Style",
+      "options": [
+        { "value": "stroke", "label": "Outline" },
+        { "value": "fill", "label": "Filled" }
+      ],
+      "default": "stroke"
     },
     {
        "type": "header",
