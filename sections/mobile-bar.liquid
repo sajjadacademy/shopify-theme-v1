@@ -22,25 +22,24 @@
 
 {% schema %}
 {
-  "name": "Sticky Mobile Nav",
-  "max_blocks": 5,
+  "name": "Mobile Bar",
   "settings": [
     {
       "type": "checkbox",
       "id": "enable",
-      "label": "Enable Sticky Bottom Bar",
+      "label": "Enable",
       "default": true
     },
     {
       "type": "color",
       "id": "bg_color",
-      "label": "Background Color",
+      "label": "Background",
       "default": "#ffffff"
     },
     {
       "type": "color",
       "id": "active_color",
-      "label": "Active Icon Color",
+      "label": "Active Color",
       "default": "#ff9900"
     }
   ],
@@ -64,13 +63,13 @@
         {
           "type": "text",
           "id": "icon_name",
-          "label": "Icon Name (home, search, grid, user, heart)",
+          "label": "Icon",
           "default": "home"
         },
         {
           "type": "image_picker",
           "id": "custom_icon",
-          "label": "Custom Icon (Upload SVG/PNG)"
+          "label": "Custom Icon"
         }
       ]
     },
@@ -94,26 +93,27 @@
         {
           "type": "text",
           "id": "icon_name",
-          "label": "Icon Name",
+          "label": "Icon",
           "default": "cart"
         },
          {
           "type": "checkbox",
           "id": "show_count",
-          "label": "Show Cart Count",
+          "label": "Count",
           "default": true
         }
       ]
     }
   ],
-  "default": {
-    "blocks": [
-      { "type": "nav_link", "settings": { "label": "Home", "icon_name": "home", "link": "/" } },
-      { "type": "nav_link", "settings": { "label": "Shop", "icon_name": "grid", "link": "/collections/all" } },
-      { "type": "nav_link", "settings": { "label": "Deals", "icon_name": "tag", "link": "/collections/sale" } },
-      { "type": "nav_link", "settings": { "label": "Account", "icon_name": "user", "link": "/account" } },
-      { "type": "cart_link", "settings": { "label": "Cart", "icon_name": "cart" } }
-    ]
-  }
+  "presets": [
+    {
+      "name": "Mobile Bar",
+      "blocks": [
+        { "type": "nav_link" },
+        { "type": "nav_link", "settings": { "label": "Shop", "icon_name": "grid" } },
+        { "type": "cart_link" }
+      ]
+    }
+  ]
 }
 {% endschema %}
