@@ -27,7 +27,9 @@
                 show_badge: section.settings.show_badge,
                 show_wishlist: section.settings.show_wishlist,
                 show_quick_add: section.settings.show_quick_add,
-                quick_add_type: section.settings.quick_add_type
+                quick_add_type: section.settings.quick_add_type,
+                enable_fake_discount: section.settings.enable_fake_discount,
+                fake_discount_percentage: section.settings.fake_discount_percentage
              %}
           </li>
         {%- else -%}
@@ -156,11 +158,11 @@
     { "type": "range", "id": "shadow_opacity", "min": 0, "max": 50, "step": 5, "default": 10, "label": "Shadow Opacity %" },
 
     { "type": "header", "content": "Typography" },
-    { "type": "range", "id": "title_font_size", "min": 10, "max": 20, "step": 1, "default": 14, "label": "Title Font Size (px)" },
+    { "type": "range", "id": "title_font_size", "min": 12, "max": 24, "step": 1, "default": 16, "label": "Title Font Size (px)" },
     { "type": "select", "id": "title_font_weight", "label": "Title Weight", "options": [
-       {"value":"400", "label":"Regular"}, {"value":"500", "label":"Medium"}, {"value":"700", "label":"Bold"}
-    ], "default": "500"},
-    { "type": "range", "id": "price_font_size", "min": 12, "max": 24, "step": 1, "default": 16, "label": "Price Font Size (px)" },
+       {"value":"400", "label":"Regular"}, {"value":"500", "label":"Medium"}, {"value":"600", "label":"Semi-Bold"}, {"value":"700", "label":"Bold"}
+    ], "default": "600"},
+    { "type": "range", "id": "price_font_size", "min": 14, "max": 28, "step": 1, "default": 18, "label": "Price Font Size (px)" },
 
     { "type": "header", "content": "Colors" },
     { "type": "color", "id": "price_color", "label": "Price Color", "default": "#000000" },
@@ -178,8 +180,10 @@
     { "type": "checkbox", "id": "show_quick_add", "label": "Show Quick Add", "default": true },
     { "type": "select", "id": "quick_add_type", "label": "Quick Add Style", "options": [
        { "value": "icon", "label": "Icon (+)" },
-       { "value": "button", "label": "Full Button" }
+       { "value": "button", "label": "Button (Text)" }
     ], "default": "button" },
+    { "type": "checkbox", "id": "enable_fake_discount", "label": "Enable Artificial Discount", "default": true, "info": "Shows a slashed 'original' price (inflated by %) if no compare price exists." },
+    { "type": "range", "id": "fake_discount_percentage", "min": 5, "max": 50, "step": 5, "default": 10, "label": "Artificial Inflation %" },
     { "type": "checkbox", "id": "show_view_all", "label": "Show View All Link", "default": true },
 
     { "type": "header", "content": "Section Padding" },
