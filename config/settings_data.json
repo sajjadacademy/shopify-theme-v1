@@ -14,10 +14,10 @@
         "type": "header",
         "settings": {
           "logo": "shopify://shop_images/ChatGPT_Image_Jan_12_2026_11_33_33_PM_1.png",
-          "logo_width": 170,
-          "logo_position": "center",
+          "logo_width": 130,
+          "logo_position": "left",
           "menu": "main-menu",
-          "menu_position": "left",
+          "menu_position": "center",
           "enable_sticky": true,
           "show_search": true,
           "search_style": "icon",
