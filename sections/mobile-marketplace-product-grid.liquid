@@ -68,8 +68,8 @@
     grid-template-columns: repeat(2, 1fr);
   }
 
-  /* Desktop Columns */
-  @media screen and (min-width: 990px) {
+  /* Desktop Columns - Trigger earlier at 750px to match standard theme behavior */
+  @media screen and (min-width: 750px) {
     .marketplace-grid {
        gap: {{ section.settings.grid_gap_desktop }}px;
     }
@@ -99,8 +99,7 @@
       box-shadow: none;
     {% endif %}
     background-color: {{ section.settings.card_bg_color }};
-  }
-  
+    
     /* Colors */
     --color-primary: {{ section.settings.button_bg_color }};
     --color-warning: {{ section.settings.rating_color }};
