@@ -1,0 +1,251 @@
+{% comment %}
+  Hero Section with Background Overlay
+  - Support for Desktop & Mobile specific images
+  - Editable overlay opacity/color
+  - Responsive height controls
+  - Content positioning and alignment
+{% endcomment %}
+
+<div class="hero-section section-{{ section.id }}-padding" style="background-color: #000;">
+  <div class="hero-wrapper {% if section.settings.width_mode == 'contained' %}container{% else %}full-width{% endif %}">
+    
+    <!-- Background Layer -->
+    <div class="hero-bg">
+      {% if section.settings.hero_image_desktop != blank %}
+        <img 
+          srcset="{{ section.settings.hero_image_desktop | image_url: width: 1500 }} 1500w, {{ section.settings.hero_image_desktop | image_url: width: 2200 }} 2200w"
+          src="{{ section.settings.hero_image_desktop | image_url: width: 1920 }}" 
+          alt="{{ section.settings.hero_image_desktop.alt | escape }}"
+          class="hero-img desktop-img"
+          loading="eager"
+          width="1920"
+          height="{{ section.settings.hero_height_desktop }}"
+        >
+      {% endif %}
+      
+      {% if section.settings.hero_image_mobile != blank %}
+         <img 
+          src="{{ section.settings.hero_image_mobile | image_url: width: 800 }}" 
+          alt="{{ section.settings.hero_image_mobile.alt | escape }}"
+          class="hero-img mobile-img"
+          loading="eager"
+          width="800"
+          height="{{ section.settings.hero_height_mobile }}"
+        >
+      {% elsif section.settings.hero_image_desktop != blank %}
+        <!-- Fallback if no mobile image -->
+        <img 
+          src="{{ section.settings.hero_image_desktop | image_url: width: 800 }}" 
+          alt="{{ section.settings.hero_image_desktop.alt | escape }}"
+          class="hero-img mobile-img"
+          loading="eager"
+          width="800"
+          height="{{ section.settings.hero_height_mobile }}"
+        >
+      {% endif %}
+    </div>
+
+    <!-- Overlay Layer -->
+    <div class="hero-overlay" style="background-color: {{ section.settings.overlay_color }}; opacity: {{ section.settings.overlay_opacity | divided_by: 100.0 }};"></div>
+
+    <!-- Content Layer -->
+    <div class="hero-content position-{{ section.settings.content_position }} text-{{ section.settings.text_alignment_desktop }} text-mobile-{{ section.settings.text_alignment_mobile }}">
+      <div class="hero-content-inner" style="max-width: {{ section.settings.content_max_width }}px;">
+        
+        {% if section.settings.heading != blank %}
+          <h2 class="hero-heading h1" style="color: {{ section.settings.text_color }}; {% if section.settings.enable_text_shadow %}text-shadow: 0 2px 4px rgba(0,0,0,0.5);{% endif %}">
+            {{ section.settings.heading }}
+          </h2>
+        {% endif %}
+
+        {% if section.settings.subheading != blank %}
+          <div class="hero-subheading rte" style="color: {{ section.settings.text_color }}; {% if section.settings.enable_text_shadow %}text-shadow: 0 1px 2px rgba(0,0,0,0.5);{% endif %}">
+            {{ section.settings.subheading }}
+          </div>
+        {% endif %}
+
+        {% if section.settings.button_text != blank and section.settings.button_link != blank %}
+           <a href="{{ section.settings.button_link }}" class="btn btn-hero btn-{{ section.settings.button_size }} btn-{{ section.settings.button_style }}">
+             {{ section.settings.button_text }}
+           </a>
+        {% endif %}
+
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<style>
+  .hero-section {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+  }
+  .hero-wrapper {
+    position: relative;
+    width: 100%;
+    height: {{ section.settings.hero_height_desktop }}px;
+  }
+  .hero-wrapper.container { margin: 0 auto; }
+  .hero-wrapper.full-width { max-width: 100%; }
+
+  /* Background Images */
+  .hero-bg, .hero-bg img {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1;
+  }
+  .desktop-img { display: block; }
+  .mobile-img { display: none; }
+
+  /* Overlay */
+  .hero-overlay {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 2; pointer-events: none;
+  }
+
+  /* Content */
+  .hero-content {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 3;
+    display: flex; flex-direction: column; 
+    padding: {{ section.settings.padding_top }}px {{ section.settings.padding_right }}px {{ section.settings.padding_bottom }}px {{ section.settings.padding_left }}px;
+  }
+  
+  .position-top { justify-content: flex-start; }
+  .position-center { justify-content: center; }
+  .position-bottom { justify-content: flex-end; }
+
+  .text-left { align-items: flex-start; text-align: left; }
+  .text-center { align-items: center; text-align: center; }
+  .text-right { align-items: flex-end; text-align: right; }
+
+  .hero-content-inner { width: 100%; }
+  
+  .hero-heading { margin-bottom: 1rem; line-height: 1.2; }
+  .hero-subheading { margin-bottom: 2rem; font-size: 1.1rem; }
+
+  /* Buttons */
+  .btn-hero {
+    display: inline-block; text-decoration: none; font-weight: 700; transition: all 0.3s;
+    border-radius: {{ section.settings.button_radius }}px;
+    border: 2px solid transparent; /* Ensure border box */
+  }
+  
+  /* Button Styles - Using Theme Colors but open to override */
+  .btn-solid {
+    background-color: {{ section.settings.button_color_bg | default: '#FFFFFF' }};
+    color: {{ section.settings.button_color_text | default: '#000000' }};
+    border-color: {{ section.settings.button_color_bg | default: '#FFFFFF' }};
+  }
+  .btn-solid:hover {
+     opacity: 0.9; transform: translateY(-2px);
+  }
+
+  .btn-outline {
+    background-color: transparent;
+    color: {{ section.settings.button_color_text | default: '#FFFFFF' }};
+    border-color: {{ section.settings.button_color_text | default: '#FFFFFF' }};
+  }
+  .btn-outline:hover {
+    background-color: {{ section.settings.button_color_text | default: '#FFFFFF' }};
+    color: {{ section.settings.button_color_bg | default: '#000000' }};
+  }
+  
+  .btn-small { padding: 8px 20px; font-size: 0.9rem; }
+  .btn-medium { padding: 12px 30px; font-size: 1rem; }
+  .btn-large { padding: 16px 40px; font-size: 1.2rem; }
+
+  /* Mobile Responsive */
+  @media screen and (max-width: 749px) {
+    .hero-wrapper { height: {{ section.settings.hero_height_mobile }}px; }
+    .desktop-img { display: none; }
+    .mobile-img { display: block; }
+    
+    .hero-content {
+      padding: {{ section.settings.padding_top_mobile }}px {{ section.settings.padding_right_mobile }}px {{ section.settings.padding_bottom_mobile }}px {{ section.settings.padding_left_mobile }}px;
+    }
+    
+    /* Mobile Alignment Overrides */
+    .text-mobile-left { align-items: flex-start; text-align: left; }
+    .text-mobile-center { align-items: center; text-align: center; }
+    .text-mobile-right { align-items: flex-end; text-align: right; }
+    
+    .hero-heading { font-size: 2rem; }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Hero Background Overlay",
+  "settings": [
+    { "type": "header", "content": "Images" },
+    { "type": "image_picker", "id": "hero_image_desktop", "label": "Desktop Image" },
+    { "type": "image_picker", "id": "hero_image_mobile", "label": "Mobile Image", "info": "Optional. Falls back to desktop image." },
+
+    { "type": "header", "content": "Dimensions" },
+    { "type": "select", "id": "width_mode", "label": "Width Mode", "options": [
+      { "value": "full", "label": "Full Width" },
+      { "value": "contained", "label": "Contained" }
+    ], "default": "full" },
+    { "type": "range", "id": "hero_height_desktop", "min": 300, "max": 900, "step": 10, "default": 520, "label": "Desktop Height (px)" },
+    { "type": "range", "id": "hero_height_mobile", "min": 280, "max": 700, "step": 10, "default": 420, "label": "Mobile Height (px)" },
+
+    { "type": "header", "content": "Overlay" },
+    { "type": "range", "id": "overlay_opacity", "min": 0, "max": 90, "step": 5, "default": 30, "label": "Overlay Opacity %" },
+    { "type": "color", "id": "overlay_color", "label": "Overlay Color", "default": "#000000" },
+
+    { "type": "header", "content": "Content" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "New Arrivals" },
+    { "type": "richtext", "id": "subheading", "label": "Subheading", "default": "<p>Discover the latest trends for the season.</p>" },
+    { "type": "range", "id": "content_max_width", "min": 320, "max": 820, "step": 20, "default": 520, "label": "Max Text Width (px)" },
+    { "type": "select", "id": "content_position", "label": "Vertical Position", "options": [
+      { "value": "top", "label": "Top" },
+      { "value": "center", "label": "Center" },
+      { "value": "bottom", "label": "Bottom" }
+    ], "default": "center" },
+    { "type": "select", "id": "text_alignment_desktop", "label": "Desktop Alignment", "options": [
+      { "value": "left", "label": "Left" },
+      { "value": "center", "label": "Center" },
+      { "value": "right", "label": "Right" }
+    ], "default": "center" },
+    { "type": "select", "id": "text_alignment_mobile", "label": "Mobile Alignment", "options": [
+      { "value": "left", "label": "Left" },
+      { "value": "center", "label": "Center" },
+      { "value": "right", "label": "Right" }
+    ], "default": "center" },
+    { "type": "checkbox", "id": "enable_text_shadow", "label": "Enable Text Shadow", "default": true },
+    { "type": "color", "id": "text_color", "label": "Text Color", "default": "#FFFFFF" },
+
+    { "type": "header", "content": "Button" },
+    { "type": "text", "id": "button_text", "label": "Button Label", "default": "Shop Now" },
+    { "type": "url", "id": "button_link", "label": "Button Link" },
+    { "type": "select", "id": "button_style", "label": "Style", "options": [
+       { "value": "solid", "label": "Solid" },
+       { "value": "outline", "label": "Outline" }
+    ], "default": "solid" },
+    { "type": "select", "id": "button_size", "label": "Size", "options": [
+       { "value": "small", "label": "Small" },
+       { "value": "medium", "label": "Medium" },
+       { "value": "large", "label": "Large" }
+    ], "default": "medium" },
+    { "type": "range", "id": "button_radius", "min": 0, "max": 30, "step": 2, "default": 4, "label": "Button Radius" },
+    { "type": "color", "id": "button_color_bg", "label": "Button Background", "default": "#FFFFFF" },
+    { "type": "color", "id": "button_color_text", "label": "Button Text", "default": "#000000" },
+
+    { "type": "header", "content": "Desktop Padding" },
+    { "type": "range", "id": "padding_top", "min": 0, "max": 100, "step": 4, "default": 20, "label": "Top" },
+    { "type": "range", "id": "padding_bottom", "min": 0, "max": 100, "step": 4, "default": 20, "label": "Bottom" },
+    { "type": "range", "id": "padding_left", "min": 0, "max": 100, "step": 4, "default": 20, "label": "Left" },
+    { "type": "range", "id": "padding_right", "min": 0, "max": 100, "step": 4, "default": 20, "label": "Right" },
+
+    { "type": "header", "content": "Mobile Padding" },
+    { "type": "range", "id": "padding_top_mobile", "min": 0, "max": 100, "step": 4, "default": 20, "label": "Top" },
+    { "type": "range", "id": "padding_bottom_mobile", "min": 0, "max": 100, "step": 4, "default": 20, "label": "Bottom" },
+    { "type": "range", "id": "padding_left_mobile", "min": 0, "max": 100, "step": 4, "default": 20, "label": "Left" },
+    { "type": "range", "id": "padding_right_mobile", "min": 0, "max": 100, "step": 4, "default": 20, "label": "Right" }
+  ],
+  "presets": [
+    {
+      "name": "Hero With Overlay"
+    }
+  ]
+}
+{% endschema %}
