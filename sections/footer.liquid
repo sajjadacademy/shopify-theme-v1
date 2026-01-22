@@ -17,15 +17,37 @@
               </ul>
             </div>
             
-          {%- elsif block.type == 'text' -%}
-            <div class="footer__text-block">
+          {%- elsif block.type == 'brand_info' -%}
+            <div class="footer__brand-block">
+              {% if block.settings.logo != blank %}
+                {{ block.settings.logo | image_url: width: block.settings.logo_width | image_tag: class: 'footer__logo', loading: 'lazy' }}
+              {% else %}
+                <h3 class="h4">{{ shop.name }}</h3>
+              {% endif %}
+              <div class="footer__rte">{{ block.settings.motivational_text }}</div>
+            </div>
+
+          {%- elsif block.type == 'contact_info' -%}
+            <div class="footer__contact-block">
               <h4 class="footer__heading">{{ block.settings.heading }}</h4>
-              <div class="footer__rte">{{ block.settings.text }}</div>
+              {% if block.settings.show_payment %}
+                 <div class="payment-icons">
+                    <!-- Placeholder Payment Icons -->
+                    <span class="icon-payment">Visa</span> <span class="icon-payment">Mastercard</span> <span class="icon-payment">Cod</span>
+                 </div>
+              {% endif %}
+              
               {% if block.settings.show_social %}
                  <div class="social-icons">
-                    <!-- Placeholder social icons -->
-                    <span>Fb</span> <span>Ig</span> <span>X</span>
+                    <!-- Placeholder Social Icons -->
+                     <a href="#" class="social-link">Ig</a> <a href="#" class="social-link">Fb</a> <a href="#" class="social-link">Tt</a>
                  </div>
+              {% endif %}
+              
+              {% if block.settings.address != blank %}
+                <div class="footer__address">
+                  <p>{{ block.settings.address | newline_to_br }}</p>
+                </div>
               {% endif %}
             </div>
           {%- endif -%}
@@ -108,6 +130,21 @@
     }
     .footer__heading.active svg { transform: rotate(180deg); }
   }
+  /* New Footer Styles */
+  .footer__logo { display: block; margin-bottom: 1rem; }
+  
+  .payment-icons, .social-icons { display: flex; gap: 8px; margin-bottom: 1rem; }
+  .icon-payment { 
+    background: #fff; color: #333; padding: 2px 6px; border-radius: 4px; font-size: 0.8rem; font-weight: bold; border: 1px solid #ccc; 
+  }
+  .social-link {
+    color: inherit; border: 1px solid rgba(255,255,255,0.2); width: 32px; height: 32px;
+    display: flex; align-items: center; justify-content: center; border-radius: 50%; text-decoration: none;
+    transition: all 0.2s;
+  }
+  .social-link:hover { background: #fff; color: #000; }
+  
+  .footer__address p { margin: 0; line-height: 1.5; opacity: 0.8; }
 </style>
 
 {% schema %}
@@ -139,47 +176,35 @@
   ],
   "blocks": [
     {
-      "type": "link_list",
-      "name": "Menu",
+      "type": "brand_info",
+      "name": "Brand Info",
+      "limit": 1,
       "settings": [
-        {
-          "type": "text",
-          "id": "heading",
-          "default": "Quick Links",
-          "label": "Heading"
-        },
-        {
-          "type": "link_list",
-          "id": "menu",
-          "default": "footer",
-          "label": "Menu"
-        }
+        { "type": "image_picker", "id": "logo", "label": "Footer Logo" },
+        { "type": "range", "id": "logo_width", "min": 50, "max": 250, "step": 5, "default": 120, "label": "Logo Width" },
+        { "type": "richtext", "id": "motivational_text", "label": "Motivational Text", "default": "<p>Empowering your lifestyle with premium products.</p>" }
       ]
     },
     {
-      "type": "text",
-      "name": "Text Info",
+      "type": "link_list",
+      "name": "Menu",
       "settings": [
-        {
-          "type": "text",
-          "id": "heading",
-          "default": "About Us",
-          "label": "Heading"
-        },
-        {
-          "type": "richtext",
-          "id": "text",
-          "default": "<p>We share our love for quality products.</p>",
-          "label": "Text"
-        },
-        {
-          "type": "checkbox",
-          "id": "show_social",
-          "label": "Show Social Icons",
-          "default": true
-        }
+        { "type": "text", "id": "heading", "default": "Quick Links", "label": "Heading" },
+        { "type": "link_list", "id": "menu", "default": "footer", "label": "Menu" }
+      ]
+    },
+    {
+      "type": "contact_info",
+      "name": "Contact & Trust",
+      "limit": 1,
+      "settings": [
+        { "type": "text", "id": "heading", "default": "Get in Touch", "label": "Heading" },
+        { "type": "textarea", "id": "address", "label": "Address", "default": "123 Commerce St, Dubai, UAE" },
+        { "type": "checkbox", "id": "show_social", "label": "Show Social Icons", "default": true },
+        { "type": "checkbox", "id": "show_payment", "label": "Show Payment Icons", "default": true }
       ]
     }
-  ]
+  ],
+  "max_blocks": 3,
 }
 {% endschema %}
