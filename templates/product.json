@@ -27,12 +27,12 @@
                         "show_dynamic_checkout": true
                     }
                 },
-                "description": {
-                    "type": "description",
-                    "settings": {}
-                },
                 "trust": {
                     "type": "trust_icons",
+                    "settings": {}
+                },
+                "description": {
+                    "type": "description",
                     "settings": {}
                 },
                 "specs": {
