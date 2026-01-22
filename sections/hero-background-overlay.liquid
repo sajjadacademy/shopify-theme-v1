@@ -144,7 +144,18 @@
   .text-center { align-items: center; text-align: center; }
   .text-right { align-items: flex-end; text-align: right; }
 
-  .hero-content-inner { width: 100%; max-width: var(--content-max-width); }
+  /* Animations */
+  @keyframes fadeUp {
+     from { opacity: 0; transform: translateY(20px); }
+     to { opacity: 1; transform: translateY(0); }
+  }
+  
+  .hero-content-inner { 
+    width: 100%; 
+    max-width: var(--content-max-width);
+    animation: fadeUp 0.8s ease-out forwards;
+    opacity: 0; /* Hidden initially */
+  }
   
   .hero-heading { margin-bottom: 1rem; line-height: 1.2; color: var(--text-color); }
   .hero-subheading { margin-bottom: 2rem; font-size: 1.1rem; color: var(--text-color); }
@@ -154,6 +165,11 @@
     display: inline-block; text-decoration: none; font-weight: 700; transition: all 0.3s;
     border-radius: var(--btn-radius);
     border: 2px solid transparent; 
+  }
+  .btn-hero:focus-visible {
+    outline: 2px solid #fff;
+    outline-offset: 4px;
+    box-shadow: 0 0 0 4px rgba(0,0,0,0.5);
   }
   
   .btn-solid {
@@ -218,7 +234,10 @@
     { "type": "range", "id": "overlay_opacity", "min": 0, "max": 90, "step": 5, "default": 30, "label": "Overlay Opacity %" },
     { "type": "color", "id": "overlay_color", "label": "Overlay Color", "default": "#000000" },
 
-    { "type": "header", "content": "Content" },
+    { "type": "select", "id": "heading_tag", "label": "Heading Tag (SEO)", "options": [
+      { "value": "h1", "label": "H1 (Primary)" },
+      { "value": "h2", "label": "H2 (Secondary)" }
+    ], "default": "h2" },
     { "type": "text", "id": "heading", "label": "Heading", "default": "New Arrivals" },
     { "type": "richtext", "id": "subheading", "label": "Subheading", "default": "<p>Discover the latest trends for the season.</p>" },
     { "type": "range", "id": "content_max_width", "min": 320, "max": 820, "step": 20, "default": 520, "label": "Max Text Width (px)" },

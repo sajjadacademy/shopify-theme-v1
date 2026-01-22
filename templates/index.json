@@ -19,20 +19,25 @@
       }
     },
     "hero": {
-      "type": "hero-split",
+      "type": "hero-background-overlay",
       "settings": {
-        "image_desktop": "shopify://shop_images/ChatGPTImageJan21_2026_03_08_25PM.png",
-        "badge": "New Arrival",
+        "hero_image_desktop": "shopify://shop_images/ChatGPTImageJan21_2026_03_08_25PM.png",
+        "hero_image_mobile": "shopify://shop_images/ChatGPTImageJan21_2026_03_08_25PM.png",
         "heading": "Premium Comfort",
-        "text": "<p>Discover the best products for your lifestyle.</p>",
-        "cta_text": "Shop Now",
-        "cta_link": "shopify://collections/all",
-        "show_secondary_cta": false,
-        "cta_secondary_text": "Learn More",
-        "cta_secondary_link": "",
-        "layout": "image_left",
-        "padding_top": 36,
-        "padding_bottom": 36
+        "heading_tag": "h1",
+        "subheading": "<p>Discover the best products for your lifestyle.</p>",
+        "button_text": "Shop Now",
+        "button_link": "shopify://collections/all",
+        "button_style": "solid",
+        "width_mode": "full",
+        "hero_height_desktop": 600,
+        "hero_height_mobile": 500,
+        "overlay_opacity": 40,
+        "overlay_color": "#000000",
+        "text_alignment_desktop": "center",
+        "text_alignment_mobile": "center",
+        "content_position": "center",
+        "text_color": "#ffffff"
       }
     },
     "marquee": {
