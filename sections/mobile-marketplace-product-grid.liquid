@@ -1,0 +1,196 @@
+{% comment %}
+  Marketplace Product Grid Section
+  - Mobile: Dense 2-column grid
+  - Desktop: Configurable columns
+  - Extensive customization settings for the product card
+{% endcomment %}
+
+<div class="marketplace-grid-section section-{{ section.id }}-padding" style="background-color: {{ section.settings.bg_color }}">
+  <div class="container">
+    {% if section.settings.heading != blank %}
+      <div class="section-heading {{ section.settings.heading_alignment }}">
+        <h2 class="h3">{{ section.settings.heading }}</h2>
+        {% if section.settings.show_view_all and section.settings.collection != blank %}
+          <a href="{{ section.settings.collection.url }}" class="link-underlined">View All</a>
+        {% endif %}
+      </div>
+    {% endif %}
+
+    <div class="marketplace-grid-wrapper">
+      {%- assign collection = collections[section.settings.collection] -%}
+      <ul class="marketplace-grid grid--{{ section.settings.columns_desktop }}-col-desktop grid--2-col-tablet-down">
+        {%- for product in collection.products limit: section.settings.products_to_show -%}
+          <li class="marketplace-grid__item">
+             {% render 'product-card-marketplace', 
+                product: product,
+                show_rating: section.settings.show_rating,
+                show_badge: section.settings.show_badge,
+                show_wishlist: section.settings.show_wishlist,
+                show_quick_add: section.settings.show_quick_add,
+                quick_add_type: section.settings.quick_add_type
+             %}
+          </li>
+        {%- else -%}
+          {%- for i in (1..4) -%}
+             <li class="marketplace-grid__item">
+               <!-- Placeholder or empty state -->
+               <div class="product-card-marketplace" style="min-height: 250px; display: flex; align-items: center; justify-content: center; background: #fff;">
+                 <p>Select a collection to display products.</p>
+               </div>
+             </li>
+          {%- endfor -%}
+        {%- endfor -%}
+      </ul>
+    </div>
+  </div>
+</div>
+
+<style>
+  /* Section Padding */
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+  }
+
+  /* Grid Layout - Mobile First Dense Grid */
+  .marketplace-grid {
+    display: grid;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    gap: {{ section.settings.grid_gap_mobile }}px; /* Tight spacing on mobile */
+  }
+  
+  /* Mobile 2 Columns Fixed */
+  .grid--2-col-tablet-down {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* Desktop Columns */
+  @media screen and (min-width: 990px) {
+    .marketplace-grid {
+       gap: {{ section.settings.grid_gap_desktop }}px;
+    }
+    .grid--3-col-desktop { grid-template-columns: repeat(3, 1fr); }
+    .grid--4-col-desktop { grid-template-columns: repeat(4, 1fr); }
+    .grid--5-col-desktop { grid-template-columns: repeat(5, 1fr); }
+  }
+
+  /* Scoped CSS Variables for the Card Snippet */
+  #shopify-section-{{ section.id }} .product-card-marketplace {
+    --card-radius: {{ section.settings.card_radius }}px;
+    --color-border: {{ section.settings.card_border_color }};
+    
+    /* Density Logic */
+    {% if section.settings.card_density == 'compact' %}
+      --card-padding: 8px;
+      --card-title-size: 13px;
+    {% else %}
+      --card-padding: 12px;
+      --card-title-size: 14px; /* Fallback if not using manual size */
+    {% endif %}
+
+    /* Shadow Logic */
+    {% if section.settings.show_shadow %}
+      box-shadow: 0 2px 8px rgba(0,0,0,0.{{ section.settings.shadow_opacity }});
+    {% else %}
+      box-shadow: none;
+    {% endif %}
+    background-color: {{ section.settings.card_bg_color }};
+  }
+  
+  /* Typography Overrides */
+  #shopify-section-{{ section.id }} .pcm-title {
+    font-size: {{ section.settings.title_font_size }}px;
+    font-weight: {{ section.settings.title_font_weight }};
+  }
+  #shopify-section-{{ section.id }} .pcm-price-current {
+    font-size: {{ section.settings.price_font_size }}px;
+    color: {{ section.settings.price_color }};
+  }
+  #shopify-section-{{ section.id }} .pcm-price-original {
+    color: {{ section.settings.compare_price_color }};
+  }
+  #shopify-section-{{ section.id }} .pcm-discount-badge {
+    background: {{ section.settings.badge_bg_color }}; /* e.g. Light Green */
+    color: {{ section.settings.badge_text_color }}; /* e.g. Dark Green */
+  }
+  #shopify-section-{{ section.id }} .pcm-rating-star,
+  #shopify-section-{{ section.id }} .pcm-rating-val {
+    color: {{ section.settings.rating_color }};
+  }
+  #shopify-section-{{ section.id }} .pcm-atc-btn--full,
+  #shopify-section-{{ section.id }} .pcm-atc-btn--icon {
+     background-color: {{ section.settings.button_bg_color }};
+     color: {{ section.settings.button_text_color }};
+  }
+  
+</style>
+
+{% schema %}
+{
+  "name": "Marketplace Grid",
+  "settings": [
+    { "type": "header", "content": "Content" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Best Sellers" },
+    { "type": "select", "id": "heading_alignment", "label": "Alignment", "options": [
+      { "value": "left", "label": "Left" }, { "value": "center", "label": "Center" }
+    ], "default": "left"},
+    { "type": "collection", "id": "collection", "label": "Collection" },
+    { "type": "range", "id": "products_to_show", "min": 4, "max": 20, "step": 2, "default": 8, "label": "Products to Show" },
+    
+    { "type": "header", "content": "Grid Layout" },
+    { "type": "range", "id": "columns_desktop", "min": 3, "max": 5, "step": 1, "default": 4, "label": "Desktop Columns" },
+    { "type": "range", "id": "grid_gap_mobile", "min": 0, "max": 20, "step": 1, "default": 8, "label": "Mobile Gap (px)" },
+    { "type": "range", "id": "grid_gap_desktop", "min": 10, "max": 40, "step": 2, "default": 16, "label": "Desktop Gap (px)" },
+
+    { "type": "select", "id": "card_density", "label": "Card Density", "options": [
+      { "value": "compact", "label": "Compact" }, { "value": "normal", "label": "Normal" }
+    ], "default": "normal" },
+
+    { "type": "header", "content": "Card Styling" },
+    { "type": "range", "id": "card_radius", "min": 0, "max": 20, "step": 1, "default": 8, "label": "Border Radius" },
+    { "type": "color", "id": "card_bg_color", "label": "Card Background", "default": "#ffffff" },
+    { "type": "color", "id": "card_border_color", "label": "Border Color", "default": "#e0e0e0" },
+    { "type": "checkbox", "id": "show_shadow", "label": "Show Shadow", "default": false },
+    { "type": "range", "id": "shadow_opacity", "min": 0, "max": 50, "step": 5, "default": 10, "label": "Shadow Opacity %" },
+
+    { "type": "header", "content": "Typography" },
+    { "type": "range", "id": "title_font_size", "min": 10, "max": 20, "step": 1, "default": 14, "label": "Title Font Size (px)" },
+    { "type": "select", "id": "title_font_weight", "label": "Title Weight", "options": [
+       {"value":"400", "label":"Regular"}, {"value":"500", "label":"Medium"}, {"value":"700", "label":"Bold"}
+    ], "default": "500"},
+    { "type": "range", "id": "price_font_size", "min": 12, "max": 24, "step": 1, "default": 16, "label": "Price Font Size (px)" },
+
+    { "type": "header", "content": "Colors" },
+    { "type": "color", "id": "price_color", "label": "Price Color", "default": "#000000" },
+    { "type": "color", "id": "compare_price_color", "label": "Compare Price Color", "default": "#777777" },
+    { "type": "color", "id": "rating_color", "label": "Rating Star Color", "default": "#FFA41C" },
+    { "type": "color", "id": "badge_bg_color", "label": "Discount Badge BG", "default": "#e6f9e9" },
+    { "type": "color", "id": "badge_text_color", "label": "Discount Badge Text", "default": "#28a745" },
+    { "type": "color", "id": "button_bg_color", "label": "Button Background", "default": "#000000" },
+    { "type": "color", "id": "button_text_color", "label": "Button Text", "default": "#ffffff" },
+    
+    { "type": "header", "content": "Behavior & Content" },
+    { "type": "checkbox", "id": "show_rating", "label": "Show Ratings", "default": true },
+    { "type": "checkbox", "id": "show_badge", "label": "Show Badges", "default": true },
+    { "type": "checkbox", "id": "show_wishlist", "label": "Show Wishlist", "default": true },
+    { "type": "checkbox", "id": "show_quick_add", "label": "Show Quick Add", "default": true },
+    { "type": "select", "id": "quick_add_type", "label": "Quick Add Style", "options": [
+       { "value": "icon", "label": "Icon (+)" },
+       { "value": "button", "label": "Full Button" }
+    ], "default": "button" },
+    { "type": "checkbox", "id": "show_view_all", "label": "Show View All Link", "default": true },
+
+    { "type": "header", "content": "Section Padding" },
+    { "type": "color", "id": "bg_color", "label": "Section Background", "default": "#f9f9f9" },
+    { "type": "range", "id": "padding_top", "min": 0, "max": 100, "step": 4, "default": 36, "label": "Top Padding" },
+    { "type": "range", "id": "padding_bottom", "min": 0, "max": 100, "step": 4, "default": 36, "label": "Bottom Padding" }
+  ],
+  "presets": [
+    {
+      "name": "Marketplace Grid"
+    }
+  ]
+}
+{% endschema %}
