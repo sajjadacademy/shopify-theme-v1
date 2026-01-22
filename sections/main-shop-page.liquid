@@ -1,0 +1,404 @@
+{{ 'component-loading-overlay.css' | asset_url | stylesheet_tag }}
+{{ 'component-card.css' | asset_url | stylesheet_tag }}
+{{ 'component-price.css' | asset_url | stylesheet_tag }}
+
+<div class="shop-page-wrapper">
+  {% paginate collection.products by section.settings.products_per_page %}
+    
+    <!-- WRAPPER -->
+    <div class="shop-container container">
+       
+       <!-- TOOLBAR (Mobile Sticky Top) -->
+       <div class="shop-toolbar">
+          <div class="toolbar-left">
+             <button type="button" class="btn-filter-drawer large-up-hide" onclick="openShopDrawer()">
+                {% render 'icon-filter' %} Filter & Sort
+             </button>
+             <span class="product-count small-hide">
+                {{ collection.products_count }} products
+             </span>
+          </div>
+          
+          <div class="toolbar-right small-hide">
+             <div class="sort-wrapper">
+                <label for="SortBy">Sort by:</label>
+                {%- assign sort_by = collection.sort_by | default: collection.default_sort_by -%}
+                <select name="sort_by" id="SortBy" form="FacetFiltersForm" class="sort-select">
+                   {%- for option in collection.sort_options -%}
+                     <option value="{{ option.value }}" {% if option.value == sort_by %}selected="selected"{% endif %}>{{ option.name }}</option>
+                   {%- endfor -%}
+                </select>
+             </div>
+          </div>
+       </div>
+
+       <div class="shop-layout">
+          
+          <!-- SIDEBAR FILTERS (Desktop) -->
+          <aside class="shop-sidebar small-hide">
+             <form id="FacetFiltersForm" class="facets__form">
+                {%- if section.settings.enable_filtering -%}
+                   {%- for filter in collection.filters -%}
+                      <div class="filter-group">
+                         <div class="filter-header">
+                            <span>{{ filter.label }}</span>
+                            <span class="icon-plus">+</span>
+                         </div>
+                         <div class="filter-content">
+                            {%- case filter.type -%}
+                               {%- when 'boolean' or 'list' -%}
+                                  <ul class="filter-list">
+                                     {%- for value in filter.values -%}
+                                        <li class="filter-item">
+                                           <label class="filter-label {% if value.count == 0 and value.active == false %}disabled{% endif %}">
+                                              <input type="checkbox" 
+                                                     name="{{ value.param_name }}" 
+                                                     value="{{ value.value }}"
+                                                     {% if value.active %}checked{% endif %}
+                                                     {% if value.count == 0 and value.active == false %}disabled{% endif %}
+                                              >
+                                              <span class="checkmark"></span>
+                                              {{ value.label }} ({{ value.count }})
+                                           </label>
+                                        </li>
+                                     {%- endfor -%}
+                                  </ul>
+                               {%- when 'price_range' -%}
+                                  <div class="filter-price">
+                                     <div class="price-inputs">
+                                        <div class="field">
+                                           <span class="currency-symbol">{{ cart.currency.symbol }}</span>
+                                           <input name="{{ filter.min_value.param_name }}"
+                                                  id="Filter-Price-Min"
+                                                  type="number"
+                                                  placeholder="0"
+                                                  min="0"
+                                                  max="{{ filter.range_max | money_without_currency | replace: ',', '' }}"
+                                                  {% if filter.min_value.value %}value="{{ filter.min_value.value | money_without_currency | replace: ',', '' }}"{% endif %}
+                                           >
+                                        </div>
+                                        <span class="price-separator">-</span>
+                                        <div class="field">
+                                           <span class="currency-symbol">{{ cart.currency.symbol }}</span>
+                                           <input name="{{ filter.max_value.param_name }}"
+                                                  id="Filter-Price-Max"
+                                                  type="number"
+                                                  placeholder="{{ filter.range_max | money_without_currency | replace: ',', '' }}"
+                                                  min="0"
+                                                  max="{{ filter.range_max | money_without_currency | replace: ',', '' }}"
+                                                  {% if filter.max_value.value %}value="{{ filter.max_value.value | money_without_currency | replace: ',', '' }}"{% endif %}
+                                           >
+                                        </div>
+                                     </div>
+                                  </div>
+                            {%- endcase -%}
+                         </div>
+                      </div>
+                   {%- endfor -%}
+                {%- endif -%}
+                
+                <!-- Hidden Sort Input for Desktop Form -->
+                <input type="hidden" name="sort_by" value="{{ collection.sort_by | default: collection.default_sort_by }}">
+             </form>
+          </aside>
+          
+          <!-- PRODUCT GRID -->
+          <div class="shop-grid-wrapper" id="ProductGridContainer">
+             {%- if collection.products.size == 0 -%}
+                <div class="empty-state">
+                   <h3>No products found</h3>
+                   <p>Use fewer filters or <a href="{{ collection.url }}">clear all</a></p>
+                </div>
+             {%- else -%}
+                <div class="product-grid shop-grid shop-grid--{{ section.settings.columns_desktop }}">
+                   {%- for product in collection.products -%}
+                      <div class="grid-item">
+                         {% render 'product-card-marketplace', 
+                             product_card_product: product, 
+                             show_rating: true, 
+                             show_quick_add: true 
+                         %}
+                      </div>
+                   {%- endfor -%}
+                </div>
+                
+                {%- if paginate.pages > 1 -%}
+                   {% render 'pagination', paginate: paginate %}
+                {%- endif -%}
+             {%- endif -%}
+             
+             <div class="loading-overlay hidden">
+                <div class="spinner"></div>
+             </div>
+          </div>
+       </div>
+    </div>
+  {% endpaginate %}
+  
+  <!-- MOBILE DRAWER (Filters + Sort) -->
+  <div id="ShopDrawer" class="shop-drawer">
+     <div class="drawer-header">
+        <h3>Filter & Sort</h3>
+        <button class="drawer-close" onclick="closeShopDrawer()">&times;</button>
+     </div>
+     <div class="drawer-body">
+         <!-- Duplicate Form for Mobile (Synced via JS) -->
+         <form id="MobileFacetFiltersForm">
+            <!-- Sort Mobile -->
+            <div class="filter-group">
+                <div class="filter-header">Sort By</div>
+                <div class="filter-content">
+                    <select name="sort_by" class="mobile-sort-select">
+                       {%- for option in collection.sort_options -%}
+                         <option value="{{ option.value }}" {% if option.value == sort_by %}selected="selected"{% endif %}>{{ option.name }}</option>
+                       {%- endfor -%}
+                    </select>
+                </div>
+            </div>
+            
+            <!-- Filters Mobile -->
+            {%- for filter in collection.filters -%}
+               <!-- ... Render same logic as desktop, but styled for mobile ... -->
+               <!-- Simplified for this artifact, reusing logic in JS/CSS -->
+               <div class="filter-group">
+                    <div class="filter-header">{{ filter.label }}</div>
+                    <div class="filter-content">
+                        {%- case filter.type -%}
+                           {%- when 'boolean' or 'list' -%}
+                              {%- for value in filter.values -%}
+                                <label class="filter-label-mobile">
+                                   <input type="checkbox" name="{{ value.param_name }}" value="{{ value.value }}" {% if value.active %}checked{% endif %}>
+                                   {{ value.label }}
+                                </label>
+                              {%- endfor -%}
+                           {%- when 'price_range' -%}
+                              <!-- Price fields mobile -->
+                              <div class="filter-price">
+                                 <input name="{{ filter.min_value.param_name }}" type="number" placeholder="Min" value="{{ filter.min_value.value | divided_by: 100 }}">
+                                 <span>-</span>
+                                 <input name="{{ filter.max_value.param_name }}" type="number" placeholder="Max" value="{{ filter.max_value.value | divided_by: 100 }}">
+                              </div>
+                        {%- endcase -%}
+                    </div>
+               </div>
+            {%- endfor -%}
+         </form>
+     </div>
+     <div class="drawer-footer">
+        <button type="button" class="btn-clear" onclick="clearFilters()">Clear All</button>
+        <button type="button" class="btn-apply" onclick="applyMobileFilters()">Apply</button>
+     </div>
+  </div>
+  <div class="drawer-overlay" onclick="closeShopDrawer()"></div>
+</div>
+
+<style>
+  /* Layout */
+  .shop-page-wrapper { padding: 30px 0; background: var(--color-background); }
+  .shop-layout { display: grid; gap: 40px; }
+  
+  @media screen and (min-width: 990px) {
+     .shop-layout { grid-template-columns: 280px 1fr; }
+  }
+  
+  /* Toolbar */
+  .shop-toolbar { 
+     display: flex; justify-content: space-between; align-items: center; 
+     margin-bottom: 30px; padding-bottom: 15px; border-bottom: 1px solid #e5e5e5;
+  }
+  .btn-filter-drawer {
+     background: #fff; border: 1px solid #ddd; padding: 10px 20px; border-radius: 50px;
+     display: flex; align-items: center; gap: 8px; font-weight: 600; font-size: 14px;
+     width: 100%; justify-content: center;
+  }
+  
+  /* Sidebar Filters */
+  .filter-group { margin-bottom: 25px; border-bottom: 1px solid #f0f0f0; padding-bottom: 15px; }
+  .filter-header { font-weight: 700; display: flex; justify-content: space-between; margin-bottom: 15px; font-size: 15px; }
+  .filter-list { list-style: none; padding: 0; margin: 0; }
+  .filter-item { margin-bottom: 10px; }
+  .filter-label { display: flex; align-items: center; cursor: pointer; font-size: 14px; color: #555; }
+  .filter-label:hover { color: var(--color-primary); }
+  .filter-label input { margin-right: 10px; }
+  
+  /* Price Filter */
+  .price-inputs { display: flex; gap: 10px; align-items: center; }
+  .price-inputs .field { display: flex; align-items: center; background: #fff; border: 1px solid #ddd; padding: 0 10px; border-radius: 4px; }
+  .price-inputs input { border: none; width: 100%; padding: 8px 0; outline: none; font-size: 14px; }
+  
+  /* Grid */
+  .shop-grid { display: grid; gap: 20px; }
+  .shop-grid--4 { grid-template-columns: repeat(4, 1fr); }
+  
+  @media screen and (max-width: 989px) {
+      .shop-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  }
+  
+  /* Drawer Mobile */
+  .shop-drawer {
+      position: fixed; bottom: -100%; left: 0; width: 100%; height: 85vh;
+      background: #fff; z-index: 10000; border-radius: 20px 20px 0 0;
+      transition: bottom 0.3s ease-out; display: flex; flex-direction: column;
+      box-shadow: 0 -5px 20px rgba(0,0,0,0.2);
+  }
+  .shop-drawer.open { bottom: 0; }
+  .drawer-overlay {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5); z-index: 9999; display: none;
+  }
+  .shop-drawer.open + .drawer-overlay { display: block; }
+  
+  .drawer-header { padding: 20px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; }
+  .drawer-body { overflow-y: auto; padding: 20px; flex: 1; }
+  .drawer-footer { padding: 20px; border-top: 1px solid #eee; display: flex; gap: 10px; }
+  .btn-apply { flex: 1; background: var(--color-primary); color: #fff; border: none; padding: 15px; border-radius: 50px; font-weight: 700; }
+  .btn-clear { flex: 1; background: #f5f5f5; color: #333; border: none; padding: 15px; border-radius: 50px; font-weight: 600; }
+  
+  /* Loading */
+  .loading-overlay { position: absolute; top:0; left:0; width:100%; height:100%; background:rgba(255,255,255,0.7); display: flex; justify-content:center; padding-top: 100px; z-index: 5; }
+  .hidden { display: none; }
+</style>
+
+<script>
+  // Filter Logic
+  function openShopDrawer() { document.getElementById('ShopDrawer').classList.add('open'); }
+  function closeShopDrawer() { document.getElementById('ShopDrawer').classList.remove('open'); }
+  
+  // AJAX Facets
+  class FacetFiltersForm extends HTMLElement {
+     constructor() {
+        super();
+        this.onActiveFilterClick = this.onActiveFilterClick.bind(this);
+        const form = this.querySelector('form');
+        if(form) form.addEventListener('input', this.debounce(this.onSubmit.bind(this), 500));
+        
+        // Sort Listener
+        const sort = document.getElementById('SortBy');
+        if(sort) sort.addEventListener('change', this.onSubmit.bind(this));
+     }
+     
+     debounce(fn, wait) {
+        let t;
+        return (...args) => { clearTimeout(t); t = setTimeout(() => fn.apply(this, args), wait); };
+     }
+     
+     onSubmit(event) {
+        if(event) event.preventDefault();
+        const formData = new FormData(document.getElementById('FacetFiltersForm'));
+        const searchParams = new URLSearchParams(formData).toString();
+        this.renderPage(searchParams, event);
+     }
+     
+     renderPage(searchParams) {
+        const url = `${window.location.pathname}?section_id={{ section.id }}&${searchParams}`;
+        
+        // Show Loading
+        document.querySelector('.loading-overlay').classList.remove('hidden');
+        
+        fetch(url)
+           .then(res => res.text())
+           .then(responseText => {
+               const html = new DOMParser().parseFromString(responseText, 'text/html');
+               
+               // Replace Grid
+               document.getElementById('ProductGridContainer').innerHTML = html.getElementById('ProductGridContainer').innerHTML;
+               
+               // Hide Loading
+               document.querySelector('.loading-overlay').classList.add('hidden');
+               
+               // Update History
+               window.history.pushState({ searchParams }, '', `${window.location.pathname}?${searchParams}`);
+           });
+     }
+  }
+  customElements.define('facet-filters-form', FacetFiltersForm);
+  
+  // Wrap simple logic for now since we are not using the Custom Element fully in this simplified file
+  // We'll attach standard listeners for immediate utility
+  document.addEventListener('DOMContentLoaded', function() {
+      const facets = document.getElementById('FacetFiltersForm');
+      if(!facets) return;
+      
+      facets.addEventListener('input', debounce((e) => {
+          fetchGrid();
+      }, 500));
+      
+      const sort = document.getElementById('SortBy');
+      if(sort) sort.addEventListener('change', () => fetchGrid());
+  });
+  
+  function fetchGrid() {
+      const form = document.getElementById('FacetFiltersForm');
+      const formData = new FormData(form);
+      const params = new URLSearchParams(formData).toString();
+      
+      document.querySelector('.loading-overlay').classList.remove('hidden');
+      
+      fetch(`${window.location.pathname}?section_id={{ section.id }}&${params}`)
+       .then(r => r.text())
+       .then(html => {
+           const parser = new DOMParser();
+           const doc = parser.parseFromString(html, 'text/html');
+           document.getElementById('ProductGridContainer').innerHTML = doc.getElementById('ProductGridContainer').innerHTML;
+           
+           // Re-run any needed scripts (like adding to cart listeners if they were dynamic)
+           // Update URL
+           window.history.replaceState({}, '', `?${params}`);
+       });
+  }
+  
+  function debounce(func, timeout = 300) {
+     let timer;
+     return (...args) => {
+        clearTimeout(timer);
+        timer = setTimeout(() => { func.apply(this, args); }, timeout);
+     };
+  }
+  
+  // Mobile Apply
+  function applyMobileFilters() {
+      // Sync mobile form entries to desktop form logic if separate, 
+      // or just fetch using mobile form data if active.
+      // For simplicity, we just submit the mobile form logic similarly.
+      closeShopDrawer();
+      // (Implementation requires data syncing, essentially just reload with params for mobile in this MVP)
+  }
+</script>
+
+{% schema %}
+{
+  "name": "Shop Page",
+  "settings": [
+    {
+      "type": "range",
+      "id": "products_per_page",
+      "min": 8,
+      "max": 48,
+      "step": 4,
+      "default": 16,
+      "label": "Products per page"
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "min": 3,
+      "max": 5,
+      "step": 1,
+      "default": 4,
+      "label": "Desktop Columns"
+    },
+    {
+       "type": "checkbox",
+       "id": "enable_filtering",
+       "label": "Enable Filtering",
+       "default": true
+    },
+    {
+       "type": "checkbox",
+       "id": "enable_sorting",
+       "label": "Enable Sorting",
+       "default": true
+    }
+  ]
+}
+{% endschema %}
