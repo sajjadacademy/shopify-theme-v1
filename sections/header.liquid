@@ -1,4 +1,13 @@
 <div class="header-wrapper" data-sticky="{{ section.settings.enable_sticky }}">
+<style>
+  .header-wrapper {
+    background-color: {{ section.settings.bg_color }};
+    color: {{ section.settings.text_color }};
+  }
+  .header__logo a, .header__menu li a, .icon-btn {
+    color: {{ section.settings.text_color }};
+  }
+</style>
   <header class="header container">
     
     {%- comment -%} LOGO {%- endcomment -%}
@@ -134,6 +143,22 @@
         { "value": "bar", "label": "Search Bar" }
       ],
       "default": "bar"
+    },
+    {
+       "type": "header",
+       "content": "Colors"
+    },
+    {
+       "type": "color",
+       "id": "bg_color",
+       "label": "Background Color",
+       "default": "#0E1B4D"
+    },
+    {
+       "type": "color",
+       "id": "text_color",
+       "label": "Text Color",
+       "default": "#FFFFFF"
     }
   ]
 }
