@@ -18,13 +18,17 @@
         </a>
       {%- endfor -%}
     {%- else -%}
-      <!-- Default Fallback Links if no blocks are added -->
+      <!-- Default Fallback Links -->
       <a href="/" class="mobile-nav__item {% if request.path == '/' %}active{% endif %}">
         <span class="mobile-nav__icon">{% render 'icon-dynamic', icon: 'home' %}</span>
         <span class="mobile-nav__label">Home</span>
       </a>
-      <a href="/collections/all" class="mobile-nav__item {% if request.path contains '/collections' %}active{% endif %}">
-        <span class="mobile-nav__icon">{% render 'icon-dynamic', icon: 'grid' %}</span>
+      <a href="/collections" class="mobile-nav__item {% if request.path == '/collections' %}active{% endif %}">
+        <span class="mobile-nav__icon">{% render 'icon-dynamic', icon: 'list' %}</span>
+        <span class="mobile-nav__label">Categories</span>
+      </a>
+      <a href="/collections/all" class="mobile-nav__item {% if request.path == '/collections/all' %}active{% endif %}">
+        <span class="mobile-nav__icon">{% render 'icon-dynamic', icon: 'shop' %}</span>
         <span class="mobile-nav__label">Shop</span>
       </a>
       <a href="/cart" class="mobile-nav__item {% if request.path == '/cart' %}active{% endif %}">
@@ -33,6 +37,10 @@
           <span class="mobile-nav__count bubble">{{ cart.item_count }}</span>
         </span>
         <span class="mobile-nav__label">Cart</span>
+      </a>
+      <a href="/account" class="mobile-nav__item {% if request.path == '/account' %}active{% endif %}">
+        <span class="mobile-nav__icon">{% render 'icon-dynamic', icon: 'account' %}</span>
+        <span class="mobile-nav__label">My Account</span>
       </a>
     {%- endif -%}
   </nav>
