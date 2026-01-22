@@ -147,10 +147,10 @@
 
                    <!-- Buttons -->
                    <div class="action-buttons">
-                     <button type="submit" name="add" class="btn-atc-pill">
+                     <button type="submit" name="add" class="btn-atc-pill" id="btn-add-to-cart">
                        Add to Cart
                      </button>
-                     <button type="submit" name="add" class="btn-buy-now">
+                     <button type="submit" name="add" class="btn-buy-now" id="btn-buy-now">
                        Buy Now
                      </button>
                    </div>
@@ -312,6 +312,33 @@
       fieldsets.forEach(fs => {
          fs.addEventListener('change', updateVariant);
       });
+      
+      // BUY NOW / ADD TO CART LOGIC
+      const form = document.getElementById('product-form-installment');
+      const btnBuyNow = document.getElementById('btn-buy-now');
+      const btnAddToCart = document.getElementById('btn-add-to-cart');
+      
+      if(form && btnBuyNow) {
+          btnBuyNow.addEventListener('click', (e) => {
+              // Create or Update return_to input
+              let input = form.querySelector('input[name="return_to"]');
+              if(!input) {
+                  input = document.createElement('input');
+                  input.type = 'hidden';
+                  input.name = 'return_to';
+                  form.appendChild(input);
+              }
+              input.value = '/checkout';
+          });
+      }
+      
+      if(form && btnAddToCart) {
+          btnAddToCart.addEventListener('click', (e) => {
+              // Remove return_to if exists (so we go to cart)
+              const input = form.querySelector('input[name="return_to"]');
+              if(input) input.remove();
+          });
+      }
   });
 </script>
 
