@@ -279,42 +279,73 @@
 </script>
 
 <script>
-  // Robust Variant Switcher
   document.addEventListener('DOMContentLoaded', () => {
-      const variantData = JSON.parse(document.getElementById('ProductVariants-{{ section.id }}').textContent);
+      // 1. Get Elements
+      const form = document.getElementById('product-form-installment');
+      const variantScript = document.getElementById('ProductVariants-{{ section.id }}');
       const fieldsets = document.querySelectorAll('.product-variant-picker fieldset');
       
+      // 2. Parse Data
+      let variantData = [];
+      if(variantScript && variantScript.textContent) {
+        try {
+           variantData = JSON.parse(variantScript.textContent);
+        } catch(e) { console.error('Variant JSON Error', e); }
+      }
+      
+      // 3. Helper: Update Hidden ID in Form
+      function updateFormId(id) {
+         if(!form || !id) return;
+         
+         // Try to find existing input
+         let input = form.querySelector('input[name="id"]');
+         
+         // If missing, create it (Safety fallback)
+         if(!input) {
+             input = document.createElement('input');
+             input.type = 'hidden';
+             input.name = 'id';
+             form.appendChild(input);
+         }
+         
+         input.value = id;
+         // console.log('Updated Form ID to:', id);
+      }
+      
+      // 4. Update Function
       function updateVariant() {
-          // Get selected options
+          // Get current selection
           const selectedOptions = Array.from(fieldsets).map(fieldset => {
-              return fieldset.querySelector('input:checked').value; // value is the option value (e.g. "Red")
-          });
+              const checked = fieldset.querySelector('input:checked');
+              return checked ? checked.value : null;
+          }).filter(Boolean); // Remove nulls
           
-          // Find matching variant
+          // Debugging
+          // console.log('Selected:', selectedOptions);
+          
+          // Find logic
           const matchedVariant = variantData.find(variant => {
-              return variant.options.every((option, index) => option === selectedOptions[index]);
+              // Compare arrays. variant.options is array of strings.
+              if(variant.options.length !== selectedOptions.length) return false;
+              return variant.options.every((opt, i) => opt === selectedOptions[i]);
           });
           
           if(matchedVariant) {
-              // Update Hidden Input ID
-              const idInput = document.querySelector('form[action*="/cart/add"] input[name="id"]');
-              if(idInput) idInput.value = matchedVariant.id;
-              
-              // Update Price (Optional but good)
-              // ...
-              
-              // Update URL
+              updateFormId(matchedVariant.id);
+              // Update URL history without reload
               window.history.replaceState({}, '', `?variant=${matchedVariant.id}`);
           }
       }
       
-      // Attach listeners
+      // 5. Initial Run (Important! Ensure default is set)
+      updateVariant(); // Run once on load to ensure input matches default selection
+      
+      // 6. Listeners
       fieldsets.forEach(fs => {
          fs.addEventListener('change', updateVariant);
       });
       
-      // BUY NOW / ADD TO CART LOGIC
-      const form = document.getElementById('product-form-installment');
+      // 7. Button Logic (Redirects)
       const btnBuyNow = document.getElementById('btn-buy-now');
       const btnAddToCart = document.getElementById('btn-add-to-cart');
       
