@@ -58,18 +58,29 @@
   }
 
   /* Grid Layout - Enforced 4-Col Desktop */
+  /* Grid Layout - Strong Enforcement */
   .deals-grid {
-    display: grid;
-    list-style: none;
-    padding: 0; margin: 0;
-    gap: {{ section.settings.grid_gap_mobile }}px;
-    grid-template-columns: repeat(2, 1fr); /* Mobile Default */
+    display: grid !important;
+    list-style: none !important;
+    padding: 0 !important; margin: 0 !important;
+    grid-template-columns: repeat(2, 1fr) !important; /* Mobile Default */
+    gap: {{ section.settings.grid_gap_mobile }}px !important;
+    width: 100% !important;
   }
   
-  @media screen and (min-width: 750px) {
+  .deals-grid__item {
+    width: 100% !important;
+    max-width: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    overflow: hidden !important; 
+  }
+  
+  /* Trigger 4 columns much earlier (Phablets/Small Tablets+) */
+  @media screen and (min-width: 600px) {
     .deals-grid {
-       grid-template-columns: repeat(4, 1fr); /* Desktop Enforced */
-       gap: {{ section.settings.grid_gap_desktop }}px;
+       grid-template-columns: repeat(4, 1fr) !important; /* Desktop Enforced */
+       gap: {{ section.settings.grid_gap_desktop }}px !important;
     }
   }
 
