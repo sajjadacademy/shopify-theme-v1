@@ -1,11 +1,94 @@
 {
     "sections": {
-        "main": {
-            "type": "main-page",
-            "settings": {}
+        "hero": {
+            "type": "hero-split",
+            "settings": {
+                "title": "New Season Arrivals",
+                "subtext": "Premium collection for modern lifestyle.",
+                "cta_text": "Shop Now",
+                "cta_link": "collections/all"
+            }
+        },
+        "marquee": {
+            "type": "marquee",
+            "settings": {
+                "speed": 20,
+                "bg_color": "#000000",
+                "text_color": "#ffffff"
+            },
+            "blocks": {
+                "m1": {
+                    "type": "text_block",
+                    "settings": {
+                        "text": "Free Shipping on Orders Over $50"
+                    }
+                },
+                "m2": {
+                    "type": "text_block",
+                    "settings": {
+                        "text": "New Styles Added Daily"
+                    }
+                },
+                "m3": {
+                    "type": "text_block",
+                    "settings": {
+                        "text": "Limited Time Offer: 20% OFF"
+                    }
+                }
+            },
+            "block_order": [
+                "m1",
+                "m2",
+                "m3"
+            ]
+        },
+        "grid": {
+            "type": "product-grid-mobile",
+            "settings": {
+                "collection": "all",
+                "product_count": 4,
+                "bg_color": "#ffffff"
+            }
+        },
+        "trust": {
+            "type": "trust-row",
+            "settings": {
+                "bg_color": "#f9f9f9"
+            },
+            "blocks": {
+                "t1": {
+                    "type": "trust_item",
+                    "settings": {
+                        "heading": "Free Shipping",
+                        "subheading": "On all orders"
+                    }
+                },
+                "t2": {
+                    "type": "trust_item",
+                    "settings": {
+                        "heading": "Secure Payment",
+                        "subheading": "100% Protected"
+                    }
+                },
+                "t3": {
+                    "type": "trust_item",
+                    "settings": {
+                        "heading": "24/7 Support",
+                        "subheading": "We're here to help"
+                    }
+                }
+            },
+            "block_order": [
+                "t1",
+                "t2",
+                "t3"
+            ]
         }
     },
     "order": [
-        "main"
+        "hero",
+        "marquee",
+        "grid",
+        "trust"
     ]
 }
