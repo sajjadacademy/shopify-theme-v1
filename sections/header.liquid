@@ -7,6 +7,13 @@
   .header__logo a, .header__menu li a, .icon-btn {
     color: {{ section.settings.text_color }};
   }
+  .header__menu li a {
+    font-size: {{ section.settings.header_menu_font_size_desktop }}px;
+    font-weight: {{ section.settings.header_menu_font_weight }};
+    letter-spacing: {{ section.settings.header_menu_letter_spacing | divided_by: 10.0 }}px;
+    text-transform: {{ section.settings.header_menu_text_transform }};
+    text-decoration: none; /* Ensure no underline by default */
+  }
   .header__menu li a:hover, .icon-btn:hover {
     background-color: #FFFFFF;
     color: {{ section.settings.bg_color }}; /* Inverse: Text becomes background color */
@@ -123,6 +130,53 @@
         { "value": "right", "label": "Right" }
       ],
       "default": "center"
+    },
+    {
+      "type": "header",
+      "content": "Navigation Typography"
+    },
+    {
+      "type": "range",
+      "id": "header_menu_font_size_desktop",
+      "min": 12,
+      "max": 26,
+      "step": 1,
+      "unit": "px",
+      "label": "Menu Font Size (Desktop)",
+      "default": 16
+    },
+    {
+      "type": "select",
+      "id": "header_menu_font_weight",
+      "label": "Menu Font Weight",
+      "options": [
+        { "value": "400", "label": "Regular" },
+        { "value": "500", "label": "Medium" },
+        { "value": "600", "label": "Semi-Bold" },
+        { "value": "700", "label": "Bold" },
+        { "value": "800", "label": "X-Bold" }
+      ],
+      "default": "700"
+    },
+    {
+       "type": "range",
+       "id": "header_menu_letter_spacing",
+       "min": 0,
+       "max": 20,
+       "step": 1,
+       "unit": "px",
+       "label": "Letter Spacing (x 0.1px)",
+       "default": 2
+    },
+    {
+       "type": "select",
+       "id": "header_menu_text_transform",
+       "label": "Text Transform",
+       "options": [
+          { "value": "none", "label": "None" },
+          { "value": "uppercase", "label": "Uppercase" }
+       ],
+       "default": "none"
     },
     {
       "type": "header",
