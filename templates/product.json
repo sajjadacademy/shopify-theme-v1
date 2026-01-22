@@ -1,82 +1,85 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
-    "sections": {
-        "main": {
-            "type": "main-product",
-            "blocks": {
-                "title": {
-                    "type": "title",
-                    "settings": {
-                        "show_vendor": true
-                    }
-                },
-                "price": {
-                    "type": "price",
-                    "settings": {}
-                },
-                "variant_picker": {
-                    "type": "variant_picker",
-                    "settings": {}
-                },
-                "bundle": {
-                    "type": "bundle_selector",
-                    "settings": {}
-                },
-                "buy_buttons": {
-                    "type": "buy_buttons",
-                    "settings": {
-                        "show_dynamic_checkout": true
-                    }
-                },
-                "trust": {
-                    "type": "trust_icons",
-                    "settings": {}
-                },
-                "description": {
-                    "type": "description",
-                    "settings": {}
-                },
-                "specs": {
-                    "type": "specifications",
-                    "settings": {}
-                }
-            },
-            "block_order": [
-                "title",
-                "price",
-                "variant_picker",
-                "bundle",
-                "buy_buttons",
-                "trust",
-                "description",
-                "specs"
-            ],
-            "settings": {
-                "media_layout": "grid"
-            }
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "blocks": {
+        "title": {
+          "type": "title",
+          "settings": {}
         },
-        "sticky_atc": {
-            "type": "sticky-atc",
-            "settings": {
-                "enable": true
-            }
+        "price": {
+          "type": "price",
+          "settings": {}
         },
-        "related": {
-            "type": "related-products",
-            "settings": {
-                "heading": "You May Also Like"
-            }
+        "variant_picker": {
+          "type": "variant_picker",
+          "settings": {}
         },
-        "recently_viewed": {
-            "type": "recently-viewed",
-            "settings": {
-                "heading": "Viewed Products"
-            }
+        "bundle": {
+          "type": "bundle_selector",
+          "settings": {}
+        },
+        "buy_buttons": {
+          "type": "buy_buttons",
+          "settings": {}
+        },
+        "trust": {
+          "type": "trust_icons",
+          "settings": {}
+        },
+        "description": {
+          "type": "description",
+          "settings": {}
+        },
+        "specs": {
+          "type": "specifications",
+          "settings": {}
         }
+      },
+      "block_order": [
+        "title",
+        "price",
+        "variant_picker",
+        "bundle",
+        "buy_buttons",
+        "trust",
+        "description",
+        "specs"
+      ],
+      "settings": {}
     },
-    "order": [
-        "main",
-        "related",
-        "recently_viewed",
-        "sticky_atc"
-    ]
+    "sticky_atc": {
+      "type": "sticky-atc",
+      "settings": {
+        "enable": true
+      }
+    },
+    "related": {
+      "type": "related-products",
+      "settings": {
+        "heading": "You May Also Like"
+      }
+    },
+    "recently_viewed": {
+      "type": "recently-viewed",
+      "settings": {
+        "heading": "Viewed Products"
+      }
+    }
+  },
+  "order": [
+    "main",
+    "related",
+    "recently_viewed",
+    "sticky_atc"
+  ]
 }

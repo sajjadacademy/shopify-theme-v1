@@ -1,0 +1,40 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "current": {
+    "sections": {
+      "header": {
+        "type": "header",
+        "settings": {
+          "logo": "shopify://shop_images/ChatGPT_Image_Jan_12_2026_11_33_33_PM_1.png",
+          "logo_width": 170,
+          "logo_position": "center",
+          "menu": "main-menu",
+          "menu_position": "left",
+          "enable_sticky": true,
+          "show_search": true,
+          "search_style": "icon",
+          "bg_color": "#0e1b4d",
+          "text_color": "#ffffff"
+        }
+      },
+      "app-bottom-bar": {
+        "type": "app-bottom-bar",
+        "settings": {
+          "enable": true,
+          "bg_color": "#0e1b4d",
+          "text_color": "#ffffff",
+          "active_color": "#d4af37"
+        }
+      }
+    },
+    "content_for_index": []
+  }
+}
