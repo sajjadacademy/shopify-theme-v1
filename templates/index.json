@@ -1,5 +1,13 @@
 {
     "sections": {
+        "announcement": {
+            "type": "announcement-bar",
+            "settings": {
+                "text": "LIMITED TIME: 50% OFF ALL ITEMS",
+                "bg_color": "#ff9900",
+                "text_color": "#000000"
+            }
+        },
         "hero": {
             "type": "hero-split",
             "settings": {
@@ -42,53 +50,93 @@
                 "m3"
             ]
         },
-        "grid": {
-            "type": "product-grid-mobile",
+        "new_products": {
+            "type": "featured-collection",
             "settings": {
+                "heading": "New Arrivals",
                 "collection": "all",
-                "product_count": 4,
-                "bg_color": "#ffffff"
+                "mobile_layout": "grid",
+                "columns_mobile": "2",
+                "products_to_show": 4
             }
         },
-        "trust": {
-            "type": "trust-row",
+        "banner_1": {
+            "type": "image-banner",
             "settings": {
-                "bg_color": "#f9f9f9"
+                "layout": "full",
+                "mobile_height": 250,
+                "desktop_height": 400
             },
             "blocks": {
-                "t1": {
-                    "type": "feature",
+                "b1": {
+                    "type": "banner",
                     "settings": {
-                        "heading": "Free Shipping",
-                        "subheading": "On all orders"
-                    }
-                },
-                "t2": {
-                    "type": "feature",
-                    "settings": {
-                        "heading": "Secure Payment",
-                        "subheading": "100% Protected"
-                    }
-                },
-                "t3": {
-                    "type": "feature",
-                    "settings": {
-                        "heading": "24/7 Support",
-                        "subheading": "We're here to help"
+                        "heading": "Summer Collection",
+                        "text": "<p>Upgrade your wardrobe with our latest styles.</p>",
+                        "cta_text": "Explore",
+                        "cta_link": "/collections/all"
                     }
                 }
             },
             "block_order": [
-                "t1",
-                "t2",
-                "t3"
+                "b1"
             ]
+        },
+        "featured_products": {
+            "type": "featured-collection",
+            "settings": {
+                "heading": "Best Sellers",
+                "collection": "all",
+                "mobile_layout": "carousel",
+                "columns_mobile": "1",
+                "products_to_show": 6
+            }
+        },
+        "banner_2": {
+            "type": "image-banner",
+            "settings": {
+                "layout": "split",
+                "mobile_height": 300,
+                "desktop_height": 500
+            },
+            "blocks": {
+                "b_left": {
+                    "type": "banner",
+                    "settings": {
+                        "heading": "Men",
+                        "cta_text": "Shop Men",
+                        "cta_link": "/collections/all",
+                        "text_alignment": "center"
+                    }
+                },
+                "b_right": {
+                    "type": "banner",
+                    "settings": {
+                        "heading": "Women",
+                        "cta_text": "Shop Women",
+                        "cta_link": "/collections/all",
+                        "text_alignment": "center"
+                    }
+                }
+            },
+            "block_order": [
+                "b_left",
+                "b_right"
+            ]
+        },
+        "newsletter": {
+            "type": "newsletter",
+            "settings": {}
         }
     },
     "order": [
+        "announcement",
         "hero",
         "marquee",
-        "grid",
-        "trust"
+        "new_products",
+        "banner_1",
+        "featured_products",
+        "banner_2",
+        "newsletter"
     ]
 }
