@@ -130,10 +130,10 @@
                 "heading": "Daily Deals",
                 "collection": "all",
                 "card_density": "normal",
-                "columns_desktop": 5,
+                "columns_desktop": 4,
                 "grid_gap_mobile": 8,
                 "show_quick_add": true,
-                "quick_add_type": "icon",
+                "quick_add_type": "button",
                 "show_shadow": true,
                 "card_border_color": "#e5e5e5"
             }
