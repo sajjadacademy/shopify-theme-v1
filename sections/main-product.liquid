@@ -2,7 +2,35 @@
   <div class="container">
     <div class="product-layout">
       
-      <!-- LEFT: Info Column (Swapped) -->
+      <!-- LEFT: Media Gallery -->
+      <div class="product-media-wrapper">
+         <div class="product-media-main">
+            {%- if product.selected_or_first_available_variant.featured_media != null -%}
+              {%- assign featured_media = product.selected_or_first_available_variant.featured_media -%}
+            {%- else -%}
+              {%- assign featured_media = product.featured_media -%}
+            {%- endif -%}
+            
+            <img src="{{ featured_media | image_url: width: 1200 }}" 
+                 alt="{{ featured_media.alt | escape }}" 
+                 id="MainImage-{{ section.id }}" 
+                 class="main-image"
+                 loading="eager" width="1200" height="1200">
+         </div>
+         
+         {%- if product.media.size > 1 -%}
+           <div class="product-thumbnails">
+              {%- for media in product.media -%}
+                <div class="thumbnail-item {% if media.id == featured_media.id %}active{% endif %}"
+                     onclick="changeMainImage('{{ media | image_url: width: 1200 }}', this)">
+                   <img src="{{ media | image_url: width: 100 }}" alt="{{ media.alt | escape }}" width="100" height="100">
+                </div>
+              {%- endfor -%}
+           </div>
+         {%- endif -%}
+      </div>
+
+      <!-- RIGHT: Info Column -->
       <div class="product-info-wrapper">
         {%- for block in section.blocks -%}
           {%- case block.type -%}
@@ -161,34 +189,6 @@
 
           {%- endcase -%}
         {%- endfor -%}
-      </div>
-
-      <!-- RIGHT: Media Gallery (Swapped) -->
-      <div class="product-media-wrapper">
-         <div class="product-media-main">
-            {%- if product.selected_or_first_available_variant.featured_media != null -%}
-              {%- assign featured_media = product.selected_or_first_available_variant.featured_media -%}
-            {%- else -%}
-              {%- assign featured_media = product.featured_media -%}
-            {%- endif -%}
-            
-            <img src="{{ featured_media | image_url: width: 1200 }}" 
-                 alt="{{ featured_media.alt | escape }}" 
-                 id="MainImage-{{ section.id }}" 
-                 class="main-image"
-                 loading="eager" width="1200" height="1200">
-         </div>
-         
-         {%- if product.media.size > 1 -%}
-           <div class="product-thumbnails">
-              {%- for media in product.media -%}
-                <div class="thumbnail-item {% if media.id == featured_media.id %}active{% endif %}"
-                     onclick="changeMainImage('{{ media | image_url: width: 1200 }}', this)">
-                   <img src="{{ media | image_url: width: 100 }}" alt="{{ media.alt | escape }}" width="100" height="100">
-                </div>
-              {%- endfor -%}
-           </div>
-         {%- endif -%}
       </div>
     
     </div>
@@ -354,7 +354,7 @@
   /* Desktop Grid */
   @media screen and (min-width: 900px) {
     .product-layout {
-       grid-template-columns: 0.8fr 1.4fr; /* Info Left (Smaller), Image Right (Larger) */
+       grid-template-columns: 1.4fr 0.8fr; /* Image Left (Larger), Info Right (Smaller) */
        gap: 4rem;
     }
   }
