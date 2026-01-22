@@ -37,6 +37,10 @@
                 "trust": {
                     "type": "trust_icons",
                     "settings": {}
+                },
+                "specs": {
+                    "type": "specifications",
+                    "settings": {}
                 }
             },
             "block_order": [
@@ -45,6 +49,7 @@
                 "bundle",
                 "buy_buttons",
                 "trust",
+                "specs",
                 "description"
             ],
             "settings": {

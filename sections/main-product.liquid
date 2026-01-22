@@ -33,6 +33,7 @@
       <!-- RIGHT: Product Info -->
       <div class="product-info-wrapper">
         {%- for block in section.blocks -%}
+        <div class="product-block-debug" style="border: 0px solid transparent;" data-block-type="{{ block.type }}">
           {%- case block.type -%}
             
             <!-- Title & Rating -->
@@ -167,8 +168,9 @@
                </div>
 
           {%- endcase -%}
-        {%- endfor -%}
-      </div>
+        </div>
+      {%- endfor -%}
+    </div>
     
     </div>
   </div>
