@@ -51,6 +51,9 @@
   #shopify-section-{{ section.id }} .mobile-nav-wrapper {
     background-color: {{ section.settings.bg_color }};
   }
+  #shopify-section-{{ section.id }} .mobile-nav__item {
+    color: {{ section.settings.text_color }};
+  }
   #shopify-section-{{ section.id }} .mobile-nav__item.active,
   #shopify-section-{{ section.id }} .mobile-nav__item.active .mobile-nav__icon svg {
     color: {{ section.settings.active_color }};
@@ -86,6 +89,12 @@
       "id": "bg_color",
       "label": "Background",
       "default": "#0E1B4D"
+    },
+    {
+       "type": "color",
+       "id": "text_color",
+       "label": "Icon/Text Color",
+       "default": "#FFFFFF"
     },
     {
       "type": "color",
