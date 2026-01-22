@@ -59,13 +59,15 @@
 
   /* Grid Layout - Enforced 4-Col Desktop */
   /* Grid Layout - Strong Enforcement */
+  /* Grid Layout - Strong Enforcement */
   .deals-grid {
     display: grid !important;
     list-style: none !important;
     padding: 0 !important; margin: 0 !important;
-    grid-template-columns: repeat(2, 1fr) !important; /* Mobile Default */
-    gap: {{ section.settings.grid_gap_mobile }}px !important;
     width: 100% !important;
+    /* DEFAULT TO 4 COLUMNS (Desktop First) */
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: {{ section.settings.grid_gap_desktop }}px !important;
   }
   
   .deals-grid__item {
@@ -76,11 +78,11 @@
     overflow: hidden !important; 
   }
   
-  /* Trigger 4 columns much earlier (Phablets/Small Tablets+) */
-  @media screen and (min-width: 600px) {
+  /* ONLY on Mobile (Phone) switch to 2 columns */
+  @media screen and (max-width: 599px) {
     .deals-grid {
-       grid-template-columns: repeat(4, 1fr) !important; /* Desktop Enforced */
-       gap: {{ section.settings.grid_gap_desktop }}px !important;
+       grid-template-columns: repeat(2, 1fr) !important;
+       gap: {{ section.settings.grid_gap_mobile }}px !important;
     }
   }
 
