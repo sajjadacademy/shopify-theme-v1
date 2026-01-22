@@ -95,7 +95,15 @@
     color: inherit;
   }
 
+  @media screen and (max-width: 767px) {
+    .media-desktop { display: none !important; }
+    .media-mobile { display: block !important; }
+  }
+
   @media screen and (min-width: 768px) {
+    .media-mobile { display: none !important; }
+    .media-desktop { display: block !important; }
+
     .image-banner__grid.grid-split {
       flex-direction: row;
     }
