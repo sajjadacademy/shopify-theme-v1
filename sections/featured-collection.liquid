@@ -42,7 +42,14 @@
                    {% endif %}
                  </div>
                  <div class="product-card__footer">
-                    <!-- Removed express badge -->
+                    {% if product.available %}
+                      <form method="post" action="/cart/add">
+                        <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+                        <button type="submit" class="btn-atc-outline">Add to cart</button>
+                      </form>
+                    {% else %}
+                       <button class="btn-atc-outline" disabled>Sold Out</button>
+                    {% endif %}
                  </div>
                </div>
              </div>
@@ -141,49 +148,56 @@
   
   .product-card__image-wrapper {
     position: relative;
-    aspect-ratio: 1; /* Keep Square for consistency */
+    aspect-ratio: 1; /* Square Area */
     width: 100%;
     overflow: hidden;
     margin-bottom: 0;
-    background: #fff; /* Ensure background matches card to hide "empty space" */
+    background: #fff; 
     display: flex;
     align-items: center;
     justify-content: center;
   }
   .product-card__image {
     width: 100%; height: 100%; 
-    object-fit: contain; /* Do not cut image */
-    padding: 4px; /* Slight breathing room if it hits edges */
+    object-fit: contain; /* PERFECT FIT - NO CROP */
+    padding: 12px; /* Generous padding like reference */
+    mix-blend-mode: multiply; /* Helps blend white backgrounds if slightly off */
   }
 
-  /* Wishlist Button - Golden Circle */
+  /* Wishlist */
   .wishlist-btn {
     position: absolute; top: 10px; right: 10px;
     background: #fff; 
     border-radius: 50%;
     width: 32px; height: 32px;
     display: flex; justify-content: center; align-items: center;
-    border: 1px solid var(--color-warning); /* Golden Border */
-    color: var(--color-warning); /* Golden Icon */
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    border: 1px solid var(--color-warning); 
+    color: var(--color-warning); 
     cursor: pointer;
-    transition: all 0.2s;
     z-index: 2;
   }
-  .wishlist-btn:hover {
-    background: var(--color-warning);
-    color: #fff;
-  }
-  .wishlist-btn svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2px; }
   
-  .badge-best-seller {
-    position: absolute; top: 10px; left: 10px;
-    background: var(--color-warning); /* Golden Badge */
+  /* Add to Cart Button (Reference Style) */
+  .product-card__footer {
+     margin-top: 10px;
+  }
+  .btn-atc-outline {
+    width: 100%;
+    display: block;
+    text-align: center;
+    padding: 8px;
+    border: 1px solid var(--color-primary);
+    color: var(--color-primary);
+    border-radius: 20px; /* Pill shape like reference */
+    background: transparent;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+  .btn-atc-outline:hover {
+    background: var(--color-primary);
     color: #fff;
-    font-size: 0.65rem; padding: 4px 8px;
-    font-weight: 700; text-transform: uppercase;
-    border-radius: 20px; /* Pill shape */
-    z-index: 2;
   }
 
   /* Info Block */
@@ -207,7 +221,7 @@
 
   .product-card__price {
      display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px;
-     font-size: 1rem; font-weight: 700; margin-top: auto; padding-top: 8px;
+     font-size: 1rem; font-weight: 700; margin-top: auto; padding-top: 4px;
   }
   .currency { font-size: 0.7rem; font-weight: 400; }
   .price-compare { text-decoration: line-through; color: #999; font-size: 0.8rem; font-weight: 400; }
