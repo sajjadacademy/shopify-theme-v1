@@ -9,47 +9,55 @@
       </div>
     {% endif %}
 
-    <div class="product-grid-wrapper {% if section.settings.mobile_layout == 'carousel' %}mobile-scroll{% endif %}">
+    <div class="product-grid-wrapper {% if section.settings.mobile_layout == 'carousel' %}mobile-scroll{% endif %} {% if section.settings.desktop_layout == 'carousel' %}desktop-scroll{% endif %}">
       {%- assign collection = collections[section.settings.collection] -%}
       <ul class="product-grid grid--{{ section.settings.columns_desktop }}-col-desktop grid--{{ section.settings.columns_mobile }}-col-tablet-down">
         {%- for product in collection.products limit: section.settings.products_to_show -%}
           <li class="grid__item">
-             <div class="product-card">
+             <div class="product-card noon-style">
                <div class="product-card__image-wrapper">
                  <a href="{{ product.url }}" class="product-card__link">
-                   <img src="{{ product.featured_image | image_url: width: 533 }}" 
+                   <img src="{{ product.featured_image | image_url: width: 400 }}" 
                         loading="lazy" 
                         class="product-card__image" 
                         alt="{{ product.title | escape }}">
                  </a>
-                 {% if product.compare_at_price > product.price %}
-                   <span class="product-badge sale-badge">Sale</span>
+                 <button class="wishlist-btn" aria-label="Add to Wishlist">{% render 'icon-dynamic', icon: 'heart' %}</button>
+                 {% if product.tags contains 'Best Seller' %}
+                    <span class="badge-best-seller">Best Seller</span>
                  {% endif %}
                </div>
                <div class="product-card__info">
                  <div class="product-card__rating">
-                    {% render 'icon-star' %} <span class="rating-text">4.8</span>
+                    <span class="rating-star">★</span> <span class="rating-text">4.8</span> <span class="rating-count">(10.3K)</span>
                  </div>
                  <h3 class="product-card__title">
                    <a href="{{ product.url }}">{{ product.title }}</a>
                  </h3>
                  <div class="product-card__price">
-                   <span class="price-current">{{ product.price | money }}</span>
+                   <span class="currency">AED</span> <span class="price-current">{{ product.price | money_without_currency }}</span>
                    {% if product.compare_at_price > product.price %}
-                     <span class="price-compare">{{ product.compare_at_price | money }}</span>
+                     <span class="price-compare">{{ product.compare_at_price | money_without_currency }}</span>
+                     <span class="discount-tag">{{ product.compare_at_price | minus: product.price | times: 100.0 | divided_by: product.compare_at_price | round }}% Off</span>
                    {% endif %}
+                 </div>
+                 <div class="product-card__footer">
+                    <span class="badge-express">express</span>
                  </div>
                </div>
              </div>
           </li>
         {%- else -%}
-          {%- for i in (1..4) -%}
+          <!-- Placeholder Loop -->
+          {%- for i in (1..6) -%}
             <li class="grid__item">
-              <div class="product-card placeholder">
-                 {{ 'product-' | append: i | placeholder_svg_tag: 'placeholder-svg' }}
+              <div class="product-card noon-style">
+                 <div class="product-card__image-wrapper placeholder">
+                    {{ 'product-' | append: i | placeholder_svg_tag: 'placeholder-svg' }}
+                 </div>
                  <div class="product-card__info">
-                   <h3 class="product-card__title">Example Product Title</h3>
-                   <div class="product-card__price">$19.99</div>
+                   <h3 class="product-card__title">Example Product</h3>
+                   <div class="product-card__price">AED 49.99</div>
                  </div>
               </div>
             </li>
@@ -66,7 +74,6 @@
     padding-bottom: {{ section.settings.padding_bottom }}px;
     background-color: {{ section.settings.bg_color }};
   }
-  
   .section-heading { margin-bottom: 1.5rem; display: flex; align-items: baseline; gap: 1rem; }
   .section-heading.center { justify-content: center; text-align: center; }
   .section-heading.left { justify-content: space-between; }
@@ -81,8 +88,22 @@
   
   /* Desktop Grid columns */
   @media screen and (min-width: 990px) {
+    .grid--6-col-desktop { grid-template-columns: repeat(6, 1fr); }
+    .grid--5-col-desktop { grid-template-columns: repeat(5, 1fr); }
     .grid--4-col-desktop { grid-template-columns: repeat(4, 1fr); }
-    .grid--3-col-desktop { grid-template-columns: repeat(3, 1fr); }
+    
+    /* Desktop Scroll / Carousel Mode */
+    .desktop-scroll .product-grid {
+       display: flex;
+       overflow-x: auto;
+       scroll-snap-type: x mandatory;
+       padding-bottom: 1rem;
+       gap: 16px;
+    }
+    .desktop-scroll .product-grid .grid__item {
+       min-width: calc(100% / {{ section.settings.columns_desktop }} - 16px);
+       scroll-snap-align: start;
+    }
   }
   
   /* Mobile Grid columns */
@@ -102,61 +123,76 @@
     scroll-snap-align: start;
   }
 
-  /* Card Styles */
-  .product-card {
+  /* Noon Style Card */
+  .product-card.noon-style {
     background: #fff;
-    border-radius: var(--card-radius);
-    overflow: hidden;
+    border: 1px solid #e0e0e0; /* Subtle border */
+    border-radius: 4px; /* Noon uses smaller radius */
     height: 100%;
     display: flex;
     flex-direction: column;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05); /* Subtle shadow for depth */
+    position: relative;
+    padding: 8px; /* Internal padding */
   }
   
   .product-card__image-wrapper {
     position: relative;
-    aspect-ratio: 0.8; /* Portrait standardized */
+    aspect-ratio: 1; /* Square */
+    margin-bottom: 8px;
     overflow: hidden;
   }
   .product-card__image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.3s;
+    width: 100%; height: 100%; object-fit: contain; /* Noon usually contain for electronics, cover for fashion. Contain is safer for mixed. */
   }
-  .product-card:hover .product-card__image {
-    transform: scale(1.05);
-  }
-  
-  .product-card__info { padding: 10px; flex-grow: 1; display: flex; flex-direction: column; }
-  
-  .product-card__title {
-    font-size: 0.9rem;
-    margin: 5px 0;
-    font-weight: 500;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-  }
-  .product-card__title a { text-decoration: none; color: inherit; }
-  
-  .product-card__price { font-weight: 700; color: var(--color-primary); margin-top: auto; }
-  .price-compare { text-decoration: line-through; color: #999; font-size: 0.8em; margin-left: 5px; }
 
-  .product-badge {
-    position: absolute; top: 8px; left: 8px;
-    background: var(--color-warning); color: #fff;
-    font-size: 0.7rem; padding: 2px 6px; border-radius: 4px;
-    font-weight: bold;
+  .wishlist-btn {
+    position: absolute; top: 0; right: 0;
+    background: #fff; border-radius: 50%;
+    width: 28px; height: 28px;
+    display: flex; justify-content: center; align-items: center;
+    border: none; box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    cursor: pointer;
+  }
+  .wishlist-btn svg { width: 14px; height: 14px; }
+  
+  .badge-best-seller {
+    position: absolute; top: 0; left: 0;
+    background: #2a3a3b; color: #fff;
+    font-size: 0.6rem; padding: 2px 6px;
+    font-weight: bold; text-transform: uppercase;
+  }
+
+  /* Info Block */
+  .product-card__title {
+    font-size: 0.85rem;
+    font-weight: 400; /* Regular weight */
+    margin: 4px 0;
+    height: 2.4em; /* limit lines */
+    overflow: hidden;
+    line-height: 1.2;
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
   }
   
   .product-card__rating {
-      display: flex; align-items: center; gap: 4px; font-size: 0.8rem; color: #f59e0b;
+     font-size: 0.7rem; color: #7e859b; display: flex; align-items: center; gap: 4px;
+     margin-bottom: 4px;
+     background: #fcfcfc; display: inline-flex; padding: 2px 4px; border-radius: 12px;
   }
-  .product-card__rating svg { width: 14px; height: 14px; fill: currentColor; }
+  .rating-star { color: #fff; background: #38ae04; font-size: 0.6rem; border-radius: 50%; width: 12px; height: 12px; display: inline-flex; justify-content: center; align-items: center; }
+  .rating-text { font-weight: bold; color: #38ae04; }
 
+  .product-card__price {
+     display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px;
+     font-size: 0.95rem; font-weight: 700;
+  }
+  .currency { font-size: 0.7rem; font-weight: normal; }
+  .price-compare { text-decoration: line-through; color: #7e859b; font-size: 0.75rem; font-weight: normal; margin-left: 4px; }
+  .discount-tag { color: #38ae04; font-weight: 700; font-size: 0.75rem; }
+
+  .badge-express {
+     background: #fcfbf4; display: inline-block; /* Faux express badge */
+     color: #000; font-style: italic; font-weight: 900; background-color: #ffcc00; padding: 0 4px; font-size: 0.7rem; border-radius: 2px;
+  }
 </style>
 
 {% schema %}
@@ -167,7 +203,7 @@
       "type": "text",
       "id": "heading",
       "label": "Heading",
-      "default": "Featured Products"
+      "default": "Recommended for you"
     },
     {
       "type": "select",
@@ -187,25 +223,43 @@
     {
       "type": "range",
       "id": "products_to_show",
-      "min": 2,
+      "min": 4,
       "max": 12,
       "step": 1,
-      "default": 4,
-      "label": "Maximum products to show"
+      "default": 6,
+      "label": "Products to show"
+    },
+    {
+       "type": "header",
+       "content": "Desktop Layout"
     },
     {
       "type": "range",
       "id": "columns_desktop",
-      "min": 1,
-      "max": 5,
+      "min": 4,
+      "max": 6,
       "step": 1,
-      "default": 4,
-      "label": "Number of columns on desktop"
+      "default": 6,
+      "label": "Number of columns"
+    },
+    {
+       "type": "select",
+       "id": "desktop_layout",
+       "label": "Desktop Layout Mode",
+       "options": [
+          { "value": "grid", "label": "Grid (Stack)" },
+          { "value": "carousel", "label": "Carousel (Horizontal Scroll)" }
+       ],
+       "default": "carousel"
+    },
+    {
+       "type": "header",
+       "content": "Mobile Layout"
     },
     {
       "type": "select",
       "id": "columns_mobile",
-      "label": "Mobile Layout (Grid Columns)",
+      "label": "Grid Columns",
       "options": [
         { "value": "1", "label": "1 Column" },
         { "value": "2", "label": "2 Columns" }
@@ -215,7 +269,7 @@
     {
        "type": "select",
        "id": "mobile_layout",
-       "label": "Mobile Swipe Mode",
+       "label": "Swipe Mode",
        "options": [
           { "value": "grid", "label": "Grid (Stack)" },
           { "value": "carousel", "label": "Swipe (Carousel)" }
