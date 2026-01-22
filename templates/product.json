@@ -31,13 +31,6 @@
                     "type": "description",
                     "settings": {}
                 },
-                "shipping": {
-                    "type": "accordion",
-                    "settings": {
-                        "heading": "Shipping Information",
-                        "content": "<p>Fast shipping via UPS/FedEx.</p>"
-                    }
-                },
                 "trust": {
                     "type": "trust_icons",
                     "settings": {}
