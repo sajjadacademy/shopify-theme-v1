@@ -42,7 +42,7 @@
                    {% endif %}
                  </div>
                  <div class="product-card__footer">
-                    <span class="badge-express">express</span>
+                    <!-- Removed express badge -->
                  </div>
                </div>
              </div>
@@ -126,73 +126,88 @@
   /* Noon Style Card */
   .product-card.noon-style {
     background: #fff;
-    border: 1px solid #e0e0e0; /* Subtle border */
-    border-radius: 4px; /* Noon uses smaller radius */
+    border: 1px solid #f0f0f0; /* Softer border */
+    border-radius: 8px; /* Slightly more rounded for premium feel */
     height: 100%;
     display: flex;
     flex-direction: column;
     position: relative;
-    padding: 8px; /* Internal padding */
+    padding: 0; /* Remove internal padding for full bleed image */
+    transition: box-shadow 0.3s ease;
+  }
+  .product-card.noon-style:hover {
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08); /* Premium lift effect */
   }
   
   .product-card__image-wrapper {
     position: relative;
     aspect-ratio: 1; /* Square */
-    margin-bottom: 8px;
+    width: 100%;
     overflow: hidden;
+    margin-bottom: 0;
   }
   .product-card__image {
-    width: 100%; height: 100%; object-fit: contain; /* Noon usually contain for electronics, cover for fashion. Contain is safer for mixed. */
+    width: 100%; height: 100%; 
+    object-fit: cover; /* Force cover per user request */
   }
 
+  /* Wishlist Button - Golden Circle */
   .wishlist-btn {
-    position: absolute; top: 0; right: 0;
-    background: #fff; border-radius: 50%;
-    width: 28px; height: 28px;
+    position: absolute; top: 10px; right: 10px;
+    background: #fff; 
+    border-radius: 50%;
+    width: 32px; height: 32px;
     display: flex; justify-content: center; align-items: center;
-    border: none; box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    border: 1px solid var(--color-warning); /* Golden Border */
+    color: var(--color-warning); /* Golden Icon */
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     cursor: pointer;
+    transition: all 0.2s;
+    z-index: 2;
   }
-  .wishlist-btn svg { width: 14px; height: 14px; }
+  .wishlist-btn:hover {
+    background: var(--color-warning);
+    color: #fff;
+  }
+  .wishlist-btn svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2px; }
   
   .badge-best-seller {
-    position: absolute; top: 0; left: 0;
-    background: #2a3a3b; color: #fff;
-    font-size: 0.6rem; padding: 2px 6px;
-    font-weight: bold; text-transform: uppercase;
+    position: absolute; top: 10px; left: 10px;
+    background: var(--color-warning); /* Golden Badge */
+    color: #fff;
+    font-size: 0.65rem; padding: 4px 8px;
+    font-weight: 700; text-transform: uppercase;
+    border-radius: 20px; /* Pill shape */
+    z-index: 2;
   }
 
   /* Info Block */
+  .product-card__info { padding: 12px; flex-grow: 1; display: flex; flex-direction: column; gap: 4px; }
+  
   .product-card__title {
-    font-size: 0.85rem;
-    font-weight: 400; /* Regular weight */
-    margin: 4px 0;
-    height: 2.4em; /* limit lines */
-    overflow: hidden;
-    line-height: 1.2;
-    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+    font-size: 0.9rem;
+    font-weight: 600; 
+    margin: 0;
+    color: var(--color-primary);
+    line-height: 1.4;
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
   }
   
   .product-card__rating {
-     font-size: 0.7rem; color: #7e859b; display: flex; align-items: center; gap: 4px;
-     margin-bottom: 4px;
-     background: #fcfcfc; display: inline-flex; padding: 2px 4px; border-radius: 12px;
+     font-size: 0.75rem; color: #666; display: flex; align-items: center; gap: 4px;
+     margin-top: 4px;
   }
-  .rating-star { color: #fff; background: #38ae04; font-size: 0.6rem; border-radius: 50%; width: 12px; height: 12px; display: inline-flex; justify-content: center; align-items: center; }
-  .rating-text { font-weight: bold; color: #38ae04; }
+  .rating-star { color: var(--color-warning); font-size: 0.8rem; }
+  .rating-count { color: #999; font-size: 0.7rem; }
 
   .product-card__price {
-     display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px;
-     font-size: 0.95rem; font-weight: 700;
+     display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px;
+     font-size: 1rem; font-weight: 700; margin-top: auto; padding-top: 8px;
   }
-  .currency { font-size: 0.7rem; font-weight: normal; }
-  .price-compare { text-decoration: line-through; color: #7e859b; font-size: 0.75rem; font-weight: normal; margin-left: 4px; }
-  .discount-tag { color: #38ae04; font-weight: 700; font-size: 0.75rem; }
+  .currency { font-size: 0.7rem; font-weight: 400; }
+  .price-compare { text-decoration: line-through; color: #999; font-size: 0.8rem; font-weight: 400; }
+  .discount-tag { color: #28a745; font-weight: 700; font-size: 0.75rem; background: #e6f9e9; padding: 2px 6px; border-radius: 4px; }
 
-  .badge-express {
-     background: #fcfbf4; display: inline-block; /* Faux express badge */
-     color: #000; font-style: italic; font-weight: 900; background-color: #ffcc00; padding: 0 4px; font-size: 0.7rem; border-radius: 2px;
-  }
 </style>
 
 {% schema %}
