@@ -352,16 +352,30 @@
       // Buy Now: Standard Submit with Checkout Redirect
       if(form && btnBuyNow) {
           btnBuyNow.addEventListener('click', (e) => {
-              // Ensure ID is up to date just in case
+              e.preventDefault(); // Stop normal submit
+              
+              // 1. Update/Ensure ID
+              let currentId = null;
+              
+              // Try to update from matching variant (visual state)
               updateVariant();
               
+              // Check input
               const idInput = form.querySelector('input[name="id"]');
-              // FAILSAFE: If no ID set, set to first variant ID
-              if((!idInput || !idInput.value) && variantData.length > 0) {
-                 updateFormId(variantData[0].id);
+              if(idInput && idInput.value) {
+                  currentId = idInput.value;
+              } else if (variantData.length > 0) {
+                  // Fallback: First Variant
+                  currentId = variantData[0].id;
+                  updateFormId(currentId);
               }
               
-              // Add return_to
+              if(!currentId) {
+                  alert('Please select a variant.');
+                  return;
+              }
+              
+              // 2. Add return_to
               let input = form.querySelector('input[name="return_to"]');
               if(!input) {
                   input = document.createElement('input');
@@ -370,7 +384,9 @@
                   form.appendChild(input);
               }
               input.value = '/checkout';
-              // Form submits naturally
+              
+              // 3. Submit
+              form.submit();
           });
       }
       
