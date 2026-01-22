@@ -1,0 +1,108 @@
+<div class="marquee-section">
+  <div class="marquee-content" style="animation-duration: {{ section.settings.speed }}s; animation-direction: {{ section.settings.direction }};">
+    <!-- Duplicate content for seamless loop -->
+    {% for i in (1..10) %}
+      {% for block in section.blocks %}
+        <div class="marquee-item">
+          {{ block.settings.text }}
+        </div>
+      {% endfor %}
+    {% endfor %}
+  </div>
+</div>
+
+<style>
+  .marquee-section {
+    width: 100%;
+    overflow: hidden;
+    background-color: {{ section.settings.bg_color }};
+    color: {{ section.settings.text_color }};
+    padding: 10px 0;
+    white-space: nowrap;
+  }
+  
+  .marquee-content {
+    display: inline-block;
+    animation-name: marquee;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+  }
+  
+  .marquee-item {
+    display: inline-block;
+    padding: 0 2rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+  }
+
+  @keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); } 
+    /* Ideally -100% depending on duplication strategy, but for simple loop -50% often works if content is doubled enough */
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Marquee",
+  "settings": [
+    {
+      "type": "range",
+      "id": "speed",
+      "min": 5,
+      "max": 50,
+      "step": 1,
+      "unit": "s",
+      "label": "Speed",
+      "default": 20
+    },
+    {
+      "type": "select",
+      "id": "direction",
+      "label": "Direction",
+      "options": [
+        { "value": "normal", "label": "Left" },
+        { "value": "reverse", "label": "Right" }
+      ],
+      "default": "normal"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#ffffff"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "text",
+      "name": "Message",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text",
+          "default": "Free Shipping on All Orders"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Scrolling Marquee",
+      "blocks": [
+        { "type": "text" },
+        { "type": "text", "settings": { "text": "Limited Time Offer" } },
+        { "type": "text" }
+      ]
+    }
+  ]
+}
+{% endschema %}

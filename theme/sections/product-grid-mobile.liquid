@@ -1,0 +1,256 @@
+<div class="mobile-grid-section section section-{{ section.id }}-padding">
+  <div class="container">
+    {% if section.settings.title != blank %}
+      <h2 class="h3 section-title">{{ section.settings.title }}</h2>
+    {% endif %}
+    
+    <div class="mobile-product-grid">
+      {%- assign collection = collections[section.settings.collection] -%}
+      {%- if collection != blank -%}
+        {%- for product in collection.products limit: section.settings.products_to_show -%}
+          <a href="{{ product.url }}" class="mobile-product-card">
+            <div class="mpc-image">
+              <img src="{{ product.featured_image | image_url: width: 400 }}" 
+                   loading="lazy" 
+                   width="200" 
+                   height="200" 
+                   alt="{{ product.title }}">
+              {% if product.compare_at_price > product.price %}
+                 <span class="mpc-badge">-{{ product.compare_at_price | minus: product.price | times: 100.0 | divided_by: product.compare_at_price | round }}%</span>
+              {% endif %}
+            </div>
+            
+            <div class="mpc-info">
+              <h3 class="mpc-title">{{ product.title }}</h3>
+              
+              <div class="mpc-rating">
+                {% render 'icon-star' %}
+                <span>4.8 (120)</span> <!-- Placeholder for real reviews -->
+              </div>
+              
+              <div class="mpc-price">
+                <span class="price-current">{{ product.price | money }}</span>
+                {% if product.compare_at_price > product.price %}
+                  <span class="price-compare">{{ product.compare_at_price | money }}</span>
+                {% endif %}
+              </div>
+              
+              {% if section.settings.show_prime %}
+                <div class="mpc-delivery">
+                  <span class="check-icon">✔</span> Prime Delivery
+                </div>
+              {% endif %}
+            </div>
+          </a>
+        {%- endfor -%}
+      {%- else -%}
+        <!-- Onboarding Cards -->
+        {% for i in (1..4) %}
+           <div class="mobile-product-card">
+             <div class="mpc-image" style="background: #f4f4f4; display:flex; align-items:center; justify-content:center;">
+               {{ 'product-1' | placeholder_svg_tag }}
+             </div>
+             <div class="mpc-info">
+               <h3 class="mpc-title">Example Product Title</h3>
+               <div class="mpc-price">$19.99</div>
+             </div>
+           </div>
+        {% endfor %}
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+<style>
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+    background-color: {{ section.settings.bg_color }};
+  }
+
+  @media screen and (min-width: 768px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+
+  .mobile-product-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px; /* Tight gap */
+  }
+  
+  .mobile-product-card {
+    border: 1px solid var(--color-border);
+    border-radius: var(--card-radius);
+    overflow: hidden;
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    color: inherit;
+  }
+  
+  .mpc-image {
+    position: relative;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+  }
+  
+  .mpc-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .mpc-badge {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    background: #cc0c39; /* Amazon redish */
+    color: white;
+    padding: 2px 6px;
+    font-size: 0.7rem;
+    font-weight: bold;
+    border-radius: 2px;
+  }
+  
+  .mpc-info {
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: 1;
+  }
+  
+  .mpc-title {
+    font-size: 0.9rem;
+    font-weight: 400;
+    margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    line-height: 1.3;
+  }
+  
+  .mpc-rating {
+    display: flex;
+    align-items: center;
+    font-size: 0.75rem;
+    color: #555;
+    gap: 2px;
+  }
+  .mpc-rating svg { width: 14px; height: 14px; fill: #FFA41C; color: #FFA41C; }
+  
+  .mpc-price {
+    font-size: 1rem;
+    align-items: baseline;
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  
+  .price-current {
+    font-weight: 700;
+    color: #B12704; /* Amazon price color */
+  }
+  
+  .price-compare {
+    text-decoration: line-through;
+    color: #777;
+    font-size: 0.8rem;
+  }
+  
+  .mpc-delivery {
+    font-size: 0.7rem;
+    color: #555;
+    margin-top: auto; /* Push to bottom */
+  }
+  .check-icon {
+    color: var(--color-accent);
+    font-weight: bold;
+  }
+  
+  /* Desktop adjustment: show 4 cols */
+  @media screen and (min-width: 900px) {
+    .mobile-product-grid {
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Marketplace Grid",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Best Sellers"
+    },
+    {
+       "type": "collection",
+       "id": "collection",
+       "label": "Collection"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "min": 4,
+      "max": 12,
+      "step": 2,
+      "label": "Products to Show",
+      "default": 4
+    },
+    {
+      "type": "checkbox",
+      "id": "show_prime",
+      "label": "Show Delivery Badge",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Appearance"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 36
+    }
+  ],
+  "presets": [
+    {
+      "name": "Marketplace Grid"
+    }
+  ]
+}
+{% endschema %}

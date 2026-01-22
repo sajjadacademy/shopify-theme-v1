@@ -1,0 +1,60 @@
+<!doctype html>
+<html class="no-js" lang="{{ request.locale.iso_code }}">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="theme-color" content="{{ settings.color_primary }}">
+    <link rel="canonical" href="{{ canonical_url }}">
+    <link rel="preconnect" href="https://cdn.shopify.com" crossorigin>
+
+    <title>{{ page_title }}</title>
+
+    {% if page_description %}
+      <meta name="description" content="{{ page_description | escape }}">
+    {% endif %}
+
+    {{ 'base.css' | asset_url | stylesheet_tag }}
+
+    <script src="{{ 'global.js' | asset_url }}" defer="defer"></script>
+
+    <style>
+      :root {
+        --color-primary: {{ settings.color_primary }};
+        --color-secondary: {{ settings.color_secondary }};
+        --color-accent: {{ settings.color_accent }};
+        --color-background: {{ settings.color_background }};
+        --color-text: {{ settings.color_text }};
+        --color-border: {{ settings.color_border }};
+        --color-success: {{ settings.color_success }};
+        --color-warning: {{ settings.color_warning }};
+
+        --font-heading: {{ settings.font_heading.family }}, {{ settings.font_heading.fallback_families }};
+        --font-body: {{ settings.font_body.family }}, {{ settings.font_body.fallback_families }};
+        --font-base-size: {{ settings.font_base_size }}px;
+
+        --section-padding-mobile: {{ settings.section_padding_mobile }}px;
+        --section-padding-desktop: {{ settings.section_padding_desktop }}px;
+        --card-radius: {{ settings.card_radius }}px;
+        --button-radius: {{ settings.button_radius }}px;
+        --shadow-intensity: {{ settings.shadow_intensity | divided_by: 100.0 }};
+      }
+    </style>
+    
+    {{ content_for_header }}
+  </head>
+
+  <body class="template-{{ request.page_type | handle }}">
+    {% section 'header' %}
+
+    <main id="MainContent" role="main" tabindex="-1">
+      {{ content_for_layout }}
+    </main>
+
+    {% section 'sticky-nav' %}
+    
+    <script>
+      window.shopUrl = '{{ request.origin }}';
+    </script>
+  </body>
+</html>

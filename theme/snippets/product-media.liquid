@@ -1,0 +1,90 @@
+{% comment %}
+  Renders a product media gallery.
+  Accepts:
+  - product: {Object} Product Liquid object
+  - media_layout: {String} 'stacked' or 'grid' (desktop)
+{% endcomment %}
+
+<div class="product-media-gallery">
+  <div class="media-container media-layout-{{ media_layout | default: 'stacked' }}">
+    {%- if product.media.size > 0 -%}
+      {%- for media in product.media -%}
+        <div class="media-item" data-media-id="{{ media.id }}">
+          {% render 'product-media-image', media: media %}
+        </div>
+      {%- endfor -%}
+    {%- else -%}
+      <div class="media-item">
+        {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+      </div>
+    {%- endif -%}
+  </div>
+  
+  {%- if product.media.size > 1 -%}
+    <div class="media-dots small-hide">
+      {%- for media in product.media -%}
+        <button class="media-dot {% if forloop.first %}active{% endif %}" aria-label="Load slide {{ forloop.index }}"></button>
+      {%- endfor -%}
+    </div>
+  {%- endif -%}
+</div>
+
+{% comment %}
+  Simple sub-snippet for image rendering to keep things clean.
+  In a real theme, this would handle video/model types too.
+{% endcomment %}
+
+<style>
+  .product-media-gallery {
+    position: relative;
+    width: 100%;
+  }
+
+  /* Mobile: Horizontal Snap Scroll */
+  .media-container {
+    display: flex;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    gap: 0;
+  }
+  
+  .media-item {
+    flex: 0 0 100%;
+    width: 100%;
+    scroll-snap-align: start;
+    position: relative;
+  }
+  
+  .media-item img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    display: block;
+  }
+  
+  /* Desktop Layouts */
+  @media screen and (min-width: 768px) {
+    .media-container {
+      display: grid;
+      gap: 10px;
+      overflow: visible;
+    }
+    
+    .media-item {
+      width: auto;
+    }
+
+    .media-layout-stacked {
+      grid-template-columns: 1fr;
+    }
+
+    .media-layout-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+    
+    /* Make first image span 2 cols in grid if odd number? Optional enhancement */
+  }
+</style>

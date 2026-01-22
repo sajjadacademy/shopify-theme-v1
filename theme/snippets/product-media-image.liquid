@@ -1,0 +1,5 @@
+{% if media.media_type == 'image' %}
+  {{ media | image_url: width: 1200 | image_tag: loading: 'lazy', width: 1200, sizes: '(min-width: 768px) 50vw, 100vw' }}
+{% else %}
+  {{ media | media_tag }}
+{% endif %}

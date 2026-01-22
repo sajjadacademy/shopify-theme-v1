@@ -1,0 +1,66 @@
+{
+    "sections": {
+        "main": {
+            "type": "main-product",
+            "blocks": {
+                "title": {
+                    "type": "title",
+                    "settings": {
+                        "show_vendor": true
+                    }
+                },
+                "price": {
+                    "type": "price",
+                    "settings": {}
+                },
+                "bundle": {
+                    "type": "bundle_selector",
+                    "settings": {}
+                },
+                "buy_buttons": {
+                    "type": "buy_buttons",
+                    "settings": {
+                        "show_dynamic_checkout": true
+                    }
+                },
+                "description": {
+                    "type": "description",
+                    "settings": {}
+                },
+                "shipping": {
+                    "type": "accordion",
+                    "settings": {
+                        "heading": "Shipping Information",
+                        "content": "<p>Fast shipping via UPS/FedEx.</p>"
+                    }
+                },
+                "trust": {
+                    "type": "trust_icons",
+                    "settings": {}
+                }
+            },
+            "block_order": [
+                "title",
+                "price",
+                "description",
+                "bundle",
+                "buy_buttons",
+                "trust",
+                "shipping"
+            ],
+            "settings": {
+                "media_layout": "grid"
+            }
+        },
+        "sticky_atc": {
+            "type": "sticky-atc",
+            "settings": {
+                "enable": true
+            }
+        }
+    },
+    "order": [
+        "main",
+        "sticky_atc"
+    ]
+}
