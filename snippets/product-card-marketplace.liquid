@@ -224,12 +224,20 @@
   .pcm-atc-btn--full {
      background: var(--color-primary, #000);
      color: #fff;
-     padding: 8px;
-     border-radius: 4px;
-     font-weight: 600;
+     padding: 10px 16px;
+     border-radius: 50px; /* Fully Rounded (Pill) */
+     font-weight: 700;
      font-size: 0.9rem;
+     border: 1px solid var(--color-primary, #000);
+     text-transform: capitalize;
+     letter-spacing: 0.5px;
+     transition: all 0.3s ease;
   }
-  .pcm-atc-btn--full:hover { opacity: 0.9; }
+  .pcm-atc-btn--full:hover { 
+     background: transparent;
+     color: var(--color-primary, #000);
+     opacity: 1;
+  }
 
   .pcm-atc-btn--icon {
     width: 32px; height: 32px;
