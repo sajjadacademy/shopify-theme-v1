@@ -96,22 +96,33 @@
                  </div>
                {%- endunless -%}
 
-            <!-- Description Short -->
+            <!-- Description Short (Accordion) -->
             {%- when 'description' -%}
-               <div class="product-block-description rte" {{ block.shopify_attributes }}>
-                 {{ product.description }}
-               </div>
+               <details class="product-accordion" {{ block.shopify_attributes }}>
+                 <summary class="accordion-header">
+                    <span class="accordion-title">Product Specifications</span>
+                    <span class="accordion-icon">+</span>
+                 </summary>
+                 <div class="accordion-content rte">
+                   {{ product.description }}
+                 </div>
+               </details>
 
-            <!-- Specs / Info -->
+            <!-- Specs / Info (Accordion) -->
             {%- when 'specifications' -%}
-               <div class="product-specs-box" {{ block.shopify_attributes }}>
-                  <h4 class="specs-title">Product Specifications</h4>
-                  <ul class="specs-list">
-                    <li><strong>Product Name:</strong> {{ product.title }}</li>
-                    <li><strong>SKU:</strong> {{ product.selected_or_first_available_variant.sku | default: 'N/A' }}</li>
-                    <li><strong>Stock:</strong> {% if product.available %}In Stock{% else %}Out of Stock{% endif %}</li>
-                  </ul>
-               </div>
+               <details class="product-accordion" {{ block.shopify_attributes }}>
+                  <summary class="accordion-header">
+                    <span class="accordion-title">Additional Information</span>
+                    <span class="accordion-icon">+</span>
+                  </summary>
+                  <div class="accordion-content">
+                    <ul class="specs-list">
+                      <li><strong>Product Name:</strong> {{ product.title }}</li>
+                      <li><strong>SKU:</strong> {{ product.selected_or_first_available_variant.sku | default: 'N/A' }}</li>
+                      <li><strong>Stock:</strong> {% if product.available %}In Stock{% else %}Out of Stock{% endif %}</li>
+                    </ul>
+                  </div>
+               </details>
 
             <!-- Bundle Selector (Restored) -->
             {%- when 'bundle_selector' -%}
@@ -350,6 +361,30 @@
   .variant-pill input:checked + span {
      background: #000; color: #fff; border-color: #000;
   }
+
+  /* Accordion Styles */
+  .product-accordion {
+    border-top: 1px solid #e5e5e5;
+    border-bottom: 1px solid #e5e5e5;
+    margin-top: 1rem;
+  }
+  .product-accordion + .product-accordion {
+     border-top: none; /* Avoid double borders */
+  }
+  .accordion-header {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 1rem 0;
+    cursor: pointer;
+    list-style: none; /* Remove default triangle */
+  }
+  .accordion-header::-webkit-details-marker { display: none; }
+  .accordion-title { font-weight: 700; font-size: 1rem; color: #000; }
+  .accordion-icon { font-size: 1.2rem; font-weight: 300; }
+  .product-accordion[open] .accordion-icon { transform: rotate(45deg); display:inline-block; } /* Simple + to x rotation or similar */
+  
+  .accordion-content { padding-bottom: 1rem; color: #555; line-height: 1.6; }
+  .specs-list { list-style: none; padding: 0; margin: 0; }
+  .specs-list li { margin-bottom: 0.5rem; font-size: 0.9rem; }
 
   /* Desktop Grid */
   @media screen and (min-width: 900px) {
