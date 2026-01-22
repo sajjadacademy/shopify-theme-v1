@@ -345,13 +345,17 @@
          fs.addEventListener('change', updateVariant);
       });
       
-      // 7. Button Logic (Redirects)
+      // 7. Button Logic (Redirects & AJAX)
       const btnBuyNow = document.getElementById('btn-buy-now');
       const btnAddToCart = document.getElementById('btn-add-to-cart');
       
+      // Buy Now: Standard Submit with Checkout Redirect
       if(form && btnBuyNow) {
           btnBuyNow.addEventListener('click', (e) => {
-              // Create or Update return_to input
+              // Ensure ID is up to date just in case
+              updateVariant();
+              
+              // Add return_to
               let input = form.querySelector('input[name="return_to"]');
               if(!input) {
                   input = document.createElement('input');
@@ -360,14 +364,79 @@
                   form.appendChild(input);
               }
               input.value = '/checkout';
+              // Form submits naturally
           });
       }
       
+      // Add to Cart: AJAX + Drawer
       if(form && btnAddToCart) {
           btnAddToCart.addEventListener('click', (e) => {
-              // Remove return_to if exists (so we go to cart)
-              const input = form.querySelector('input[name="return_to"]');
-              if(input) input.remove();
+              e.preventDefault(); // Stop normal submit
+              
+              // Ensure ID is up to date
+              updateVariant();
+              
+              // Remove return_to if exists (cleanup)
+              const returnInput = form.querySelector('input[name="return_to"]');
+              if(returnInput) returnInput.remove();
+              
+              // Prepare Payload
+              const formData = new FormData(form);
+              
+              // If using bundle selector 'items[0][quantity]', we need to map it to standard 'quantity' for the simple /cart/add.js endpoint
+              // Or just construct manually.
+              const id = form.querySelector('input[name="id"]').value;
+              
+              // Check for bundle hidden quantity
+              let qty = 1;
+              const bundleInput = document.getElementById('bundle-qty-hidden');
+              if(bundleInput) qty = parseInt(bundleInput.value);
+              
+              // Payload
+              const payload = {
+                  items: [{
+                      id: id,
+                      quantity: qty
+                  }]
+              };
+              
+              // Loading State
+              btnAddToCart.textContent = 'Adding...';
+              btnAddToCart.disabled = true;
+              
+              fetch(window.Shopify.routes.root + 'cart/add.js', {
+                  method: 'POST',
+                  headers: {
+                      'Content-Type': 'application/json'
+                  },
+                  body: JSON.stringify(payload)
+              })
+              .then(response => {
+                  return response.json();
+              })
+              .then(data => {
+                  btnAddToCart.textContent = 'Add to Cart';
+                  btnAddToCart.disabled = false;
+                  
+                  if(data.status && data.status === 422) {
+                      // Error (e.g. OOS)
+                      alert(data.description || 'Could not add to cart.');
+                  } else {
+                      // Success: Open Drawer
+                      if(window.openCartDrawer) {
+                          window.openCartDrawer();
+                      } else {
+                          // Fallback if drawer fails
+                          window.location.href = '/cart';
+                      }
+                  }
+              })
+              .catch((error) => {
+                  console.error('Error:', error);
+                  btnAddToCart.textContent = 'Add to Cart';
+                  btnAddToCart.disabled = false;
+                  alert('An error occurred.');
+              });
           });
       }
   });
