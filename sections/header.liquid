@@ -7,6 +7,12 @@
   .header__logo a, .header__menu li a, .icon-btn {
     color: {{ section.settings.text_color }};
   }
+  .header__menu li a:hover, .icon-btn:hover {
+    background-color: #FFFFFF;
+    color: {{ section.settings.bg_color }}; /* Inverse: Text becomes background color */
+    border-radius: var(--button-radius);
+  }
+  .icon-btn:hover svg { stroke: {{ section.settings.bg_color }}; }
 </style>
   <header class="header container">
     
