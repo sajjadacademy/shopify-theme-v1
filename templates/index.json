@@ -6,7 +6,7 @@
                 "title": "New Season Arrivals",
                 "subtext": "Premium collection for modern lifestyle.",
                 "cta_text": "Shop Now",
-                "cta_link": "collections/all"
+                "cta_link": "/collections/all"
             }
         },
         "marquee": {
@@ -18,19 +18,19 @@
             },
             "blocks": {
                 "m1": {
-                    "type": "text_block",
+                    "type": "text",
                     "settings": {
                         "text": "Free Shipping on Orders Over $50"
                     }
                 },
                 "m2": {
-                    "type": "text_block",
+                    "type": "text",
                     "settings": {
                         "text": "New Styles Added Daily"
                     }
                 },
                 "m3": {
-                    "type": "text_block",
+                    "type": "text",
                     "settings": {
                         "text": "Limited Time Offer: 20% OFF"
                     }
@@ -57,21 +57,21 @@
             },
             "blocks": {
                 "t1": {
-                    "type": "trust_item",
+                    "type": "feature",
                     "settings": {
                         "heading": "Free Shipping",
                         "subheading": "On all orders"
                     }
                 },
                 "t2": {
-                    "type": "trust_item",
+                    "type": "feature",
                     "settings": {
                         "heading": "Secure Payment",
                         "subheading": "100% Protected"
                     }
                 },
                 "t3": {
-                    "type": "trust_item",
+                    "type": "feature",
                     "settings": {
                         "heading": "24/7 Support",
                         "subheading": "We're here to help"
