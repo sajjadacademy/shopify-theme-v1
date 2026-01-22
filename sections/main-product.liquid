@@ -2,35 +2,7 @@
   <div class="container">
     <div class="product-layout">
       
-      <!-- LEFT: Media Gallery -->
-      <div class="product-media-wrapper">
-         <div class="product-media-main">
-            {%- if product.selected_or_first_available_variant.featured_media != null -%}
-              {%- assign featured_media = product.selected_or_first_available_variant.featured_media -%}
-            {%- else -%}
-              {%- assign featured_media = product.featured_media -%}
-            {%- endif -%}
-            
-            <img src="{{ featured_media | image_url: width: 800 }}" 
-                 alt="{{ featured_media.alt | escape }}" 
-                 id="MainImage-{{ section.id }}" 
-                 class="main-image"
-                 loading="eager" width="800" height="800">
-         </div>
-         
-         {%- if product.media.size > 1 -%}
-           <div class="product-thumbnails">
-              {%- for media in product.media -%}
-                <div class="thumbnail-item {% if media.id == featured_media.id %}active{% endif %}"
-                     onclick="changeMainImage('{{ media | image_url: width: 800 }}', this)">
-                   <img src="{{ media | image_url: width: 100 }}" alt="{{ media.alt | escape }}" width="100" height="100">
-                </div>
-              {%- endfor -%}
-           </div>
-         {%- endif -%}
-      </div>
-
-      <!-- RIGHT: Product Info -->
+      <!-- LEFT: Info Column (Swapped) -->
       <div class="product-info-wrapper">
         {%- for block in section.blocks -%}
           {%- case block.type -%}
@@ -74,6 +46,27 @@
                     {%- endif -%}
                  </div>
               </div>
+
+            <!-- Variant Picker (Color) -->
+            {%- when 'variant_picker' -%}
+               {%- unless product.has_only_default_variant -%}
+                 <div class="product-variant-picker" {{ block.shopify_attributes }}>
+                    {%- for option in product.options_with_values -%}
+                       <fieldset class="js product-form__input">
+                          <legend class="form__label">{{ option.name }}</legend>
+                          <div class="variant-options">
+                             {%- for value in option.values -%}
+                                <label class="variant-pill">
+                                   <input type="radio" name="{{ option.name }}" value="{{ value | escape }}" {% if option.selected_value == value %}checked{% endif %} 
+                                          onchange="/* logic to update variant id */">
+                                   <span>{{ value }}</span>
+                                </label>
+                             {%- endfor -%}
+                          </div>
+                       </fieldset>
+                    {%- endfor -%}
+                 </div>
+               {%- endunless -%}
 
             <!-- Description Short -->
             {%- when 'description' -%}
@@ -167,8 +160,36 @@
                </div>
 
           {%- endcase -%}
-      {%- endfor -%}
-    </div>
+        {%- endfor -%}
+      </div>
+
+      <!-- RIGHT: Media Gallery (Swapped) -->
+      <div class="product-media-wrapper">
+         <div class="product-media-main">
+            {%- if product.selected_or_first_available_variant.featured_media != null -%}
+              {%- assign featured_media = product.selected_or_first_available_variant.featured_media -%}
+            {%- else -%}
+              {%- assign featured_media = product.featured_media -%}
+            {%- endif -%}
+            
+            <img src="{{ featured_media | image_url: width: 1200 }}" 
+                 alt="{{ featured_media.alt | escape }}" 
+                 id="MainImage-{{ section.id }}" 
+                 class="main-image"
+                 loading="eager" width="1200" height="1200">
+         </div>
+         
+         {%- if product.media.size > 1 -%}
+           <div class="product-thumbnails">
+              {%- for media in product.media -%}
+                <div class="thumbnail-item {% if media.id == featured_media.id %}active{% endif %}"
+                     onclick="changeMainImage('{{ media | image_url: width: 1200 }}', this)">
+                   <img src="{{ media | image_url: width: 100 }}" alt="{{ media.alt | escape }}" width="100" height="100">
+                </div>
+              {%- endfor -%}
+           </div>
+         {%- endif -%}
+      </div>
     
     </div>
   </div>
@@ -317,10 +338,23 @@
   .trust-item { display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 0.8rem; color: #555; text-align: center; }
   .trust-icon { font-size: 1.5rem; }
 
+  /* Variant Picker */
+  .product-variant-picker { margin: 1rem 0; }
+  .form__label { font-size: 0.9rem; font-weight: 700; margin-bottom: 0.5rem; display: block; }
+  .variant-options { display: flex; gap: 8px; flex-wrap: wrap; }
+  .variant-pill { position: relative; cursor: pointer; }
+  .variant-pill input { position: absolute; opacity: 0; width: 0; height: 0; }
+  .variant-pill span {
+     padding: 8px 16px; border: 1px solid #ccc; border-radius: 20px; font-size: 0.9rem; display: inline-block; transition: all 0.2s;
+  }
+  .variant-pill input:checked + span {
+     background: #000; color: #fff; border-color: #000;
+  }
+
   /* Desktop Grid */
   @media screen and (min-width: 900px) {
     .product-layout {
-       grid-template-columns: 1.5fr 1fr; /* 60% Image Width */
+       grid-template-columns: 0.8fr 1.4fr; /* Info Left (Smaller), Image Right (Larger) */
        gap: 4rem;
     }
   }
@@ -336,6 +370,7 @@
   "blocks": [
     { "type": "title", "name": "Title", "limit": 1 },
     { "type": "price", "name": "Price", "limit": 1 },
+    { "type": "variant_picker", "name": "Variant Picker", "limit": 1 },
     { "type": "bundle_selector", "name": "Bundle Selector", "limit": 1 },
     { "type": "buy_buttons", "name": "Buy Actions", "limit": 1 },
     { "type": "trust_icons", "name": "Trust Badges", "limit": 1 },

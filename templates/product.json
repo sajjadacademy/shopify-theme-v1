@@ -13,6 +13,10 @@
                     "type": "price",
                     "settings": {}
                 },
+                "variant_picker": {
+                    "type": "variant_picker",
+                    "settings": {}
+                },
                 "bundle": {
                     "type": "bundle_selector",
                     "settings": {}
@@ -46,6 +50,7 @@
             "block_order": [
                 "title",
                 "price",
+                "variant_picker",
                 "bundle",
                 "buy_buttons",
                 "trust",
