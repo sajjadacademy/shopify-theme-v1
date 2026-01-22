@@ -7,6 +7,16 @@
   .header__logo a, .header__menu li a, .icon-btn {
     color: {{ section.settings.text_color }};
   }
+  .header__menu li {
+    display: inline-block;
+    padding: 0 1rem;
+    position: relative;
+    list-style: none; /* Ensure no bullets */
+  }
+  .header__menu li::before, .header__menu li::after {
+    content: none !important; /* Force remove any separator dots */
+    display: none !important;
+  }
   .header__menu li a {
     font-size: {{ section.settings.header_menu_font_size_desktop }}px;
     font-weight: {{ section.settings.header_menu_font_weight }};
