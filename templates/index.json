@@ -124,6 +124,20 @@
                 "b_right"
             ]
         },
+        "marketplace_collection": {
+            "type": "mobile-marketplace-product-grid",
+            "settings": {
+                "heading": "Daily Deals",
+                "collection": "all",
+                "card_density": "normal",
+                "columns_desktop": 5,
+                "grid_gap_mobile": 8,
+                "show_quick_add": true,
+                "quick_add_type": "icon",
+                "show_shadow": true,
+                "card_border_color": "#e5e5e5"
+            }
+        },
         "newsletter": {
             "type": "newsletter",
             "settings": {}
@@ -133,6 +147,7 @@
         "announcement",
         "hero",
         "marquee",
+        "marketplace_collection",
         "new_products",
         "banner_1",
         "featured_products",
