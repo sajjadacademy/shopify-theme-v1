@@ -96,33 +96,9 @@
                  </div>
                {%- endunless -%}
 
-            <!-- Description Short (Accordion) -->
+            <!-- Description/Specs now moved to bottom, so we skip here -->
             {%- when 'description' -%}
-               <details class="product-accordion" {{ block.shopify_attributes }}>
-                 <summary class="accordion-header">
-                    <span class="accordion-title">Product Specifications</span>
-                    <span class="accordion-icon">+</span>
-                 </summary>
-                 <div class="accordion-content rte">
-                   {{ product.description }}
-                 </div>
-               </details>
-
-            <!-- Specs / Info (Accordion) -->
             {%- when 'specifications' -%}
-               <details class="product-accordion" {{ block.shopify_attributes }}>
-                  <summary class="accordion-header">
-                    <span class="accordion-title">Additional Information</span>
-                    <span class="accordion-icon">+</span>
-                  </summary>
-                  <div class="accordion-content">
-                    <ul class="specs-list">
-                      <li><strong>Product Name:</strong> {{ product.title }}</li>
-                      <li><strong>SKU:</strong> {{ product.selected_or_first_available_variant.sku | default: 'N/A' }}</li>
-                      <li><strong>Stock:</strong> {% if product.available %}In Stock{% else %}Out of Stock{% endif %}</li>
-                    </ul>
-                  </div>
-               </details>
 
             <!-- Bundle Selector (Restored) -->
             {%- when 'bundle_selector' -%}
@@ -202,6 +178,41 @@
         {%- endfor -%}
       </div>
     
+    </div>
+
+    <!-- BOTTOM: Detailed Information (Full Width) -->
+    <div class="product-bottom-accordions">
+       {%- for block in section.blocks -%}
+          {%- case block.type -%}
+             <!-- Description Accordion -->
+             {%- when 'description' -%}
+               <details class="product-accordion" {{ block.shopify_attributes }}>
+                 <summary class="accordion-header">
+                    <span class="accordion-title">Product Specifications</span>
+                    <span class="accordion-icon">+</span>
+                 </summary>
+                 <div class="accordion-content rte">
+                   {{ product.description }}
+                 </div>
+               </details>
+
+             <!-- Specs Accordion -->
+             {%- when 'specifications' -%}
+               <details class="product-accordion" {{ block.shopify_attributes }}>
+                  <summary class="accordion-header">
+                    <span class="accordion-title">Additional Information</span>
+                    <span class="accordion-icon">+</span>
+                  </summary>
+                  <div class="accordion-content">
+                    <ul class="specs-list">
+                      <li><strong>Product Name:</strong> {{ product.title }}</li>
+                      <li><strong>SKU:</strong> {{ product.selected_or_first_available_variant.sku | default: 'N/A' }}</li>
+                      <li><strong>Stock:</strong> {% if product.available %}In Stock{% else %}Out of Stock{% endif %}</li>
+                    </ul>
+                  </div>
+               </details>
+          {%- endcase -%}
+       {%- endfor -%}
     </div>
   </div>
 </div>
@@ -363,26 +374,26 @@
   }
 
   /* Accordion Styles */
+  .product-bottom-accordions {
+     margin-top: 3rem;
+     border-top: 1px solid #e5e5e5; /* Top separator for the whole section */
+  }
   .product-accordion {
-    border-top: 1px solid #e5e5e5;
     border-bottom: 1px solid #e5e5e5;
-    margin-top: 1rem;
   }
-  .product-accordion + .product-accordion {
-     border-top: none; /* Avoid double borders */
-  }
+  
   .accordion-header {
     display: flex; justify-content: space-between; align-items: center;
-    padding: 1rem 0;
+    padding: 1.5rem 0; /* More spacing for full width */
     cursor: pointer;
     list-style: none; /* Remove default triangle */
   }
   .accordion-header::-webkit-details-marker { display: none; }
-  .accordion-title { font-weight: 700; font-size: 1rem; color: #000; }
+  .accordion-title { font-weight: 700; font-size: 1.1rem; color: #000; }
   .accordion-icon { font-size: 1.2rem; font-weight: 300; }
   .product-accordion[open] .accordion-icon { transform: rotate(45deg); display:inline-block; } /* Simple + to x rotation or similar */
   
-  .accordion-content { padding-bottom: 1rem; color: #555; line-height: 1.6; }
+  .accordion-content { padding-bottom: 1.5rem; color: #555; line-height: 1.6; }
   .specs-list { list-style: none; padding: 0; margin: 0; }
   .specs-list li { margin-bottom: 0.5rem; font-size: 0.9rem; }
 
@@ -390,7 +401,7 @@
   @media screen and (min-width: 900px) {
     .product-layout {
        grid-template-columns: 1.4fr 0.8fr; /* Image Left (Larger), Info Right (Smaller) */
-       gap: 4rem;
+       gap: 5rem; /* Increased Gap */
     }
   }
 </style>
