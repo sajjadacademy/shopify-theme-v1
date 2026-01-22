@@ -101,6 +101,11 @@
     background-color: {{ section.settings.card_bg_color }};
   }
   
+    /* Colors */
+    --color-primary: {{ section.settings.button_bg_color }};
+    --color-warning: {{ section.settings.rating_color }};
+  }
+  
   /* Typography Overrides */
   #shopify-section-{{ section.id }} .pcm-title {
     font-size: {{ section.settings.title_font_size }}px;
@@ -114,17 +119,12 @@
     color: {{ section.settings.compare_price_color }};
   }
   #shopify-section-{{ section.id }} .pcm-discount-badge {
-    background: {{ section.settings.badge_bg_color }}; /* e.g. Light Green */
-    color: {{ section.settings.badge_text_color }}; /* e.g. Dark Green */
+    background: {{ section.settings.badge_bg_color }};
+    color: {{ section.settings.badge_text_color }};
   }
   #shopify-section-{{ section.id }} .pcm-rating-star,
   #shopify-section-{{ section.id }} .pcm-rating-val {
     color: {{ section.settings.rating_color }};
-  }
-  #shopify-section-{{ section.id }} .pcm-atc-btn--full,
-  #shopify-section-{{ section.id }} .pcm-atc-btn--icon {
-     background-color: {{ section.settings.button_bg_color }};
-     color: {{ section.settings.button_text_color }};
   }
   
 </style>

@@ -57,6 +57,7 @@
                 "collection": "all",
                 "mobile_layout": "grid",
                 "columns_mobile": "2",
+                "columns_desktop": 4,
                 "products_to_show": 4
             }
         },
@@ -89,7 +90,8 @@
                 "collection": "all",
                 "mobile_layout": "carousel",
                 "columns_mobile": "1",
-                "products_to_show": 6
+                "columns_desktop": 4,
+                "products_to_show": 4
             }
         },
         "banner_2": {
