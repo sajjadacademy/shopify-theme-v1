@@ -1,0 +1,135 @@
+<div class="newsletter-section section section-{{ section.id }}-padding">
+  <div class="container container--narrow">
+    <div class="newsletter__content center">
+       {% if section.settings.heading != blank %}
+         <h2 class="h2">{{ section.settings.heading }}</h2>
+       {% endif %}
+       {% if section.settings.text != blank %}
+         <div class="newsletter__text rte">{{ section.settings.text }}</div>
+       {% endif %}
+       
+       <div class="newsletter__form-wrapper">
+         {% form 'customer', class: 'newsletter-form' %}
+           <input type="hidden" name="contact[tags]" value="newsletter">
+           <div class="input-group">
+             <input
+               id="NewsletterForm--{{ section.id }}"
+               type="email"
+               name="contact[email]"
+               class="input-field"
+               value="{{ form.email }}"
+               aria-required="true"
+               autocorrect="off"
+               autocapitalize="off"
+               autocomplete="email"
+               {% if form.errors %}
+                 autofocus
+                 aria-invalid="true"
+                 aria-describedby="Newsletter-error--{{ section.id }}"
+               {% elsif form.posted_successfully? %}
+                 aria-describedby="Newsletter-success--{{ section.id }}"
+               {% endif %}
+               placeholder="Enter your email"
+               required
+             >
+             <button type="submit" class="btn btn-primary" name="commit" aria-label="Subscribe">
+               Subscribe
+             </button>
+           </div>
+           {%- if form.errors -%}
+             <small class="newsletter-form__message form__message" id="Newsletter-error--{{ section.id }}">
+               {% render 'icon-dynamic', icon: 'error' %} {{ form.errors.translated_fields['email'] | capitalize }} {{ form.errors.messages['email'] }}
+             </small>
+           {%- endif -%}
+           {%- if form.posted_successfully? -%}
+             <h3 class="newsletter-form__message newsletter-form__message--success form__message" id="Newsletter-success--{{ section.id }}" tabindex="-1" autofocus>
+               {% render 'icon-dynamic', icon: 'success' %} Thanks for subscribing!
+             </h3>
+           {%- endif -%}
+         {% endform %}
+       </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+    background-color: {{ section.settings.bg_color }};
+    color: {{ section.settings.text_color }};
+  }
+  
+  .container--narrow { max-width: 600px; margin: 0 auto; padding: 0 1.5rem; }
+  .center { text-align: center; }
+  
+  .newsletter__form-wrapper { margin-top: 2rem; }
+  
+  .input-group {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .input-field {
+    flex-grow: 1;
+    padding: 12px 16px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--button-radius);
+    font-size: 1rem;
+  }
+  
+  .btn { padding: 12px 24px; cursor: pointer; border: none; border-radius: var(--button-radius); font-weight: 600; white-space: nowrap; }
+  .btn-primary { background: var(--color-primary); color: #fff; }
+
+  @media screen and (max-width: 480px) {
+    .input-group { flex-direction: column; }
+    .btn { width: 100%; }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Newsletter",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "default": "Subscribe to our emails",
+      "label": "Heading"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "default": "<p>Be the first to know about new collections and exclusive offers.</p>",
+      "label": "Subtext"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "#f4f4f4"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0, "max": 100, "step": 4, "unit": "px", "label": "Top Padding", "default": 60
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0, "max": 100, "step": 4, "unit": "px", "label": "Bottom Padding", "default": 60
+    }
+  ],
+  "presets": [
+    {
+      "name": "Newsletter"
+    }
+  ]
+}
+{% endschema %}
