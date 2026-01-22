@@ -39,6 +39,18 @@
                 "id": "color_button_text",
                 "label": "Button Text Color",
                 "default": "#FFFFFF"
+            },
+            {
+                "type": "color",
+                "id": "color_warning",
+                "label": "Sale / Warning Color",
+                "default": "#D4AF37"
+            },
+            {
+                "type": "color",
+                "id": "color_success",
+                "label": "Success Color",
+                "default": "#28a745"
             }
         ]
     },
