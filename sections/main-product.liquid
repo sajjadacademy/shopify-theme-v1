@@ -33,7 +33,6 @@
       <!-- RIGHT: Product Info -->
       <div class="product-info-wrapper">
         {%- for block in section.blocks -%}
-        <div class="product-block-debug" style="border: 0px solid transparent;" data-block-type="{{ block.type }}">
           {%- case block.type -%}
             
             <!-- Title & Rating -->
@@ -168,7 +167,6 @@
                </div>
 
           {%- endcase -%}
-        </div>
       {%- endfor -%}
     </div>
     
@@ -322,7 +320,7 @@
   /* Desktop Grid */
   @media screen and (min-width: 900px) {
     .product-layout {
-       grid-template-columns: 1.4fr 0.8fr; /* ~64% Image Width */
+       grid-template-columns: 1.5fr 1fr; /* 60% Image Width */
        gap: 4rem;
     }
   }
