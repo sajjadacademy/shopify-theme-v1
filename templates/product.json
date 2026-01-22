@@ -42,11 +42,10 @@
             "block_order": [
                 "title",
                 "price",
-                "description",
                 "bundle",
                 "buy_buttons",
                 "trust",
-                "shipping"
+                "description"
             ],
             "settings": {
                 "media_layout": "grid"
