@@ -1,21 +1,40 @@
 <div class="mobile-nav-wrapper">
   {% if section.settings.enable %}
   <nav class="mobile-nav">
-    {%- for block in section.blocks -%}
-      <a href="{{ block.settings.link }}" class="mobile-nav__item {% if request.path == block.settings.link %}active{% endif %}">
-        <span class="mobile-nav__icon">
-          {%- if block.settings.custom_icon != blank -%}
-            {{ block.settings.custom_icon | image_url: width: 24 | image_tag }}
-          {%- else -%}
-            {%- render 'icon-dynamic', icon: block.settings.icon_name -%}
+    {%- if section.blocks.size > 0 -%}
+      {%- for block in section.blocks -%}
+        <a href="{{ block.settings.link }}" class="mobile-nav__item {% if request.path == block.settings.link %}active{% endif %}">
+          <span class="mobile-nav__icon">
+            {%- if block.settings.custom_icon != blank -%}
+              {{ block.settings.custom_icon | image_url: width: 24 | image_tag }}
+            {%- else -%}
+              {%- render 'icon-dynamic', icon: block.settings.icon_name -%}
+            {%- endif -%}
+          </span>
+          <span class="mobile-nav__label">{{ block.settings.label }}</span>
+          {%- if block.settings.show_count and block.type == 'cart_link' -%}
+            <span class="mobile-nav__count bubble">{{ cart.item_count }}</span>
           {%- endif -%}
-        </span>
-        <span class="mobile-nav__label">{{ block.settings.label }}</span>
-        {%- if block.settings.show_count and block.type == 'cart_link' -%}
-          <span class="mobile-nav__count bubble">{{ cart.item_count }}</span>
-        {%- endif -%}
+        </a>
+      {%- endfor -%}
+    {%- else -%}
+      <!-- Default Fallback Links if no blocks are added -->
+      <a href="/" class="mobile-nav__item {% if request.path == '/' %}active{% endif %}">
+        <span class="mobile-nav__icon">{% render 'icon-dynamic', icon: 'home' %}</span>
+        <span class="mobile-nav__label">Home</span>
       </a>
-    {%- endfor -%}
+      <a href="/collections/all" class="mobile-nav__item {% if request.path contains '/collections' %}active{% endif %}">
+        <span class="mobile-nav__icon">{% render 'icon-dynamic', icon: 'grid' %}</span>
+        <span class="mobile-nav__label">Shop</span>
+      </a>
+      <a href="/cart" class="mobile-nav__item {% if request.path == '/cart' %}active{% endif %}">
+        <span class="mobile-nav__icon">
+          {% render 'icon-dynamic', icon: 'cart' %}
+          <span class="mobile-nav__count bubble">{{ cart.item_count }}</span>
+        </span>
+        <span class="mobile-nav__label">Cart</span>
+      </a>
+    {%- endif -%}
   </nav>
   {% endif %}
 </div>
