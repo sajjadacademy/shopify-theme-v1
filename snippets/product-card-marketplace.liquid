@@ -47,8 +47,25 @@
     {%- if show_rating -%}
       <div class="pcm-rating">
         <span class="pcm-rating-star">★</span>
-        <span class="pcm-rating-val">4.8</span>
-        <span class="pcm-rating-count">(10.3K)</span>
+        <span class="pcm-rating-val">4.9</span>
+        
+        {%- if enable_random_reviews -%}
+             {%- comment -%} Random Number Generation based on Product ID Hash {%- endcomment -%}
+             {%- assign min = random_review_min | default: 100 -%}
+             {%- assign max = random_review_max | default: 5000 -%}
+             {%- assign diff = max | minus: min -%}
+             {%- assign random_number = product.id | modulo: diff | plus: min -%}
+             
+             {%- if random_number > 1000 -%}
+                {%- assign decimal = random_number | modulo: 1000 | divided_by: 100 -%}
+                <span class="pcm-rating-count">({{ random_number | divided_by: 1000 }}.{{ decimal }}K)</span>
+             {%- else -%}
+                <span class="pcm-rating-count">({{ random_number }})</span>
+             {%- endif -%}
+        {%- else -%}
+             <!-- Fixed Static or Real Metafield if available later -->
+             <span class="pcm-rating-count">(10.3K)</span>
+        {%- endif -%}
       </div>
     {%- endif -%}
 

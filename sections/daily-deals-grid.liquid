@@ -1,0 +1,167 @@
+{% comment %}
+  Daily Deals Grid Section
+  - Enforced 4-Column Desktop Grid
+  - 2-Column Mobile Grid
+  - Compact "Marketplace" Design
+  - Randomized Reviews for Social Proof
+{% endcomment %}
+
+<div class="daily-deals-section section-{{ section.id }}-padding" style="background-color: {{ section.settings.bg_color }}">
+  <div class="container">
+    {% if section.settings.heading != blank %}
+      <div class="section-heading {{ section.settings.heading_alignment }}">
+        <h2 class="h3">{{ section.settings.heading }}</h2>
+        {% if section.settings.show_view_all and section.settings.collection != blank %}
+          <a href="{{ section.settings.collection.url }}" class="link-underlined">View All</a>
+        {% endif %}
+      </div>
+    {% endif %}
+
+    <div class="daily-deals-wrapper">
+      {%- assign collection = collections[section.settings.collection] -%}
+      <ul class="deals-grid">
+        {%- for product in collection.products limit: section.settings.products_to_show -%}
+          <li class="deals-grid__item">
+             {% render 'product-card-marketplace', 
+                product: product,
+                show_rating: section.settings.show_rating,
+                show_badge: section.settings.show_badge,
+                show_wishlist: section.settings.show_wishlist,
+                show_quick_add: section.settings.show_quick_add,
+                quick_add_type: 'button',
+                enable_fake_discount: section.settings.enable_fake_discount,
+                fake_discount_percentage: section.settings.fake_discount_percentage,
+                enable_random_reviews: section.settings.enable_random_reviews,
+                random_review_min: section.settings.review_min,
+                random_review_max: section.settings.review_max
+             %}
+          </li>
+        {%- else -%}
+          {%- for i in (1..4) -%}
+             <li class="deals-grid__item">
+               <div class="product-card-marketplace" style="min-height: 280px; display: flex; align-items: center; justify-content: center; background: #fff;">
+                 <p>Select a collection</p>
+               </div>
+             </li>
+          {%- endfor -%}
+        {%- endfor -%}
+      </ul>
+    </div>
+  </div>
+</div>
+
+<style>
+  /* Section Padding */
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+  }
+
+  /* Grid Layout - Enforced 4-Col Desktop */
+  .deals-grid {
+    display: grid;
+    list-style: none;
+    padding: 0; margin: 0;
+    gap: {{ section.settings.grid_gap_mobile }}px;
+    grid-template-columns: repeat(2, 1fr); /* Mobile Default */
+  }
+  
+  @media screen and (min-width: 750px) {
+    .deals-grid {
+       grid-template-columns: repeat(4, 1fr); /* Desktop Enforced */
+       gap: {{ section.settings.grid_gap_desktop }}px;
+    }
+  }
+
+  /* Scoped Variables for Card Compactness */
+  #shopify-section-{{ section.id }} .product-card-marketplace {
+    --card-radius: {{ section.settings.card_radius }}px;
+    --color-border: {{ section.settings.card_border_color }};
+    
+    /* Force Compact for Daily Deals */
+    --card-padding: 8px;
+    --card-title-size: 13px;
+
+    /* Shadow Logic */
+    {% if section.settings.show_shadow %}
+      box-shadow: 0 2px 8px rgba(0,0,0,0.{{ section.settings.shadow_opacity }});
+    {% else %}
+      box-shadow: none;
+    {% endif %}
+    background-color: {{ section.settings.card_bg_color }};
+    
+    /* Colors */
+    --color-primary: {{ section.settings.button_bg_color }};
+    --color-warning: {{ section.settings.rating_color }};
+  }
+  
+  /* Typography Overrides */
+  #shopify-section-{{ section.id }} .pcm-title { font-weight: 600; }
+  #shopify-section-{{ section.id }} .pcm-price-current { font-size: 16px; color: {{ section.settings.price_color }}; }
+  #shopify-section-{{ section.id }} .pcm-discount-badge {
+    background: {{ section.settings.badge_bg_color }};
+    color: {{ section.settings.badge_text_color }};
+  }
+  #shopify-section-{{ section.id }} .pcm-rating-star,
+  #shopify-section-{{ section.id }} .pcm-rating-val {
+    color: {{ section.settings.rating_color }};
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Daily Deals Grid",
+  "settings": [
+    { "type": "header", "content": "Content" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Daily Deals" },
+    { "type": "select", "id": "heading_alignment", "label": "Alignment", "options": [
+      { "value": "left", "label": "Left" }, { "value": "center", "label": "Center" }
+    ], "default": "left"},
+    { "type": "collection", "id": "collection", "label": "Collection" },
+    { "type": "range", "id": "products_to_show", "min": 4, "max": 12, "step": 4, "default": 4, "label": "Products to Show" },
+    
+    { "type": "header", "content": "Trust & Reviews" },
+    { "type": "checkbox", "id": "enable_random_reviews", "label": "Enable Random Reviews", "default": true },
+    { "type": "range", "id": "review_min", "min": 100, "max": 1000, "step": 50, "default": 150, "label": "Min Count" },
+    { "type": "range", "id": "review_max", "min": 1000, "max": 10000, "step": 500, "default": 5000, "label": "Max Count" },
+
+    { "type": "header", "content": "Grid Spacing" },
+    { "type": "range", "id": "grid_gap_mobile", "min": 0, "max": 20, "step": 1, "default": 8, "label": "Mobile Gap (px)" },
+    { "type": "range", "id": "grid_gap_desktop", "min": 10, "max": 40, "step": 2, "default": 16, "label": "Desktop Gap (px)" },
+
+    { "type": "header", "content": "Card Styling" },
+    { "type": "range", "id": "card_radius", "min": 0, "max": 20, "step": 1, "default": 8, "label": "Border Radius" },
+    { "type": "color", "id": "card_bg_color", "label": "Card Background", "default": "#ffffff" },
+    { "type": "color", "id": "card_border_color", "label": "Border Color", "default": "#e0e0e0" },
+    { "type": "checkbox", "id": "show_shadow", "label": "Show Shadow", "default": true },
+    { "type": "range", "id": "shadow_opacity", "min": 0, "max": 50, "step": 5, "default": 10, "label": "Shadow Opacity %" },
+
+    { "type": "header", "content": "Colors" },
+    { "type": "color", "id": "price_color", "label": "Price Color", "default": "#B12704" },
+    { "type": "color", "id": "rating_color", "label": "Rating Star Color", "default": "#FFA41C" },
+    { "type": "color", "id": "badge_bg_color", "label": "Discount Badge BG", "default": "#CC0C39" },
+    { "type": "color", "id": "badge_text_color", "label": "Discount Badge Text", "default": "#ffffff" },
+    { "type": "color", "id": "button_bg_color", "label": "Button Background", "default": "#FFD814" },
+    { "type": "color", "id": "button_text_color", "label": "Button Text", "default": "#000000" },
+    
+    { "type": "header", "content": "Toggles" },
+    { "type": "checkbox", "id": "show_rating", "label": "Show Ratings", "default": true },
+    { "type": "checkbox", "id": "show_badge", "label": "Show Badges", "default": true },
+    { "type": "checkbox", "id": "show_wishlist", "label": "Show Wishlist", "default": true },
+    { "type": "checkbox", "id": "show_quick_add", "label": "Show Quick Add", "default": true },
+    { "type": "checkbox", "id": "enable_fake_discount", "label": "Enable Artificial Discount", "default": true },
+    { "type": "range", "id": "fake_discount_percentage", "min": 5, "max": 50, "step": 5, "default": 15, "label": "Artificial Inflation %" },
+    { "type": "checkbox", "id": "show_view_all", "label": "Show View All Link", "default": false },
+
+    { "type": "header", "content": "Section Padding" },
+    { "type": "color", "id": "bg_color", "label": "Section Background", "default": "#f9f9f9" },
+    { "type": "range", "id": "padding_top", "min": 0, "max": 100, "step": 4, "default": 36, "label": "Top Padding" },
+    { "type": "range", "id": "padding_bottom", "min": 0, "max": 100, "step": 4, "default": 36, "label": "Bottom Padding" }
+  ],
+  "presets": [
+    {
+      "name": "Daily Deals Grid"
+    }
+  ]
+}
+{% endschema %}
