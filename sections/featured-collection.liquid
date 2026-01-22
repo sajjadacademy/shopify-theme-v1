@@ -14,44 +14,17 @@
       <ul class="product-grid grid--{{ section.settings.columns_desktop }}-col-desktop grid--{{ section.settings.columns_mobile }}-col-tablet-down">
         {%- for product in collection.products limit: section.settings.products_to_show -%}
           <li class="grid__item">
-             <div class="product-card noon-style">
-               <div class="product-card__image-wrapper">
-                 <a href="{{ product.url }}" class="product-card__link">
-                   <img src="{{ product.featured_image | image_url: width: 400 }}" 
-                        loading="lazy" 
-                        class="product-card__image" 
-                        alt="{{ product.title | escape }}">
-                 </a>
-                 <button class="wishlist-btn" aria-label="Add to Wishlist">{% render 'icon-dynamic', icon: 'heart' %}</button>
-                 {% if product.tags contains 'Best Seller' %}
-                    <span class="badge-best-seller">Best Seller</span>
-                 {% endif %}
-               </div>
-               <div class="product-card__info">
-                 <div class="product-card__rating">
-                    <span class="rating-star">★</span> <span class="rating-text">4.8</span> <span class="rating-count">(10.3K)</span>
-                 </div>
-                 <h3 class="product-card__title">
-                   <a href="{{ product.url }}">{{ product.title }}</a>
-                 </h3>
-                 <div class="product-card__price">
-                   <span class="currency">AED</span> <span class="price-current">{{ product.price | money_without_currency }}</span>
-                   {% if product.compare_at_price > product.price %}
-                     <span class="price-compare">{{ product.compare_at_price | money_without_currency }}</span>
-                     <span class="discount-tag">{{ product.compare_at_price | minus: product.price | times: 100.0 | divided_by: product.compare_at_price | round }}% Off</span>
-                   {% endif %}
-                 </div>
-                 <div class="product-card__footer">
-                    {% if product.available %}
-                      <form method="post" action="/cart/add">
-                        <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
-                        <button type="submit" class="btn-atc-outline">Add to cart</button>
-                      </form>
-                    {% else %}
-                       <button class="btn-atc-outline" disabled>Sold Out</button>
-                    {% endif %}
-                 </div>
-               </div>
+             <div class="product-card-wrapper" style="height: 100%;">
+               {% render 'product-card-marketplace', 
+                  product: product,
+                  show_rating: section.settings.show_rating,
+                  show_badge: section.settings.show_badge,
+                  show_wishlist: section.settings.show_wishlist,
+                  show_quick_add: section.settings.show_quick_add,
+                  quick_add_type: section.settings.quick_add_type,
+                  enable_fake_discount: section.settings.enable_fake_discount,
+                  fake_discount_percentage: section.settings.fake_discount_percentage
+               %}
              </div>
           </li>
         {%- else -%}
@@ -227,6 +200,20 @@
   .price-compare { text-decoration: line-through; color: #999; font-size: 0.8rem; font-weight: 400; }
   .discount-tag { color: #28a745; font-weight: 700; font-size: 0.75rem; background: #e6f9e9; padding: 2px 6px; border-radius: 4px; }
 
+  /* Marketplace Card Override Variables */
+  #shopify-section-{{ section.id }} .product-card-marketplace {
+    --card-radius: 8px;
+    --color-border: #e0e0e0;
+    --card-padding: 12px;
+    
+    /* Typography */
+    --card-title-size: 16px;
+    --card-title-weight: 600;
+    
+    /* Colors */
+    --color-primary: #000; /* Button Background */
+    --color-warning: #FFA41C; /* Stars */
+  }
 </style>
 
 {% schema %}
@@ -316,6 +303,18 @@
       "default": true,
       "label": "Enable 'View all' link"
     },
+    { "type": "header", "content": "Card Settings" },
+    { "type": "checkbox", "id": "show_rating", "label": "Show Ratings", "default": true },
+    { "type": "checkbox", "id": "show_badge", "label": "Show Badges", "default": true },
+    { "type": "checkbox", "id": "show_wishlist", "label": "Show Wishlist", "default": true },
+    { "type": "checkbox", "id": "show_quick_add", "label": "Show Quick Add", "default": true },
+    { "type": "select", "id": "quick_add_type", "label": "Quick Add Style", "options": [
+       { "value": "icon", "label": "Icon (+)" },
+       { "value": "button", "label": "Button (Text)" }
+    ], "default": "button" },
+    { "type": "checkbox", "id": "enable_fake_discount", "label": "Enable Artificial Discount", "default": true },
+    { "type": "range", "id": "fake_discount_percentage", "min": 5, "max": 50, "step": 5, "default": 10, "label": "Artificial Inflation %" },
+    
     {
       "type": "header",
       "content": "Appearance"
