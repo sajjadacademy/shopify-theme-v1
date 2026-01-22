@@ -63,7 +63,7 @@
         "m3"
       ],
       "settings": {
-        "speed": 20,
+        "speed": 50,
         "direction": "normal",
         "bg_color": "#000000",
         "text_color": "#ffffff"
