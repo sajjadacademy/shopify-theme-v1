@@ -1,0 +1,11 @@
+{% layout none %}
+{%- for item in search.results -%}
+    {%- if item.object_type == 'product' -%}
+        {% render 'product-card-marketplace', 
+            product_card_product: item, 
+            show_rating: true, 
+            show_quick_add: true,
+            quick_add_type: 'button' 
+        %}
+    {%- endif -%}
+{%- endfor -%}

@@ -1,0 +1,119 @@
+<div class="recently-viewed-section container" style="display:none;">
+    <h2 class="section-title">{{ section.settings.heading }}</h2>
+    <div class="marketplace-grid" id="recently-viewed-grid">
+        <!-- Products injected via JS -->
+    </div>
+</div>
+
+<script>
+  // Ultra-simple Recently Viewed Handler
+  (function() {
+     const KEY = 'recently_viewed_handles';
+     const LIMIT = {{ section.settings.products_to_show }};
+     const currentHandle = "{{ product.handle }}";
+
+     // 1. Update LocalStorage
+     let handles = JSON.parse(localStorage.getItem(KEY) || '[]');
+     // Remove current if exists (to push to top)
+     if(currentHandle && handles.indexOf(currentHandle) !== -1) {
+        handles = handles.filter(h => h !== currentHandle);
+     }
+     // Add current to top
+     if(currentHandle) {
+        handles.unshift(currentHandle);
+     }
+     // Slice to limit (store a few more just in case)
+     handles = handles.slice(0, 12);
+     localStorage.setItem(KEY, JSON.stringify(handles));
+
+     // 2. Fetch Logic (only if we have other handles)
+     // Filter out current product for display if desired, or keep it. usually exclude current.
+     const displayHandles = handles.filter(h => h !== currentHandle).slice(0, LIMIT);
+
+     if(displayHandles.length > 0) {
+        const query = displayHandles.map(h => 'handle:' + h).join(' OR ');
+        const url = `/search?view=recently&type=product&q=${encodeURIComponent(query)}`;
+
+        fetch(url)
+           .then(res => res.text())
+           .then(html => {
+              const grid = document.getElementById('recently-viewed-grid');
+              if(grid && html.trim().length > 0) {
+                  grid.innerHTML = html;
+                  document.querySelector('.recently-viewed-section').style.display = 'block';
+              }
+           })
+           .catch(err => console.error('Recent Fetch Error:', err));
+     }
+  })();
+</script>
+
+<style>
+  .recently-viewed-section {
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+    margin-top: 4rem;
+    border-top: 1px solid #eee;
+  }
+  .section-title {
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
+    font-weight: 700;
+    text-align: center;
+  }
+  /* Reuse marketplace grid styles */
+  .marketplace-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+  @media screen and (min-width: 750px) {
+    .marketplace-grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Recently Viewed",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "default": "Recently Viewed",
+      "label": "Heading"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "min": 2,
+      "max": 8,
+      "step": 1,
+      "default": 4,
+      "label": "Products to show"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "default": 36,
+      "label": "Padding Top"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "default": 36,
+      "label": "Padding Bottom"
+    }
+  ],
+  "presets": [
+     { "name": "Recently Viewed" }
+  ]
+}
+{% endschema %}
