@@ -49,8 +49,8 @@
                 "bundle",
                 "buy_buttons",
                 "trust",
-                "specs",
-                "description"
+                "description",
+                "specs"
             ],
             "settings": {
                 "media_layout": "grid"
