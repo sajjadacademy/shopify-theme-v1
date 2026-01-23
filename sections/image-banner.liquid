@@ -3,14 +3,14 @@
     
     {%- for block in section.blocks -%}
     <div class="image-banner__item">
-      <div class="image-banner__media media-desktop">
+      <div class="image-banner__media banner-media-desktop">
         {% if block.settings.image_desktop != blank %}
           {{ block.settings.image_desktop | image_url: width: 2000 | image_tag: loading: 'lazy', width: 2000 }}
         {% else %}
           {{ 'lifestyle-2' | placeholder_svg_tag: 'placeholder-svg' }}
         {% endif %}
       </div>
-      <div class="image-banner__media media-mobile">
+      <div class="image-banner__media banner-media-mobile">
         {% if block.settings.image_mobile != blank %}
            {{ block.settings.image_mobile | image_url: width: 800 | image_tag: loading: 'lazy', width: 800 }}
         {% elsif block.settings.image_desktop != blank %}
@@ -96,13 +96,13 @@
   }
 
   @media screen and (max-width: 767px) {
-    .media-desktop { display: none !important; }
-    .media-mobile { display: block !important; }
+    .banner-media-desktop { display: none !important; }
+    .banner-media-mobile { display: block !important; }
   }
 
   @media screen and (min-width: 768px) {
-    .media-mobile { display: none !important; }
-    .media-desktop { display: block !important; }
+    .banner-media-mobile { display: none !important; }
+    .banner-media-desktop { display: block !important; }
 
     .image-banner__grid.grid-split {
       flex-direction: row;
