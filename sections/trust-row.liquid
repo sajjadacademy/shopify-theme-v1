@@ -15,6 +15,10 @@
             <p>{{ block.settings.subtext }}</p>
           </div>
         </div>
+      {% elsif block.type == 'custom_liquid' %}
+        <div class="trust-item trust-custom-liquid" style="background: transparent; border: none; padding: 0;">
+           {{ block.settings.custom_liquid }}
+        </div>
       {% endfor %}
     </div>
   </div>
@@ -140,6 +144,18 @@
            "type": "image_picker",
            "id": "custom_icon",
            "label": "Custom Icon"
+        }
+      ]
+    }
+    },
+    {
+      "type": "custom_liquid",
+      "name": "Custom Liquid",
+      "settings": [
+        {
+          "type": "liquid",
+          "id": "custom_liquid",
+          "label": "Custom Liquid"
         }
       ]
     }

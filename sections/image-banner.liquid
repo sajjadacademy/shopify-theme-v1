@@ -42,6 +42,13 @@
         </div>
       </div>
     </div>
+      {%- elsif block.type == 'custom_liquid' -%}
+        <div class="image-banner__item" style="min-height: auto; background: transparent;">
+           <div class="banner__custom-liquid-block" style="width: 100%;">
+              {{ block.settings.custom_liquid }}
+           </div>
+        </div>
+      {%- endif -%}
     {%- endfor -%}
 
   </div>
@@ -185,7 +192,10 @@
     {
       "type": "banner",
       "name": "Banner",
-      "limit": 2,
+      "type": "banner",
+      "name": "Banner",
+      "limit": 12,
+      "settings": [
       "settings": [
         {
           "type": "image_picker",
@@ -264,6 +274,20 @@
            "id": "custom_liquid",
            "label": "Custom Liquid",
            "info": "Add embedded custom code."
+        }
+      ]
+    }
+        }
+      ]
+    },
+    {
+      "type": "custom_liquid",
+      "name": "Custom Liquid",
+      "settings": [
+        {
+          "type": "liquid",
+          "id": "custom_liquid",
+          "label": "Custom Liquid"
         }
       ]
     }
