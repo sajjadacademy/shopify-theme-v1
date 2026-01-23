@@ -1,21 +1,29 @@
 <div class="recently-viewed-section container">
     <h2 class="section-title">{{ section.settings.heading }}</h2>
     <div class="marketplace-grid" id="recently-viewed-grid">
-        <!-- Server-Side Fallback: Show Random/Popular Products to ensure not empty -->
-        {%- assign fallback_collection = collections['all'] -%}
+        <!-- Server-Side Fallback: Use same collection for better relevance and data safety -->
+        {%- assign fallback_collection = product.collections.first -%}
         {%- if fallback_collection.products_count > 0 -%}
-           {%- assign offset = 'now' | date: "%S" | modulo: 10 -%}
-           {%- for product in fallback_collection.products limit: section.settings.products_to_show offset: offset -%}
+           <!-- Simple offset randomization -->
+           {%- assign offset = 'now' | date: "%S" | modulo: fallback_collection.products_count | minus: section.settings.products_to_show -%}
+           {%- if offset < 0 %}{% assign offset = 0 %}{% endif -%}
+           
+           {%- assign count = 0 -%}
+           {%- for item in fallback_collection.products offset: offset -%}
+               {%- if item.id == product.id %}{% continue %}{% endif -%}
+               
                {% render 'product-card-marketplace', 
-                  product: product, 
+                  product: item, 
                   show_rating: true, 
                   show_quick_add: true,
                   quick_add_type: 'button' 
                %}
+               {%- assign count = count | plus: 1 -%}
+               {%- if count >= section.settings.products_to_show %}{% break %}{% endif -%}
            {%- endfor -%}
         {%- else -%}
-           <!-- Safe fallback if 'all' is empty or weird -->
-           <p class="text-center" style="grid-column: 1/-1;">Check out our latest products.</p>
+           <!-- Safe fallback empty state (hidden or minimal) -->
+           <p class="text-center" style="grid-column: 1/-1; display:none;">No products looked at yet.</p>
         {%- endif -%}
     </div>
 </div>

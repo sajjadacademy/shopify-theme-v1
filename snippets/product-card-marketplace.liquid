@@ -15,14 +15,18 @@
   <!-- PHASE 1: Image Area -->
   <div class="pcm-image-wrapper">
     <a href="{{ product.url }}" class="pcm-link">
-      <img
-        src="{{ product.featured_image | image_url: width: 400 }}"
-        alt="{{ product.title | escape }}"
-        loading="lazy"
-        width="200"
-        height="200"
-        class="pcm-image"
-      >
+      {%- if product.featured_image != blank -%}
+        <img
+          src="{{ product.featured_image | image_url: width: 400 }}"
+          alt="{{ product.title | escape }}"
+          loading="lazy"
+          width="200"
+          height="200"
+          class="pcm-image"
+        >
+      {%- else -%}
+        {{ 'product-1' | placeholder_svg_tag: 'pcm-image placeholder-svg' }}
+      {%- endif -%}
     </a>
     
     {%- if show_wishlist -%}
