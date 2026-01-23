@@ -1,0 +1,214 @@
+{{ 'section-collection-list.css' | asset_url | stylesheet_tag }}
+
+<div class="section-{{ section.id }}-padding gradient color-{{ section.settings.color_scheme }}">
+  <div class="container section-{{ section.id }}-padding">
+    
+    {%- if section.settings.title != blank -%}
+      <div class="collection-list-title text-center">
+         <h1 class="h2">{{ section.settings.title | escape }}</h1>
+      </div>
+    {%- endif -%}
+
+    {%- if section.settings.display_type == 'all' -%}
+      {%- case section.settings.sort -%}
+        {%- when 'products_high' or 'products_low' -%}
+          {%- assign collections = collections | sort: 'all_products_count' -%}
+        {%- when 'date' or 'date_reversed' -%}
+          {%- assign collections = collections | sort: 'published_at' -%}
+      {%- endcase -%}
+
+      {%- if section.settings.sort == 'products_low' or section.settings.sort == 'date' or section.settings.sort == 'alphabetical' -%}
+        {%- for collection in collections -%}
+          {%- assign featured_collection = collection -%}
+          {%- render 'card-collection', card_collection: featured_collection -%}
+        {%- endfor -%}
+      {%- else -%}
+        {%- assign collections = collections | reverse -%}
+      {%- endif -%}
+    {%- endif -%}
+    
+    <div class="collection-list-grid">
+       {%- liquid
+         assign collections_to_display = collections
+         if section.settings.display_type == 'selected'
+             assign collections_to_display = section.blocks | where: "type", "collection"
+         endif
+       -%}
+       
+       {%- for collection_item in collections_to_display -%}
+          {%- if section.settings.display_type == 'selected' -%}
+             {% assign collection_ref = collections[collection_item.settings.collection] %}
+          {%- else -%}
+             {% assign collection_ref = collection_item %}
+          {%- endif -%}
+          
+          <div class="collection-card-item">
+             <a href="{{ collection_ref.url }}" class="collection-card-link">
+                <div class="collection-card-image">
+                   {% if collection_ref.image != blank %}
+                      <img src="{{ collection_ref.image | image_url: width: 600 }}" loading="lazy" width="600" height="600">
+                   {% elsif collection_ref.products.first != blank %}
+                      <img src="{{ collection_ref.products.first.featured_image | image_url: width: 600 }}" loading="lazy" width="600" height="600">
+                   {% else %}
+                      {{ 'collection-1' | placeholder_svg_tag: 'placeholder-svg' }}
+                   {% endif %}
+                </div>
+                <div class="collection-card-info">
+                   <h3 class="h4">{{ collection_ref.title }}</h3>
+                   <span class="collection-count">{{ collection_ref.all_products_count }} products</span>
+                </div>
+             </a>
+          </div>
+       {%- endfor -%}
+    </div>
+    
+    <!-- Custom Liquid Block Render -->
+    {%- for block in section.blocks -%}
+       {%- if block.type == 'custom_liquid' -%}
+          <div class="custom-liquid-container" {{ block.shopify_attributes }}>
+             {{ block.settings.custom_liquid }}
+          </div>
+       {%- endif -%}
+    {%- endfor -%}
+
+  </div>
+</div>
+
+<style>
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+  }
+  
+  .collection-list-grid {
+    display: grid;
+    grid-template-columns: repeat({{ section.settings.columns_desktop }}, 1fr);
+    gap: 2rem;
+    margin-top: 2rem;
+  }
+  
+  @media screen and (max-width: 768px) {
+    .collection-list-grid {
+      grid-template-columns: repeat({{ section.settings.columns_mobile }}, 1fr);
+       gap: 1rem;
+    }
+  }
+
+  .collection-card-item {
+     border-radius: 8px; overflow: hidden;
+     transition: transform 0.2s ease;
+  }
+  .collection-card-item:hover { transform: translateY(-3px); }
+  
+  .collection-card-image {
+     aspect-ratio: 16/9; /* Or adjustable */
+     overflow: hidden; background: #f0f0f0;
+  }
+  .collection-card-image img {
+     width: 100%; height: 100%; object-fit: cover; transition: scale 0.4s;
+  }
+  .collection-card-item:hover .collection-card-image img { scale: 1.05; }
+  
+  .collection-card-info { padding: 1rem 0; text-align: center; }
+  .collection-count { font-size: 0.85rem; color: #666; }
+</style>
+
+{% schema %}
+{
+  "name": "Collections List Page",
+  "class": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Collections"
+    },
+    {
+      "type": "select",
+      "id": "display_type",
+      "label": "Select Collections to Show",
+      "default": "all",
+      "options": [
+        { "value": "all", "label": "All" },
+        { "value": "selected", "label": "Selected Only" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "sort",
+      "options": [
+        { "value": "alphabetical", "label": "Alphabetically, A-Z" },
+        { "value": "alphabetical_reversed", "label": "Alphabetically, Z-A" },
+        { "value": "date", "label": "Date, old to new" },
+        { "value": "date_reversed", "label": "Date, new to old" },
+        { "value": "products_high", "label": "Product count, high to low" },
+        { "value": "products_low", "label": "Product count, low to high" }
+      ],
+      "default": "alphabetical",
+      "label": "Sort collections by:"
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "min": 1,
+      "max": 5,
+      "step": 1,
+      "default": 3,
+      "label": "Columns (Desktop)"
+    },
+    {
+      "type": "range",
+      "id": "columns_mobile",
+      "min": 1,
+      "max": 2,
+      "step": 1,
+      "default": 1,
+      "label": "Columns (Mobile)"
+    },
+    {
+      "type": "header",
+      "content": "Section Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "default": 36,
+      "label": "Top Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "default": 36,
+      "label": "Bottom Padding"
+    }
+  ],
+  "blocks": [
+    {
+       "type": "collection",
+       "name": "Collection",
+       "settings": [
+          { "type": "collection", "id": "collection", "label": "Collection" }
+       ]
+    },
+    {
+       "type": "custom_liquid",
+       "name": "Custom Liquid",
+       "settings": [
+          {
+             "type": "liquid",
+             "id": "custom_liquid",
+             "label": "Custom Liquid",
+             "info": "Add app snippets or custom code here."
+          }
+       ]
+    }
+  ]
+}
+{% endschema %}
