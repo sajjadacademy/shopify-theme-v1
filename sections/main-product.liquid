@@ -1,5 +1,5 @@
 <div class="product-section section-{{ section.id }}-padding" id="MainProduct-{{ section.id }}">
-  <div class="container">
+  <div class="container product-container">
     <div class="product-layout">
       
       <!-- LEFT: Media Gallery -->
@@ -15,7 +15,7 @@
                  alt="{{ featured_media.alt | escape }}" 
                  id="MainImage-{{ section.id }}" 
                  class="main-image"
-                 loading="eager" width="1200" height="1200">
+                 loading="eager" width="1200">
          </div>
          
          {%- if product.media.size > 1 -%}
@@ -509,6 +509,10 @@
     padding-bottom: {{ section.settings.padding_bottom }}px;
     background: #fff;
   }
+  
+  .product-container {
+     max-width: 1200px; margin: 0 auto; padding: 0 20px;
+  }
 
   .product-layout {
     display: grid;
@@ -519,18 +523,19 @@
   /* Media Gallery */
   .product-media-wrapper { 
     display: flex; flex-direction: column; gap: 1rem; 
-    width: 100%; max-width: 600px; margin: 0 auto; /* Center everything */
+    width: 100%; max-width: 550px; margin: 0 auto; /* Constraint width */
   }
   .product-media-main {
     width: 100%;
-    /* Removed max-width/margin from here to use wrapper */
-    aspect-ratio: 1;
-    background: #f8f8f8;
+    position: relative;
+    /* Removed fixed aspect-ratio to let image define height naturally */
+    background: transparent; 
     border-radius: 12px;
     overflow: hidden;
     display: flex; align-items: center; justify-content: center;
+    border: 1px solid #f0f0f0; /* Subtle border */
   }
-  .main-image { width: 100%; height: 100%; object-fit: contain; mix-blend-mode: multiply; }
+  .main-image { width: 100%; height: auto; object-fit: contain; }
   
   .product-thumbnails {
     display: flex; gap: 10px; overflow-x: auto; padding-bottom: 5px;
