@@ -71,15 +71,17 @@
                  {%- endif -%}
                </div>
               
+              {% if block.settings.custom_liquid != blank %}
+                 <div class="footer__custom-liquid" style="margin-bottom: 1rem;">{{ block.settings.custom_liquid }}</div>
+              {% endif %}
+              
               {% if block.settings.address != blank %}
                 <div class="footer__address">
                   <p>{{ block.settings.address | newline_to_br }}</p>
                 </div>
               {% endif %}
               
-              {% if block.settings.custom_liquid != blank %}
-                 <div class="footer__custom-liquid">{{ block.settings.custom_liquid }}</div>
-              {% endif %}
+
             </div>
           {%- elsif block.type == 'custom_liquid_block' -%}
              <div class="footer__custom-liquid-block">
