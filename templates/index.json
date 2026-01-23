@@ -169,10 +169,10 @@
       "settings": {
         "layout": "full",
         "mobile_height": 330,
-        "desktop_height": 400,
-        "overlay_opacity": 30,
-        "padding_top": 20,
-        "padding_bottom": 20
+        "desktop_height": 310,
+        "overlay_opacity": 45,
+        "padding_top": 0,
+        "padding_bottom": 0
       }
     },
     "featured_products": {
@@ -247,7 +247,7 @@
         "heading": "Subscribe to our emails",
         "text": "<p>Be the first to know about new collections and exclusive offers.</p>",
         "bg_color": "#f4f4f4",
-        "text_color": "#0E1B4D",
+        "text_color": "#0e1b4d",
         "padding_top": 60,
         "padding_bottom": 60
       }
