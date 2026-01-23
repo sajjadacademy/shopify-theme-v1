@@ -1,58 +1,53 @@
 <link rel="stylesheet" href="{{ 'component-card.css' | asset_url }}" media="print" onload="this.media='all'">
 
-<div class="related-products-section container" data-url="{{ routes.product_recommendations_url }}?section_id={{ section.id }}&product_id={{ product.id }}&limit={{ section.settings.products_to_show }}">
-  {%- if recommendations.performed and recommendations.products_count > 0 -%}
-    <h2 class="section-title">{{ section.settings.heading }}</h2>
-    <div class="marketplace-grid">
-      {%- for recommendation in recommendations.products -%}
-         <!-- Reusing the existing styled card -->
-         {% render 'product-card-marketplace', 
-            product_card_product: recommendation, 
-            show_rating: section.settings.show_rating, 
-            show_quick_add: section.settings.enable_quick_add,
-            quick_add_type: 'button' 
-         %}
-      {%- endfor -%}
-    </div>
-  {%- endif -%}
+<div class="related-products-section container section-{{ section.id }}-padding">
+  <h2 class="section-title">{{ section.settings.heading }}</h2>
+  
+  <div class="marketplace-grid">
+     {%- liquid
+       assign products_to_show = section.settings.products_to_show
+       
+       # Determine Source Collection
+       if section.settings.collection != blank
+          assign source_collection = collections[section.settings.collection]
+       else
+          assign source_collection = product.collections.first
+       endif
+       
+       # Gather products excluding current
+       assign counter = 0
+       
+       # Randomize if possible (simple shuffle via liquid isn't native, so we use offset or just linear with exclusion)
+       # Implementing a simple offset based on time or just standard loop skipping current
+     -%}
+
+     {%- if source_collection != blank -%}
+        {%- for recommendation in source_collection.products -%}
+           {%- if recommendation.id == product.id -%}{% continue %}{%- endif -%}
+           
+           {% render 'product-card-marketplace', 
+              product_card_product: recommendation, 
+              show_rating: section.settings.show_rating, 
+              show_quick_add: section.settings.enable_quick_add,
+              quick_add_type: 'button' 
+           %}
+           
+           {%- assign counter = counter | plus: 1 -%}
+           {%- if counter >= products_to_show -%}{% break %}{%- endif -%}
+        {%- endfor -%}
+     {%- else -%}
+        <!-- Fallback if no collection found (e.g. orphan product) -->
+        <p class="text-center" style="grid-column: 1/-1;">No related products found.</p>
+     {%- endif -%}
+  </div>
 </div>
 
-<script>
-  const handleIntersection = (entries, observer) => {
-    if (!entries[0].isIntersecting) return;
-    observer.unobserve(entries[0].target);
-
-    const relatedProductsSection = document.querySelector('.related-products-section');
-    const url = relatedProductsSection.dataset.url;
-
-    fetch(url)
-      .then(response => response.text())
-      .then(text => {
-        const html = document.createElement('div');
-        html.innerHTML = text;
-        const recommendations = html.querySelector('.related-products-section');
-        if (recommendations && recommendations.innerHTML.trim().length) {
-          relatedProductsSection.innerHTML = recommendations.innerHTML;
-        }
-      })
-      .catch(e => {
-        console.error(e);
-      });
-  }
-
-  document.addEventListener("DOMContentLoaded", function() {
-    const relatedObserver = new IntersectionObserver(handleIntersection, {rootMargin: '0px 0px 400px 0px'});
-    const relatedSection = document.querySelector('.related-products-section');
-    if(relatedSection) relatedObserver.observe(relatedSection);
-  });
-</script>
-
 <style>
-  .related-products-section {
+  .section-{{ section.id }}-padding {
     padding-top: {{ section.settings.padding_top }}px;
     padding-bottom: {{ section.settings.padding_bottom }}px;
-    margin-top: 4rem;
-    border-top: 1px solid #eee;
+     border-top: 1px solid #eee;
+     margin-top: 4rem;
   }
   .section-title {
     font-size: 1.5rem;
@@ -85,10 +80,16 @@
       "label": "Heading"
     },
     {
+       "type": "collection",
+       "id": "collection",
+       "label": "Source Collection",
+       "info": "Select a specific collection (e.g. Daily Deals) to show on all product pages. Leave blank to show products from the current product's collection."
+    },
+    {
       "type": "range",
       "id": "products_to_show",
       "min": 2,
-      "max": 10,
+      "max": 8,
       "step": 1,
       "default": 4,
       "label": "Products to show"
