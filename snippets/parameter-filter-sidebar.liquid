@@ -1,0 +1,70 @@
+{%- assign filters = results.filters -%}
+
+<form class="filter-form">
+  {%- for filter in filters -%}
+     <details class="filter-group" open>
+        <summary class="filter-title">
+           <span>{{ filter.label }}</span>
+           <span class="icon-plus">+</span>
+        </summary>
+        
+        <div class="filter-content" style="margin-top: 10px;">
+           {%- case filter.type -%}
+              {%- when 'boolean' or 'list' -%}
+                 <ul class="filter-list">
+                    {%- for value in filter.values -%}
+                       <li class="filter-item">
+                          <label for="Filter-{{ mobile | default: 'Desktop' }}-{{ filter.label }}-{{ forloop.index }}">
+                             <input type="checkbox"
+                                    name="{{ value.param_name }}"
+                                    value="{{ value.value }}"
+                                    id="Filter-{{ mobile | default: 'Desktop' }}-{{ filter.label }}-{{ forloop.index }}"
+                                    {% if value.active %}checked{% endif %}
+                                    {% if value.count == 0 and value.active == false %}disabled{% endif %}
+                             >
+                             {{ value.label }}
+                             <span style="color:#999; font-size: 0.8em;">({{ value.count }})</span>
+                          </label>
+                       </li>
+                    {%- endfor -%}
+                 </ul>
+                 
+              {%- when 'price_range' -%}
+                 <div class="price-range-inputs">
+                    <div class="price-input-group">
+                       <span class="price-currency">{{ cart.currency.symbol }}</span>
+                       <input name="{{ filter.min_value.param_name }}"
+                              id="Filter-{{ mobile | default: 'Desktop' }}-{{ filter.label }}-GTE"
+                              {% if filter.min_value.value -%}
+                                value="{{ filter.min_value.value | money_without_currency | replace: ',', '' }}"
+                              {%- endif %}
+                              type="number"
+                              placeholder="0"
+                              min="0"
+                              max="{{ filter.range_max | money_without_currency | replace: ',', '' }}"
+                       >
+                    </div>
+                    <span>-</span>
+                    <div class="price-input-group">
+                       <span class="price-currency">{{ cart.currency.symbol }}</span>
+                       <input name="{{ filter.max_value.param_name }}"
+                              id="Filter-{{ mobile | default: 'Desktop' }}-{{ filter.label }}-LTE"
+                              {% if filter.max_value.value -%}
+                                value="{{ filter.max_value.value | money_without_currency | replace: ',', '' }}"
+                              {%- endif %}
+                              type="number"
+                              placeholder="{{ filter.range_max | money_without_currency | replace: ',', '' }}"
+                              min="0"
+                              max="{{ filter.range_max | money_without_currency | replace: ',', '' }}"
+                       >
+                    </div>
+                 </div>
+           {%- endcase -%}
+        </div>
+     </details>
+  {%- endfor -%}
+  
+  <div class="filter-actions" style="margin-top: 1rem;">
+     <button type="submit" class="btn btn-primary" style="padding: 8px 16px; background: #000; color: #fff; border:none; border-radius: 4px; cursor: pointer;">Apply</button>
+  </div>
+</form>

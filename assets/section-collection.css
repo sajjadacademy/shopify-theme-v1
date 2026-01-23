@@ -1,0 +1,213 @@
+/* Collection Page Layout */
+.collection-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    padding-top: 2rem;
+    padding-bottom: 3rem;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+}
+
+@media screen and (min-width: 900px) {
+    .collection-container {
+        grid-template-columns: 280px 1fr;
+        /* Sidebar width + Grid */
+        align-items: start;
+        gap: 3rem;
+    }
+}
+
+/* Sidebar Filters */
+.collection-filters {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.filter-group {
+    border-bottom: 1px solid #eee;
+    padding-bottom: 1.5rem;
+}
+
+.filter-title {
+    font-weight: 700;
+    margin-bottom: 1rem;
+    font-size: 1rem;
+    display: flex;
+    justify-content: space-between;
+    cursor: pointer;
+}
+
+.filter-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.filter-item label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    font-size: 0.9rem;
+    color: #333;
+}
+
+.filter-item input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    border-radius: 4px;
+}
+
+/* Price Range */
+.price-range-inputs {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.price-input-group {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ccc;
+    padding: 5px 10px;
+    border-radius: 4px;
+}
+
+.price-input-group input {
+    border: none;
+    width: 100%;
+    outline: none;
+    font-size: 0.9rem;
+}
+
+.price-currency {
+    margin-right: 5px;
+    color: #777;
+    font-size: 0.9rem;
+}
+
+
+/* Main Content Area */
+.collection-content {
+    width: 100%;
+}
+
+/* Toolbar (Sort + Count) */
+.collection-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #eee;
+}
+
+.toolbar-count {
+    font-size: 0.9rem;
+    color: #555;
+}
+
+.toolbar-sort {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.toolbar-sort select {
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    background: #fff;
+}
+
+/* Grid Override - Enforcing Consistency */
+.collection-product-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    /* Default Mobile */
+    column-gap: 16px;
+    /* 10px - 16px */
+    row-gap: 30px;
+}
+
+@media screen and (min-width: 768px) {
+    .collection-product-grid {
+        grid-template-columns: repeat(3, 1fr);
+        column-gap: 20px;
+    }
+}
+
+@media screen and (min-width: 1100px) {
+    .collection-product-grid {
+        grid-template-columns: repeat(4, 1fr);
+        /* 4 Column Desktop */
+        column-gap: 24px;
+    }
+}
+
+/* Mobile Filter Drawer */
+.mobile-filter-trigger {
+    display: none;
+    /* Hidden on Desktop */
+}
+
+@media screen and (max-width: 899px) {
+    .collection-container {
+        display: block;
+        /* Stack */
+    }
+
+    .collection-filters {
+        display: none;
+        /* Initially hide sidebar */
+        /* Add Drawer Styling Here if using JS toggle, or use Details */
+    }
+
+    .mobile-filter-trigger {
+        display: block;
+        width: 100%;
+        margin-bottom: 1.5rem;
+    }
+
+    .btn-filter-drawer {
+        width: 100%;
+        padding: 10px;
+        background: #f4f4f4;
+        border: 1px solid #e0e0e0;
+        text-align: center;
+        font-weight: 600;
+        cursor: pointer;
+    }
+}
+
+/* Active Filter Pills */
+.active-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 1rem;
+}
+
+.active-filter-pill {
+    background: #f0f0f0;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    text-decoration: none;
+    color: #000;
+}
+
+.active-filter-pill:hover {
+    background: #e0e0e0;
+}

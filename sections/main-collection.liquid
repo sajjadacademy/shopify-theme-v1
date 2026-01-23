@@ -1,45 +1,136 @@
-{% comment %}
-  Main Collection Section
-  - Displays products in a grid
-  - Supports filtering and sorting
-{% endcomment %}
+{{ 'section-collection.css' | asset_url | stylesheet_tag }}
+
+{%- assign sort_by = collection.sort_by | default: collection.default_sort_by -%}
 
 <div class="section-{{ section.id }}-padding">
   <div class="container">
     <h1 class="collection-title text-center">{{ collection.title }}</h1>
     
     {% if collection.description != blank %}
-      <div class="collection-description rte text-center">
+      <div class="collection-description rte text-center" style="max-width: 800px; margin: 0 auto 2rem;">
         {{ collection.description }}
       </div>
     {% endif %}
 
-    <div class="collection-grid">
-       {% paginate collection.products by section.settings.products_per_page %}
-        <ul class="grid product-grid grid--{{ section.settings.columns_desktop }}-col-desktop grid--2-col-tablet-down">
-          {% for product in collection.products %}
-            <li class="grid__item">
-              {% render 'product-card-marketplace', product: product %}
-            </li>
-          {% else %}
-             <p>No products found.</p>
-          {% endfor %}
-        </ul>
-        
-        {% if paginate.pages > 1 %}
-          {% render 'pagination', paginate: paginate %}
-        {% endif %}
-      {% endpaginate %}
+    <!-- Mobile Filter Trigger -->
+    <div class="mobile-filter-trigger">
+       <details class="mobile-filter-details">
+          <summary class="btn-filter-drawer">
+             Filters & Sort
+          </summary>
+          <div class="mobile-filters-content" style="padding: 1rem; border: 1px solid #eee; margin-top: 5px;">
+             {% render 'parameter-filter-sidebar', results: collection, mobile: true %}
+          </div>
+       </details>
+    </div>
+
+    <div class="collection-container">
+       
+       <!-- Sidebar (Desktop) -->
+       <aside class="collection-sidebar" {% unless section.settings.enable_filtering %}style="display:none;"{% endunless %}>
+          <div class="collection-filters">
+             <div class="filter-header">
+                <h3>Filters</h3>
+                <a href="{{ collection.url }}?sort_by={{ sort_by }}" class="clear-all-link">Clear all</a>
+             </div>
+             
+             <!-- Faceted Filtering Form -->
+             {% render 'parameter-filter-sidebar', results: collection %}
+          </div>
+       </aside>
+
+       <!-- Main Grid -->
+       <div class="collection-content">
+          <!-- Toolbar -->
+          <div class="collection-toolbar">
+             <div class="toolbar-count">
+                {{ collection.products_count }} products
+             </div>
+             
+             {% if section.settings.enable_sorting %}
+             <div class="toolbar-sort">
+                <label for="SortBy">Sort by:</label>
+                <select name="sort_by" id="SortBy" form="FacetFiltersForm" onchange="location.search = '?sort_by=' + this.value">
+                   {%- for option in collection.sort_options -%}
+                      <option value="{{ option.value }}" {% if option.value == sort_by %}selected="selected"{% endif %}>
+                         {{ option.name }}
+                      </option>
+                   {%- endfor -%}
+                </select>
+             </div>
+             {% endif %}
+          </div>
+          
+          <!-- Active Filters -->
+          <div class="active-filters">
+             {%- for filter in collection.filters -%}
+                {%- for value in filter.active_values -%}
+                   <a href="{{ value.url_to_remove }}" class="active-filter-pill">
+                      {{ value.label }} <span>&times;</span>
+                   </a>
+                {%- endfor -%}
+                {% if filter.type == "price_range" %}
+                   {%- if filter.min_value.value != nil or filter.max_value.value != nil -%}
+                      <a href="{{ filter.url_to_remove }}" class="active-filter-pill">
+                         {%- if filter.min_value.value -%}{{ filter.min_value.value | money }}{%- else -%}{{ 0 | money }}{%- endif -%}-{%- if filter.max_value.value -%}{{ filter.max_value.value | money }}{%- else -%}{{ filter.range_max | money }}{%- endif -%}
+                         <span>&times;</span>
+                      </a>
+                   {%- endif -%}
+                {% endif %}
+             {%- endfor -%}
+             
+             <a href="{{ collection.url }}?sort_by={{ sort_by }}" class="active-filter-pill" style="background:#000; color:#fff;">Clear All</a>
+          </div>
+
+          <!-- Product Grid -->
+          <div class="collection-grid-wrapper">
+            {% paginate collection.products by section.settings.products_per_page %}
+              <ul class="collection-product-grid">
+                {% for product in collection.products %}
+                  <li class="grid-item">
+                    {% render 'product-card-marketplace', product: product %}
+                  </li>
+                {% else %}
+                   <li style="grid-column: 1 / -1; text-align: center; padding: 2rem;">
+                      <p>No products found matching your selection.</p>
+                      <a href="{{ collection.url }}" class="btn">Clear Filters</a>
+                   </li>
+                {% endfor %}
+              </ul>
+              
+              {% if paginate.pages > 1 %}
+                <div style="margin-top: 3rem; display: flex; justify-content: center;">
+                   {% render 'pagination', paginate: paginate %}
+                </div>
+              {% endif %}
+            {% endpaginate %}
+          </div>
+       </div>
     </div>
   </div>
 </div>
+
+<script>
+  // Simple Filter Form Submit Handler to prevent full reload if using AJAX (Future)
+  // For now, let it submit normally to refresh page with params.
+</script>
 
 {% schema %}
 {
   "name": "Collection Page",
   "settings": [
-    { "type": "range", "id": "products_per_page", "min": 8, "max": 24, "step": 4, "default": 16, "label": "Products per page" },
-    { "type": "range", "id": "columns_desktop", "min": 2, "max": 5, "step": 1, "default": 4, "label": "Columns on desktop" }
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    { "type": "range", "id": "products_per_page", "min": 8, "max": 48, "step": 4, "default": 16, "label": "Products per page" },
+    { "type": "range", "id": "columns_desktop", "min": 2, "max": 5, "step": 1, "default": 4, "label": "Columns on desktop" },
+    {
+      "type": "header",
+      "content": "Filtering & Sorting"
+    },
+    { "type": "checkbox", "id": "enable_filtering", "label": "Enable filtering", "default": true },
+    { "type": "checkbox", "id": "enable_sorting", "label": "Enable sorting", "default": true }
   ]
 }
 {% endschema %}
