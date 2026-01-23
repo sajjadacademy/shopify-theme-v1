@@ -104,18 +104,11 @@
   document.addEventListener('DOMContentLoaded', function() {
       const cartItems = {{ cart.items | json }};
       const subtotal = {{ cart.total_price }};
-      let eligibleQty = 0;
+      let maxItemQty = 0;
       
-      // Calculate Eligible Qty
+      // Calculate Max Item Qty (Global Rule)
       cartItems.forEach(item => {
-          let isEligible = false;
-          if(item.properties) {
-              const props = item.properties;
-              if(props['_qty_offer_eligible'] || props['qty_offer'] || props['_offer_eligible']) {
-                  isEligible = true;
-              }
-          }
-          if(isEligible) eligibleQty += item.quantity;
+          if(item.quantity > maxItemQty) maxItemQty = item.quantity;
       });
       
       // Logic
@@ -123,15 +116,26 @@
       let savings = 0;
       let discountText = '';
       
-      if(eligibleQty >= 3) {
+      if(maxItemQty >= 3) {
           discountCode = 'BUY3SAVE20';
           discountText = 'Buy 3 & Save 20%';
-          savings = subtotal * 0.20; 
-      } else if (eligibleQty >= 2) {
+          // Verify with visual per-item logic below or apply globally?
+          // For consistency with drawer, we check eligible items for visual savings
+      } else if (maxItemQty >= 2) {
           discountCode = 'BUY2SAVE10';
           discountText = 'Buy 2 & Save 10%';
-          savings = subtotal * 0.10; 
       }
+      
+      // Calculate Savings (Visual) for Summary
+      cartItems.forEach(item => {
+          let itemRate = 0;
+          if(item.quantity >= 3) itemRate = 0.20;
+          else if(item.quantity >= 2) itemRate = 0.10;
+          
+          if(itemRate > 0) {
+              savings += (item.original_line_price * itemRate);
+          }
+      });
       
       // Update Checkout Button
       const checkoutBtn = document.querySelector('button[name="checkout"]');
