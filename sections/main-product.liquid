@@ -5,24 +5,28 @@
       <!-- LEFT: Media Gallery -->
       <div class="product-media-wrapper">
          <div class="product-media-main">
-            {%- if product.selected_or_first_available_variant.featured_media != null -%}
-              {%- assign featured_media = product.selected_or_first_available_variant.featured_media -%}
-            {%- else -%}
-              {%- assign featured_media = product.featured_media -%}
-            {%- endif -%}
+            <div class="slider-container" id="MainImageSlider-{{ section.id }}">
+              {%- for media in product.media -%}
+                <div class="slider-item" id="slide-{{ media.id }}" data-index="{{ forloop.index0 }}">
+                  <img src="{{ media | image_url: width: 1200 }}" 
+                       alt="{{ media.alt | escape }}" 
+                       class="main-image"
+                       loading="{% if forloop.first %}eager{% else %}lazy{% endif %}" 
+                       width="1200" height="1200">
+                </div>
+              {%- endfor -%}
+            </div>
             
-            <img src="{{ featured_media | image_url: width: 1200 }}" 
-                 alt="{{ featured_media.alt | escape }}" 
-                 id="MainImage-{{ section.id }}" 
-                 class="main-image"
-                 loading="eager" width="1200">
+            <!-- Arrows -->
+            <button class="slider-arrow prev" onclick="moveSlide(-1, '{{ section.id }}')" aria-label="Previous Slide">&lt;</button>
+            <button class="slider-arrow next" onclick="moveSlide(1, '{{ section.id }}')" aria-label="Next Slide">&gt;</button>
          </div>
          
          {%- if product.media.size > 1 -%}
            <div class="product-thumbnails">
               {%- for media in product.media -%}
-                <div class="thumbnail-item {% if media.id == featured_media.id %}active{% endif %}"
-                     onclick="changeMainImage('{{ media | image_url: width: 1200 }}', this)">
+                <div class="thumbnail-item {% if media.id == product.selected_or_first_available_variant.featured_media.id %}active{% endif %}"
+                     onclick="scrollToSlide({{ forloop.index0 }}, '{{ section.id }}', this)">
                    <img src="{{ media | image_url: width: 100 }}" alt="{{ media.alt | escape }}" width="100" height="100">
                 </div>
               {%- endfor -%}
@@ -255,77 +259,29 @@
 </div>
 
 <script>
-  function changeMainImage(src, el) {
-    document.getElementById('MainImage-{{ section.id }}').src = src;
-    document.querySelectorAll('.thumbnail-item').forEach(t => t.classList.remove('active'));
-    el.classList.add('active');
+  /* Slider Logic */
+  function moveSlide(direction, id) {
+     const slider = document.getElementById('MainImageSlider-' + id);
+     if(slider) {
+        const width = slider.clientWidth;
+        slider.scrollBy({ left: width * direction, behavior: 'smooth' });
+     }
   }
 
-  function selectBundle(qty, element) {
-    /* Visual */
-    document.querySelectorAll('.bundle-option').forEach(el => el.classList.remove('active'));
-    element.classList.add('active');
-    
-    /* Logic: Update hidden inputs */
-    // 1. The selector's own input (visual state)
-    const input = document.getElementById('bundle-qty-hidden');
-    if(input) input.value = qty;
-    
-    // 2. The REAL form input (submission state)
-    const realInput = document.getElementById('real-form-qty');
-    if(realInput) realInput.value = qty;
+  function scrollToSlide(index, id, thumbEl) {
+     const slider = document.getElementById('MainImageSlider-' + id);
+     if(slider) {
+        const width = slider.clientWidth;
+        slider.scrollTo({ left: width * index, behavior: 'smooth' });
+        
+        // Update Thumbnails Visuals
+        const container = thumbEl.parentElement;
+        container.querySelectorAll('.thumbnail-item').forEach(t => t.classList.remove('active'));
+        thumbEl.classList.add('active');
+     }
   }
   
-  /* Variant Selection Handler (Simple) */
-  document.addEventListener('DOMContentLoaded', function() {
-     const variantInputs = document.querySelectorAll('.product-variant-picker input[type="radio"]');
-     variantInputs.forEach(input => {
-        input.addEventListener('change', function() {
-           // Provide a simple way to find the matching variant ID
-           // Note: In a full theme, we'd map JSON options to IDs. 
-           // For now, we assume the value IS the title, but we need the ID.
-           // Since we don't have a massive JSON map here, let's try a simpler approach if possible.
-           // Relying on the typical &variant=URL param update or similar.
-           
-           // For this specific 'Fix', we'll make sure the form SUBMITS the ID.
-           // The liquid loop ensures default.
-           // We need to fetch the ID for the combination.
-        });
-     });
-     
-     // CRITICAL FIX: Ensure the hidden ID input is actually inside the form or linked
-     // The form ID is 'product-form-installment'.
-     // The input line 145 IS inside the form tags in the liquid file.
-     // Is 'product.selected_or_first_available_variant.id' null?
-     
-     // Only other cause: The Variant Picker Block is OUTSIDE the form.
-     // When user clicks a pill, we must update the <input name="id"> value.
-  });
-  
-  // We need to inject the variant map to make this work 100% on client side switch
-  // But first, let's fix the basic "Add" if it's failing on default load.
-  // The error "Parameter Missing: id" means the input is empty or missing.
-  
-</script>
-
-{%- # JSON Map for Variants (Crucial for JS selection) -%}
-<script type="application/json" id="ProductVariants-{{ section.id }}">
-  [
-  {%- for variant in product.variants -%}
-    {
-      "id": {{ variant.id }},
-      "title": "{{ variant.title }}",
-      "options": {{ variant.options | json }},
-      "featured_media": {
-        "src": "{{ variant.featured_media | image_url: width: 1200 }}",
-        "id": {{ variant.featured_media.id | default: 'null' }}
-      }
-    }{% unless forloop.last %},{% endunless %}
-  {%- endfor -%}
-  ]
-</script>
-
-<script>
+  /* Variant Selection Handler */
   document.addEventListener('DOMContentLoaded', () => {
       // 1. Get Elements
       const form = document.getElementById('product-form-installment');
@@ -356,7 +312,6 @@
          }
          
          input.value = id;
-         // console.log('Updated Form ID to:', id);
       }
       
       // 4. Update Function
@@ -367,12 +322,8 @@
               return checked ? checked.value : null;
           }).filter(Boolean); // Remove nulls
           
-          // Debugging
-          // console.log('Selected:', selectedOptions);
-          
           // Find logic
           const matchedVariant = variantData.find(variant => {
-              // Compare arrays. variant.options is array of strings.
               if(variant.options.length !== selectedOptions.length) return false;
               return variant.options.every((opt, i) => opt === selectedOptions[i]);
           });
@@ -382,18 +333,28 @@
               // Update URL history without reload
               window.history.replaceState({}, '', `?variant=${matchedVariant.id}`);
               
-              // Switch Image if available
-              if(matchedVariant.featured_media && matchedVariant.featured_media.src) {
-                 const mainImg = document.getElementById('MainImage-{{ section.id }}');
-                 if(mainImg) {
-                    mainImg.src = matchedVariant.featured_media.src;
+              // Scroll Slider to Matched Image
+              if(matchedVariant.featured_media && matchedVariant.featured_media.id) {
+                 const slide = document.getElementById('slide-' + matchedVariant.featured_media.id);
+                 if(slide) {
+                     const slider = document.getElementById('MainImageSlider-{{ section.id }}');
+                     const index = slide.getAttribute('data-index');
+                     if(slider && index !== null) {
+                         const width = slider.clientWidth;
+                         slider.scrollTo({ left: width * index, behavior: 'smooth' });
+                         
+                         // Update active thumbnail
+                         const thumbs = document.querySelectorAll('.thumbnail-item');
+                         thumbs.forEach(t => t.classList.remove('active'));
+                         if(thumbs[index]) thumbs[index].classList.add('active');
+                     }
                  }
               }
           }
       }
       
-      // 5. Initial Run (Important! Ensure default is set)
-      updateVariant(); // Run once on load to ensure input matches default selection
+      // 5. Initial Run
+      updateVariant(); 
       
       // 6. Listeners
       fieldsets.forEach(fs => {
@@ -599,25 +560,60 @@
     width: 100%;
   }
 
-  /* Media Gallery */
+  /* Media Gallery (Slider) */
   .product-media-wrapper { 
     display: flex; flex-direction: column; gap: 1rem; 
-    width: 100%; max-width: 550px; margin: 0 auto; /* Constraint width */
+    width: 100%; max-width: 550px; margin: 0 auto; 
+    position: relative; 
   }
+
   .product-media-main {
     width: 100%;
     position: relative;
-    /* Removed fixed aspect-ratio to let image define height naturally */
     background: transparent; 
     border-radius: 12px;
     overflow: hidden;
-    display: flex; align-items: center; justify-content: center;
-    border: 1px solid #f0f0f0; /* Subtle border */
+    border: 1px solid #f0f0f0;
   }
+  
+  .slider-container {
+      display: flex;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scroll-behavior: smooth;
+      scrollbar-width: none;
+      width: 100%;
+  }
+  .slider-container::-webkit-scrollbar { display: none; }
+  
+  .slider-item {
+      flex: 0 0 100%;
+      width: 100%;
+      scroll-snap-align: start;
+      display: flex; align-items: center; justify-content: center;
+  }
+
+  /* Arrows */
+  .slider-arrow {
+      position: absolute; top: 50%; transform: translateY(-50%);
+      background: rgba(255, 255, 255, 0.8); color: #000;
+      border: 1px solid #ddd; border-radius: 50%;
+      width: 40px; height: 40px;
+      font-size: 1.2rem; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      z-index: 10;
+      transition: all 0.2s;
+      opacity: 0; pointer-events: none;
+  }
+  .product-media-main:hover .slider-arrow { opacity: 1; pointer-events: auto; }
+  .slider-arrow:hover { background: #fff; transform: translateY(-50%) scale(1.1); }
+  
+  .slider-arrow.prev { left: 10px; }
+  .slider-arrow.next { right: 10px; }
   
 
 
-  .main-image { width: 100%; height: auto; object-fit: contain; }
+  .main-image { width: 100%; height: auto; object-fit: contain; display: block; }
   
   .product-thumbnails {
     display: flex; gap: 10px; overflow-x: auto; padding-bottom: 5px;
