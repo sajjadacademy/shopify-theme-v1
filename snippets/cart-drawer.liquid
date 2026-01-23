@@ -107,6 +107,30 @@
           const bubble = document.querySelector('.cart-count.bubble');
           if(bubble) bubble.textContent = cart.item_count;
           
+          // CHECKOUT DISCOUNT (Inject)
+          const checkoutBtn = document.querySelector('.btn-drawer-checkout');
+          if(checkoutBtn) {
+             if(cart.attributes && cart.attributes.discount_code) {
+                 checkoutBtn.href = `/checkout?discount=${cart.attributes.discount_code}`;
+                 // Indicator
+                 let msg = document.getElementById('drawer-discount-msg');
+                 if(!msg) {
+                     msg = document.createElement('div');
+                     msg.id = 'drawer-discount-msg';
+                     msg.style.color = 'green';
+                     msg.style.fontSize = '0.9rem';
+                     msg.style.textAlign = 'center';
+                     msg.style.marginBottom = '0.5rem';
+                     checkoutBtn.before(msg);
+                 }
+                 msg.innerText = `Discount Code '${cart.attributes.discount_code}' applied!`;
+             } else {
+                 checkoutBtn.href = '/checkout';
+                 const msg = document.getElementById('drawer-discount-msg');
+                 if(msg) msg.remove();
+             }
+          }
+          
           // Update Total
           document.getElementById('drawer-total-price').textContent = formatMoney(cart.total_price);
           
