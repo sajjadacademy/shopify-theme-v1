@@ -12,6 +12,12 @@
     "main": {
       "type": "main-product",
       "blocks": {
+        "custom_liquid_pPmT3J": {
+          "type": "custom_liquid",
+          "settings": {
+            "custom_liquid": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Rating Widget</title>\n    <style>\n        body.uniqueBody_Ty83Kl {\n            font-family: Arial, sans-serif;\n        }\n\n        .ratingWidget_Wp76Nm {\n            display: flex;\n            align-items: center;\n        }\n\n        .profileImages_Qw59Br {\n            display: flex;\n            align-items: center;\n            margin-right: 20px;\n        }\n\n        .profileImages_Qw59Br img {\n            width: 30px;\n            height: 30px;\n            border-radius: 50%;\n            margin-right: -10px;\n            border: 2px solid white;\n        }\n\n        .nameAndVerified_Xz24Ft {\n            display: flex;\n            align-items: center;\n            margin-left: 15px;\n            font-size: 15px;\n        }\n\n        .purchaseText_Ym34Gh {\n            font-size: 12px;\n            margin-left: 5px;\n        }\n\n        /* Sayıyı daha belirgin, siyah ve bold yap */\n        #purchase-count {\n            font-weight: bold;\n            color: #000000; /* Siyah renk */\n            font-size: 14px; /* Biraz daha büyük */\n        }\n\n        @font-face {\n            font-family: \"CustomIcons\";\n            src: url(\"https://fonts.gstatic.com/s/materialsymbolsoutlined/v54/1f6ad2e0e7c7b3724793c4d8709a24a5.woff2\") format(\"woff2\");\n        }\n    </style>\n</head>\n<body class=\"uniqueBody_Ty83Kl\">\n\n    <div class=\"ratingWidget_Wp76Nm\">\n        <div class=\"profileImages_Qw59Br\">\n            <img src=\"https://randomuser.me/api/portraits/men/1.jpg\" alt=\"Profile 1\">\n            <img src=\"https://randomuser.me/api/portraits/women/1.jpg\" alt=\"Profile 2\">\n            <img class=\"uniqueReviewImage_Tz89Lp\" src=\"https://i.hizliresim.com/je7b0fg.jpg\" alt=\"Profile 3\">\n            <div class=\"nameAndVerified_Xz24Ft\">\n                <span>Burkisoy and <span id=\"purchase-count\">470</span> people purchased</span>\n            </div>\n        </div>\n    </div>\n\n    <script>\n        let purchaseCount = 470;\n        const purchaseCountElement = document.getElementById(\"purchase-count\");\n\n        function updatePurchaseCount() {\n            // Her seferde 1, 2 veya bazen 3 artış miktarı\n            let incrementAmount = Math.floor(Math.random() * 3) + 1;\n            purchaseCount += incrementAmount;\n            purchaseCountElement.textContent = purchaseCount;\n\n            // Sonraki artış süresini rastgele 2 ila 8 saniye arasında belirle\n            const nextUpdateDelay = Math.floor(Math.random() * 6000) + 2000;\n\n            setTimeout(updatePurchaseCount, nextUpdateDelay);\n        }\n\n        // İlk güncellemeyi başlat\n        updatePurchaseCount();\n    </script>\n\n</body>\n</html>"
+          }
+        },
         "title": {
           "type": "title",
           "settings": {}
@@ -52,6 +58,12 @@
           "type": "buy_buttons",
           "settings": {}
         },
+        "custom_liquid_rf6tap": {
+          "type": "custom_liquid",
+          "settings": {
+            "custom_liquid": "<div class=\"red-div\">\n  <span class=\"blink\">&#9679;</span>\n  <span id=\"cartCount\" style=\"color: #f0fc0d;\">4</span> people have this in their cart\n</div>\n\n<script>\n  // Function to update the random number every 15 seconds\n  function updateRandomNumber() {\n    // Generate a random number between 4 and 20\n    var randomCount = Math.floor(Math.random() * (20 - 4 + 1)) + 4;\n    // Display the random number in the HTML\n    document.getElementById(\"cartCount\").innerText = randomCount;\n  }\n\n  // Call the function immediately to set the initial random number\n  updateRandomNumber();\n\n  // Update the random number every 15 seconds\n  setInterval(updateRandomNumber, 15000);\n</script>\n\n<style>\n  .red-div {\n    background-color: #03800f;\n    padding: 2px 10px; /* 6px vertical, 10px horizontal */\n    border-radius: 8px; /* Rounded corners */\n    display: inline-block; /* Display as inline-block */\n    text-align: center; /* Center align the content */\n    margin: 0 auto; /* Horizontally center the red-div */\n    color: #ffffff; /* Text color */\n    font-weight: 500; /* Medium font weight */\n    font-size: 16px; /* Set font size */\n  }\n\n  .blink {\n    color: inherit; /* Inherit color from parent */\n    display: inline-block; /* Display as inline-block */\n    vertical-align: middle; /* Align vertically to middle */\n    font-size: 12px; /* Set font size */\n    margin-right: 5px; /* Add some space between the dot and the text */\n  }\n</style>"
+          }
+        },
         "custom_liquid_D7WLtW": {
           "type": "custom_liquid",
           "settings": {
@@ -80,6 +92,7 @@
         }
       },
       "block_order": [
+        "custom_liquid_pPmT3J",
         "title",
         "custom_liquid_JaHCkt",
         "price",
@@ -87,6 +100,7 @@
         "variant_picker",
         "bundle",
         "buy_buttons",
+        "custom_liquid_rf6tap",
         "custom_liquid_D7WLtW",
         "custom_liquid_Vtjdta",
         "custom_liquid_A73LkV",
