@@ -521,9 +521,8 @@
   }
 
   .product-layout {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 3rem;
+    /* Layout handled by media queries */
+    width: 100%;
   }
 
   /* Media Gallery */
@@ -542,16 +541,7 @@
     border: 1px solid #f0f0f0; /* Subtle border */
   }
   
-  @media screen and (max-width: 768px) {
-    .product-media-wrapper {
-       max-width: 100%; /* Use full width on mobile */
-       gap: 0.5rem;
-    }
-    .product-media-main {
-       border-radius: 0; /* Optional: Edge to edge look or smaller radius */
-       border: none;
-    }
-  }
+
 
   .main-image { width: 100%; height: auto; object-fit: contain; }
   
@@ -669,10 +659,33 @@
   /* Desktop Grid */
   @media screen and (min-width: 900px) {
     .product-layout {
+       display: grid;
        grid-template-columns: 1fr 1fr; /* Balanced 50/50 Split */
        gap: 4rem;
        align-items: start;
     }
+  }
+  
+  /* Mobile Layout - Strict Enforcement */
+  @media screen and (max-width: 899px) {
+     .product-layout {
+        display: flex; flex-direction: column; gap: 2rem;
+     }
+     
+     .product-media-wrapper {
+        width: 100% !important; max-width: 100% !important; margin: 0 !important;
+     }
+     
+     .product-media-main {
+        width: 100% !important; height: auto !important; aspect-ratio: auto !important;
+        border: none !important; border-radius: 0 !important;
+        background: transparent !important;
+     }
+     
+     .main-image {
+        width: 100% !important; height: auto !important; object-fit: contain !important;
+        max-height: none !important;
+     }
   }
 </style>
 
