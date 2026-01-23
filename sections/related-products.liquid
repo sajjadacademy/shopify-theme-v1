@@ -22,11 +22,15 @@
      -%}
 
      {%- if source_collection != blank -%}
-        {%- for recommendation in source_collection.products -%}
+        {%- assign collection_size = source_collection.products_count -%}
+        {%- assign offset = 'now' | date: "%S" | modulo: collection_size | minus: products_to_show -%}
+        {%- if offset < 0 %}{% assign offset = 0 %}{% endif -%}
+        
+        {%- for recommendation in source_collection.products offset: offset -%}
            {%- if recommendation.id == product.id -%}{% continue %}{%- endif -%}
            
            {% render 'product-card-marketplace', 
-              product_card_product: recommendation, 
+              product: recommendation, 
               show_rating: section.settings.show_rating, 
               show_quick_add: section.settings.enable_quick_add,
               quick_add_type: 'button' 
