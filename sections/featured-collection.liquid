@@ -94,6 +94,10 @@
     /* Typography */
     --card-title-size: 13px; /* Compact text */
     --card-title-weight: 600;
+    
+    /* Colors */
+    --color-primary: {{ section.settings.button_bg_color }};
+    --color-warning: #FFA41C;
   }
 </style>
 
@@ -184,6 +188,18 @@
       "id": "bg_color",
       "label": "Background",
       "default": "#ffffff"
+    },
+    {
+       "type": "color",
+       "id": "button_bg_color",
+       "label": "Button Background",
+       "default": "#FFD814"
+    },
+    {
+       "type": "color",
+       "id": "button_text_color",
+       "label": "Button Text",
+       "default": "#000000"
     },
     {
       "type": "range",
