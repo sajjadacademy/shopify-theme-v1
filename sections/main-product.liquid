@@ -513,6 +513,12 @@
   .product-container {
      max-width: 1200px; margin: 0 auto; padding: 0 20px;
   }
+  
+  @media screen and (max-width: 768px) {
+    .product-container {
+       padding: 0 16px; /* Slightly tighter on mobile */
+    }
+  }
 
   .product-layout {
     display: grid;
@@ -535,6 +541,18 @@
     display: flex; align-items: center; justify-content: center;
     border: 1px solid #f0f0f0; /* Subtle border */
   }
+  
+  @media screen and (max-width: 768px) {
+    .product-media-wrapper {
+       max-width: 100%; /* Use full width on mobile */
+       gap: 0.5rem;
+    }
+    .product-media-main {
+       border-radius: 0; /* Optional: Edge to edge look or smaller radius */
+       border: none;
+    }
+  }
+
   .main-image { width: 100%; height: auto; object-fit: contain; }
   
   .product-thumbnails {
