@@ -80,14 +80,29 @@
                {%- unless product.has_only_default_variant -%}
                  <div class="product-variant-picker" {{ block.shopify_attributes }}>
                     {%- for option in product.options_with_values -%}
+                       {%- assign option_name_downcase = option.name | downcase -%}
+                       {%- if option_name_downcase contains 'ships from' and block.settings.enable_ships_from == false -%}
+                          {%- continue -%}
+                       {%- endif -%}
+
                        <fieldset class="js product-form__input">
                           <legend class="form__label">{{ option.name }}</legend>
                           <div class="variant-options">
                              {%- for value in option.values -%}
-                                <label class="variant-pill">
+                                <label class="variant-pill {% if option_name_downcase contains 'color' and block.settings.color_style == 'circle' %}variant-circle{% endif %}"
+                                       {% if option_name_downcase contains 'color' and block.settings.color_style == 'circle' %}
+                                         {% assign color_swatch = value | split: '-' | first | split: ' ' | first | downcase %}
+                                         style="--swatch-color: {{ color_swatch }};"
+                                         title="{{ value }}"
+                                       {% endif %}
+                                >
                                    <input type="radio" name="{{ option.name }}" value="{{ value | escape }}" {% if option.selected_value == value %}checked{% endif %} 
                                           onchange="/* logic to update variant id */">
-                                   <span>{{ value }}</span>
+                                   {% if option_name_downcase contains 'color' and block.settings.color_style == 'circle' %}
+                                      <span class="circle-swatch"></span>
+                                   {% else %}
+                                      <span>{{ value }}</span>
+                                   {% endif %}
                                 </label>
                              {%- endfor -%}
                           </div>
@@ -644,6 +659,31 @@
      background: #000; color: #fff; border-color: #000;
   }
 
+  /* Color Circle Mode */
+  .variant-pill.variant-circle {
+     padding: 3px; border-radius: 50%; width: 42px; height: 42px;
+     border: 1px solid transparent; 
+     display: flex; align-items: center; justify-content: center;
+  }
+  .variant-pill.variant-circle:has(input:checked) {
+     border-color: #000; /* Outer Ring */
+  }
+  
+  .circle-swatch {
+     display: block; width: 100%; height: 100%; 
+     border-radius: 50%;
+     background-color: var(--swatch-color, #ccc);
+     border: 1px solid rgba(0,0,0,0.1);
+     /* Override standard pill styles */
+     padding: 0 !important; margin: 0 !important;
+  }
+  
+  /* Reset default pill checked style for circle */
+  .variant-pill.variant-circle input:checked + .circle-swatch {
+     background-color: var(--swatch-color); /* Keep original color */
+     color: transparent; border-color: rgba(0,0,0,0.1);
+  }
+
   /* Accordion Styles */
   .product-bottom-accordions {
      margin-top: 3rem;
@@ -711,7 +751,29 @@
   "blocks": [
     { "type": "title", "name": "Title", "limit": 1 },
     { "type": "price", "name": "Price", "limit": 1 },
-    { "type": "variant_picker", "name": "Variant Picker", "limit": 1 },
+    { 
+      "type": "variant_picker", 
+      "name": "Variant Picker", 
+      "limit": 1,
+      "settings": [
+        {
+          "type": "select",
+          "id": "color_style",
+          "label": "Color Option Style",
+          "options": [
+            { "value": "text", "label": "Text (Pills)" },
+            { "value": "circle", "label": "Color Circles" }
+          ],
+          "default": "text"
+        },
+        {
+          "type": "checkbox",
+          "id": "enable_ships_from",
+          "label": "Show 'Ships From' Option",
+          "default": true
+        }
+      ]
+    },
     { "type": "bundle_selector", "name": "Bundle Selector", "limit": 1 },
     { "type": "buy_buttons", "name": "Buy Actions", "limit": 1 },
     { "type": "trust_icons", "name": "Trust Badges", "limit": 1 },
