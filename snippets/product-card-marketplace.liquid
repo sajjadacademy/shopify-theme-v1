@@ -88,27 +88,18 @@
     
     <!-- 1. Rating Row -->
     {%- if show_rating -%}
+      {%- comment -%} Deterministic Random Rating (4.1-4.9) and Count (1.2k-4.5k) based on Product ID {%- endcomment -%}
+      {%- assign rating_int = product.id | modulo: 9 | plus: 41 -%}
+      {%- assign rating_val = rating_int | divided_by: 10.0 -%}
+      
+      {%- assign count_seed = product.id | times: 37 | modulo: 3301 -%}
+      {%- assign review_count = 1200 | plus: count_seed -%}
+      {%- assign review_count_disp = review_count | divided_by: 100.0 | round | divided_by: 10.0 -%}
+
       <div class="pcm-rating">
         <span class="pcm-rating-star">★</span>
-        <span class="pcm-rating-val">4.9</span>
-        
-        {%- if enable_random_reviews -%}
-             {%- comment -%} Random Number Generation based on Product ID Hash {%- endcomment -%}
-             {%- assign min = random_review_min | default: 100 -%}
-             {%- assign max = random_review_max | default: 5000 -%}
-             {%- assign diff = max | minus: min -%}
-             {%- assign random_number = product.id | modulo: diff | plus: min -%}
-             
-             {%- if random_number > 1000 -%}
-                {%- assign decimal = random_number | modulo: 1000 | divided_by: 100 -%}
-                <span class="pcm-rating-count">({{ random_number | divided_by: 1000 }}.{{ decimal }}K)</span>
-             {%- else -%}
-                <span class="pcm-rating-count">({{ random_number }})</span>
-             {%- endif -%}
-        {%- else -%}
-             <!-- Fixed Static or Real Metafield if available later -->
-             <span class="pcm-rating-count">(10.3K)</span>
-        {%- endif -%}
+        <span class="pcm-rating-val">{{ rating_val }}</span>
+        <span class="pcm-rating-count">({{ review_count_disp }}k)</span>
       </div>
     {%- endif -%}
 
