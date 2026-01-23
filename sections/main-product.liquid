@@ -125,7 +125,7 @@
                    
                  <h3 class="h4" style="font-size: 1rem; margin-bottom: 0.5rem;">Select Quantity</h3>
                  
-                 <input type="hidden" name="quantity" value="1" form="product-form-installment" id="bundle-qty-hidden">
+                 <input type="hidden" id="bundle-qty-hidden" value="1">
                  
                  <div class="bundle-options">
                    <!-- Tier 1: Buy 1 -->
@@ -513,7 +513,7 @@
               btnAddToCart.textContent = 'Adding...';
               btnAddToCart.disabled = true;
               
-              fetch(window.Shopify.routes.root + 'cart/add.js', {
+              fetch('/cart/add.js', {
                   method: 'POST',
                   headers: {
                       'Content-Type': 'application/json'
