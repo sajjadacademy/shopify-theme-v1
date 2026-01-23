@@ -2,23 +2,25 @@
   <div class="container">
     <div class="trust-grid">
       {% for block in section.blocks %}
-        <div class="trust-item">
-          <div class="trust-icon">
-            {% if block.settings.custom_icon != blank %}
-               {{ block.settings.custom_icon | image_url: width: 40 | image_tag }}
-            {% else %}
-               {% render 'icon-dynamic', icon: 'check' %}
-            {% endif %}
+        {% if block.type == 'feature' %}
+          <div class="trust-item">
+            <div class="trust-icon">
+              {% if block.settings.custom_icon != blank %}
+                 {{ block.settings.custom_icon | image_url: width: 40 | image_tag }}
+              {% else %}
+                 {% render 'icon-dynamic', icon: 'check' %}
+              {% endif %}
+            </div>
+            <div class="trust-text">
+              <h4>{{ block.settings.heading }}</h4>
+              <p>{{ block.settings.subtext }}</p>
+            </div>
           </div>
-          <div class="trust-text">
-            <h4>{{ block.settings.heading }}</h4>
-            <p>{{ block.settings.subtext }}</p>
+        {% elsif block.type == 'custom_liquid' %}
+          <div class="trust-item trust-custom-liquid" style="background: transparent; border: none; padding: 0;">
+             {{ block.settings.custom_liquid }}
           </div>
-        </div>
-      {% elsif block.type == 'custom_liquid' %}
-        <div class="trust-item trust-custom-liquid" style="background: transparent; border: none; padding: 0;">
-           {{ block.settings.custom_liquid }}
-        </div>
+        {% endif %}
       {% endfor %}
     </div>
   </div>
