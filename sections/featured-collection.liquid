@@ -54,165 +54,43 @@
     padding-bottom: {{ section.settings.padding_bottom }}px;
     background-color: {{ section.settings.bg_color }};
   }
-  .section-heading { margin-bottom: 1.5rem; display: flex; align-items: baseline; gap: 1rem; }
+  .section-heading { margin-bottom: 24px; display: flex; align-items: baseline; gap: 1rem; }
   .section-heading.center { justify-content: center; text-align: center; }
   .section-heading.left { justify-content: space-between; }
   
+  /* STRICT GRID LAYOUT (Match Daily Deals) */
   .product-grid {
-    display: grid;
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    gap: 16px;
+    display: grid !important;
+    list-style: none !important;
+    padding: 0 !important; margin: 0 !important;
+    width: 100% !important;
+    /* Enforce 4 columns default */
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 16px !important;
   }
   
-  /* Desktop Grid columns */
-  @media screen and (min-width: 990px) {
-    .grid--6-col-desktop { grid-template-columns: repeat(6, 1fr); }
-    .grid--5-col-desktop { grid-template-columns: repeat(5, 1fr); }
-    .grid--4-col-desktop { grid-template-columns: repeat(4, 1fr); }
-    
-    /* Desktop Scroll / Carousel Mode */
-    .desktop-scroll .product-grid {
-       display: flex;
-       overflow-x: auto;
-       scroll-snap-type: x mandatory;
-       padding-bottom: 1rem;
-       gap: 16px;
-    }
-    .desktop-scroll .product-grid .grid__item {
-       min-width: calc(100% / {{ section.settings.columns_desktop }} - 16px);
-       scroll-snap-align: start;
+  .grid__item {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+  
+  /* Mobile: 2 Columns Strict */
+  @media screen and (max-width: 767px) {
+    .product-grid {
+       grid-template-columns: repeat(2, 1fr) !important;
+       gap: 8px !important;
     }
   }
-  
-  /* Mobile Grid columns */
-  .grid--2-col-tablet-down { grid-template-columns: repeat(2, 1fr); gap: 8px; }
-  .grid--1-col-tablet-down { grid-template-columns: 1fr; }
 
-  /* Mobile Scroll/Carousel Override */
-  .mobile-scroll .product-grid {
-    display: flex;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    padding-bottom: 1rem;
-    gap: 12px;
-  }
-  .mobile-scroll .product-grid .grid__item {
-    min-width: 60%;
-    scroll-snap-align: start;
-  }
-
-  /* Noon Style Card */
-  .product-card.noon-style {
-    background: #fff;
-    border: 1px solid #f0f0f0; /* Softer border */
-    border-radius: 8px; /* Slightly more rounded for premium feel */
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    position: relative;
-    padding: 0; /* Remove internal padding for full bleed image */
-    transition: box-shadow 0.3s ease;
-  }
-  .product-card.noon-style:hover {
-    box-shadow: 0 8px 20px rgba(0,0,0,0.08); /* Premium lift effect */
-  }
-  
-  .product-card__image-wrapper {
-    position: relative;
-    aspect-ratio: 1; /* Square Area */
-    width: 100%;
-    overflow: hidden;
-    margin-bottom: 0;
-    background: #fff; 
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .product-card__image {
-    width: 100%; height: 100%; 
-    object-fit: contain; /* PERFECT FIT - NO CROP */
-    padding: 12px; /* Generous padding like reference */
-    mix-blend-mode: multiply; /* Helps blend white backgrounds if slightly off */
-  }
-
-  /* Wishlist */
-  .wishlist-btn {
-    position: absolute; top: 10px; right: 10px;
-    background: #fff; 
-    border-radius: 50%;
-    width: 32px; height: 32px;
-    display: flex; justify-content: center; align-items: center;
-    border: 1px solid var(--color-warning); 
-    color: var(--color-warning); 
-    cursor: pointer;
-    z-index: 2;
-  }
-  
-  /* Add to Cart Button (Reference Style) */
-  .product-card__footer {
-     margin-top: 10px;
-  }
-  .btn-atc-outline {
-    width: 100%;
-    display: block;
-    text-align: center;
-    padding: 8px;
-    border: 1px solid var(--color-primary);
-    color: var(--color-primary);
-    border-radius: 20px; /* Pill shape like reference */
-    background: transparent;
-    font-size: 0.85rem;
-    font-weight: 600;
-    text-decoration: none;
-    transition: all 0.2s;
-  }
-  .btn-atc-outline:hover {
-    background: var(--color-primary);
-    color: #fff;
-  }
-
-  /* Info Block */
-  .product-card__info { padding: 12px; flex-grow: 1; display: flex; flex-direction: column; gap: 4px; }
-  
-  .product-card__title {
-    font-size: 0.9rem;
-    font-weight: 600; 
-    margin: 0;
-    color: var(--color-primary);
-    line-height: 1.4;
-    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
-  }
-  
-  .product-card__rating {
-     font-size: 0.75rem; color: #666; display: flex; align-items: center; gap: 4px;
-     margin-top: 4px;
-  }
-  .rating-star { color: var(--color-warning); font-size: 0.8rem; }
-  .rating-count { color: #999; font-size: 0.7rem; }
-
-  .product-card__price {
-     display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px;
-     font-size: 1rem; font-weight: 700; margin-top: auto; padding-top: 4px;
-  }
-  .currency { font-size: 0.7rem; font-weight: 400; }
-  .price-compare { text-decoration: line-through; color: #999; font-size: 0.8rem; font-weight: 400; }
-  .discount-tag { color: #28a745; font-weight: 700; font-size: 0.75rem; background: #e6f9e9; padding: 2px 6px; border-radius: 4px; }
-
-  /* Marketplace Card Override Variables */
+  /* Scoped Variables to Match Daily Deals Compactness */
   #shopify-section-{{ section.id }} .product-card-marketplace {
     --card-radius: 8px;
     --color-border: #e0e0e0;
-    --card-padding: 12px;
+    --card-padding: 8px; /* Compact padding */
     
     /* Typography */
-    --card-title-size: 16px;
+    --card-title-size: 13px; /* Compact text */
     --card-title-weight: 600;
-    
-    /* Colors */
-    --color-primary: #000; /* Button Background */
-    --color-warning: #FFA41C; /* Stars */
   }
 </style>
 
@@ -246,8 +124,8 @@
       "id": "products_to_show",
       "min": 4,
       "max": 12,
-      "step": 1,
-      "default": 6,
+      "step": 4,
+      "default": 8,
       "label": "Products to show"
     },
     {
@@ -258,20 +136,10 @@
       "type": "range",
       "id": "columns_desktop",
       "min": 4,
-      "max": 6,
+      "max": 4,
       "step": 1,
-      "default": 6,
-      "label": "Number of columns"
-    },
-    {
-       "type": "select",
-       "id": "desktop_layout",
-       "label": "Desktop Layout Mode",
-       "options": [
-          { "value": "grid", "label": "Grid (Stack)" },
-          { "value": "carousel", "label": "Carousel (Horizontal Scroll)" }
-       ],
-       "default": "carousel"
+      "default": 4,
+      "label": "Number of columns (Enforced to 4)"
     },
     {
        "type": "header",
@@ -282,20 +150,9 @@
       "id": "columns_mobile",
       "label": "Grid Columns",
       "options": [
-        { "value": "1", "label": "1 Column" },
         { "value": "2", "label": "2 Columns" }
       ],
       "default": "2"
-    },
-    {
-       "type": "select",
-       "id": "mobile_layout",
-       "label": "Swipe Mode",
-       "options": [
-          { "value": "grid", "label": "Grid (Stack)" },
-          { "value": "carousel", "label": "Swipe (Carousel)" }
-       ],
-       "default": "grid"
     },
     {
       "type": "checkbox",
