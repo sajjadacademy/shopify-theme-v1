@@ -61,27 +61,32 @@
   .section-heading.center { justify-content: center; text-align: center; }
   .section-heading.left { justify-content: space-between; }
   
-  /* STRICT GRID LAYOUT (Match Daily Deals) */
+  /* STRICT GRID LAYOUT (Dynamic) */
   .product-grid {
     display: grid !important;
     list-style: none !important;
     padding: 0 !important; margin: 0 !important;
     width: 100% !important;
-    /* Enforce 4 columns default */
-    grid-template-columns: repeat(4, 1fr) !important;
-    gap: 16px !important;
   }
   
   .grid__item {
     width: 100% !important;
     max-width: 100% !important;
   }
-  
-  /* Mobile: 2 Columns Strict */
+
+  /* Mobile: Dynamic Columns & Gap */
   @media screen and (max-width: 767px) {
     .product-grid {
-       grid-template-columns: repeat(2, 1fr) !important;
-       gap: 8px !important;
+       grid-template-columns: repeat({{ section.settings.columns_mobile }}, 1fr) !important;
+       gap: {{ section.settings.grid_gap_mobile }}px !important;
+    }
+  }
+
+  /* Desktop/Tablet: Dynamic Columns & Gap */
+  @media screen and (min-width: 768px) {
+    .product-grid {
+      grid-template-columns: repeat({{ section.settings.columns_desktop }}, 1fr) !important;
+      gap: {{ section.settings.grid_gap }}px !important;
     }
   }
 
@@ -142,11 +147,20 @@
     {
       "type": "range",
       "id": "columns_desktop",
-      "min": 4,
-      "max": 4,
+      "min": 2,
+      "max": 6,
       "step": 1,
       "default": 4,
-      "label": "Number of columns (Enforced to 4)"
+      "label": "Desktop Columns"
+    },
+    {
+      "type": "range",
+      "id": "grid_gap",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "default": 16,
+      "label": "Grid Spacing (Gap)"
     },
     {
        "type": "header",
@@ -157,9 +171,19 @@
       "id": "columns_mobile",
       "label": "Grid Columns",
       "options": [
+        { "value": "1", "label": "1 Column" },
         { "value": "2", "label": "2 Columns" }
       ],
       "default": "2"
+    },
+    {
+       "type": "range",
+       "id": "grid_gap_mobile",
+       "min": 0,
+       "max": 20,
+       "step": 2,
+       "default": 8,
+       "label": "Mobile Spacing"
     },
     {
       "type": "checkbox",
