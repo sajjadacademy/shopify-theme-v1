@@ -42,8 +42,8 @@
         "button_style": "solid",
         "button_size": "medium",
         "button_radius": 4,
-        "button_color_bg": "#0E1B4D",
-        "button_color_text": "#FFFFFF",
+        "button_color_bg": "#0e1b4d",
+        "button_color_text": "#ffffff",
         "padding_top": 20,
         "padding_bottom": 20,
         "padding_left": 20,
@@ -109,7 +109,7 @@
         "rating_color": "#ffa41c",
         "badge_bg_color": "#cc0c39",
         "badge_text_color": "#ffffff",
-        "button_bg_color": "#0E1B4D",
+        "button_bg_color": "#0e1b4d",
         "button_text_color": "#000000",
         "show_rating": true,
         "show_badge": true,
@@ -205,10 +205,12 @@
         "b_left": {
           "type": "banner",
           "settings": {
-            "heading": "Men",
-            "text": "<p>Description of the offer.</p>",
-            "cta_text": "Shop Men",
-            "cta_link": "/collections/all",
+            "image_desktop": "shopify://shop_images/ChatGPT_Image_Jan_22_2026_09_02_05_PM.png",
+            "image_mobile": "shopify://shop_images/ChatGPT_Image_Jan_22_2026_08_48_39_PM.png",
+            "heading": "Trending Products",
+            "text": "<p>Find the best Trending Product.</p>",
+            "cta_text": "Explore Now",
+            "cta_link": "shopify://collections/all",
             "cta_style": "primary",
             "text_alignment": "center"
           }
@@ -216,6 +218,7 @@
         "b_right": {
           "type": "banner",
           "settings": {
+            "image_desktop": "shopify://shop_images/ChatGPT_Image_Jan_22_2026_09_03_37_PM.png",
             "heading": "Women",
             "text": "<p>Description of the offer.</p>",
             "cta_text": "Shop Women",
