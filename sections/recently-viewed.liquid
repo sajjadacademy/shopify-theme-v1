@@ -20,6 +20,7 @@
            {%- assign count = 0 -%}
            {%- for item in fallback_collection.products offset: offset -%}
                {%- if item.id == product.id %}{% continue %}{% endif -%}
+               {%- if item.available == false or item.featured_image == blank %}{% continue %}{% endif -%}
                
                {% render 'product-card-marketplace', 
                   product: item, 
