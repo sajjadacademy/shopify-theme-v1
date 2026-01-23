@@ -82,64 +82,94 @@
              <a href="{{ collection.url }}?sort_by={{ sort_by }}" class="active-filter-pill" style="background:#000; color:#fff;">Clear All</a>
           </div>
 
-          <!-- Product Grid -->
-          <div class="collection-grid-wrapper">
-            {% paginate collection.products by section.settings.products_per_page %}
-              <ul class="collection-product-grid">
-                {% for product in collection.products %}
-                  <li class="grid-item">
-                  <li class="grid-item">
-                    {% assign show_qa = true %}
-                    {% if section.settings.show_quick_add == false %}{% assign show_qa = false %}{% endif %}
-                    {% assign qa_type = section.settings.quick_add_type | default: 'button' %}
-                    {% render 'product-card-marketplace', 
-                      product: product, 
-                      show_rating: true, 
-                      show_quick_add: show_qa,
-                      quick_add_type: qa_type
-                    %}
-                  </li>
-                {% else %}
-                   <li style="grid-column: 1 / -1; text-align: center; padding: 2rem;">
-                      <p>No products found matching your selection.</p>
-                      <a href="{{ collection.url }}" class="btn">Clear Filters</a>
-                   </li>
-                {% endfor %}
-              </ul>
-              
-              {% if paginate.pages > 1 %}
-                <div style="margin-top: 3rem; display: flex; justify-content: center;">
-                   {% render 'pagination', paginate: paginate %}
-                </div>
-              {% endif %}
-            {% endpaginate %}
-          </div>
-       </div>
-    </div>
-  </div>
+      <style>
+        .collection-product-grid {
+             list-style: none !important;
+             padding: 0 !important;
+             margin: 0 !important;
+        }
+      </style>
+      <div class="collection-grid-wrapper">
+        {% paginate collection.products by section.settings.products_per_page %}
+          <ul class="collection-product-grid">
+            {% for product in collection.products %}
+              <li class="grid-item">
+                {% comment %} Force default true unless explicitly disabled in settings {% endcomment %}
+                {% assign show_qa = true %}
+                {% if section.settings.show_quick_add == false %}
+                    {% assign show_qa = false %}
+                {% endif %}
+                
+                {% assign qa_type = section.settings.quick_add_type | default: 'button' %}
+                
+                {% render 'product-card-marketplace', 
+                  product: product, 
+                  show_rating: true, 
+                  show_quick_add: show_qa,
+                  quick_add_type: qa_type
+                %}
+              </li>
+            {% else %}
+               <li style="list-style: none; grid-column: 1 / -1; text-align: center; padding: 2rem;">
+                  <p>No products found matching your selection.</p>
+                  <a href="{{ collection.url }}" class="btn">Clear Filters</a>
+               </li>
+            {% endfor %}
+          </ul>
+          
+          {% if paginate.pages > 1 %}
+            <div style="margin-top: 3rem; display: flex; justify-content: center;">
+               {% render 'pagination', paginate: paginate %}
+            </div>
+          {% endif %}
+        {% endpaginate %}
+      </div>
+   </div>
+</div>
+</div>
 </div>
 
 <script>
-  // Simple Filter Form Submit Handler to prevent full reload if using AJAX (Future)
-  // For now, let it submit normally to refresh page with params.
+// Simple Filter Form Submit Handler to prevent full reload if using AJAX (Future)
+// For now, let it submit normally to refresh page with params.
 </script>
 
 {% schema %}
 {
-  "name": "Collection Page",
-  "settings": [
-    {
-      "type": "header",
-      "content": "Layout"
-    },
-    { "type": "range", "id": "products_per_page", "min": 8, "max": 48, "step": 4, "default": 16, "label": "Products per page" },
-    { "type": "range", "id": "columns_desktop", "min": 2, "max": 5, "step": 1, "default": 4, "label": "Columns on desktop" },
-    {
-      "type": "header",
-      "content": "Filtering & Sorting"
-    },
-    { "type": "checkbox", "id": "enable_filtering", "label": "Enable filtering", "default": true },
-    { "type": "checkbox", "id": "enable_sorting", "label": "Enable sorting", "default": true }
-  ]
+"name": "Collection Page",
+"settings": [
+{
+  "type": "header",
+  "content": "Layout"
+},
+{ "type": "range", "id": "products_per_page", "min": 8, "max": 48, "step": 4, "default": 16, "label": "Products per page" },
+{ "type": "range", "id": "columns_desktop", "min": 2, "max": 5, "step": 1, "default": 4, "label": "Columns on desktop" },
+{
+  "type": "header",
+  "content": "Filtering & Sorting"
+},
+{ "type": "checkbox", "id": "enable_filtering", "label": "Enable filtering", "default": true },
+{ "type": "checkbox", "id": "enable_sorting", "label": "Enable sorting", "default": true },
+{
+  "type": "header",
+  "content": "Product Card Settings"
+},
+{
+  "type": "checkbox",
+  "id": "show_quick_add",
+  "default": true,
+  "label": "Show Add to Cart Button"
+},
+{
+  "type": "select",
+  "id": "quick_add_type",
+  "options": [
+    { "value": "button", "label": "Button (Pill)" },
+    { "value": "icon", "label": "Icon (+)" }
+  ],
+  "default": "button",
+  "label": "Quick Add Style"
+}
+]
 }
 {% endschema %}

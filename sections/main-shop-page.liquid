@@ -113,9 +113,14 @@
                 <div class="product-grid shop-grid shop-grid--{{ section.settings.columns_desktop }}">
                   {%- for product in collection.products -%}
                       <div class="grid-item">
+                          {% comment %} Force default true unless explicitly disabled in settings {% endcomment %}
                           {% assign show_qa = true %}
-                          {% if section.settings.show_quick_add == false %}{% assign show_qa = false %}{% endif %}
+                          {% if section.settings.show_quick_add == false %}
+                              {% assign show_qa = false %}
+                          {% endif %}
+                          
                           {% assign qa_type = section.settings.quick_add_type | default: 'button' %}
+                          
                           {% render 'product-card-marketplace', 
                               product: product, 
                               show_rating: true, 
