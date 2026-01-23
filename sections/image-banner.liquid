@@ -33,6 +33,12 @@
               {{ block.settings.cta_text }}
             </a>
           {% endif %}
+          
+          {% if block.settings.custom_liquid != blank %}
+             <div class="banner__custom-liquid" style="margin-top: 1rem;">
+                {{ block.settings.custom_liquid }}
+             </div>
+          {% endif %}
         </div>
       </div>
     </div>
@@ -246,7 +252,18 @@
               { "value": "center", "label": "Center" },
               { "value": "right", "label": "Right" }
            ],
+           "options": [
+              { "value": "left", "label": "Left" },
+              { "value": "center", "label": "Center" },
+              { "value": "right", "label": "Right" }
+           ],
            "default": "center"
+        },
+        {
+           "type": "liquid",
+           "id": "custom_liquid",
+           "label": "Custom Liquid",
+           "info": "Add embedded custom code."
         }
       ]
     }

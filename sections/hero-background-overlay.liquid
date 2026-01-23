@@ -70,6 +70,15 @@
            </a>
         {% endif %}
 
+           </a>
+        {% endif %}
+
+        {% if section.settings.custom_liquid != blank %}
+          <div class="hero__custom-liquid" style="margin-top: 1.5rem;">
+            {{ section.settings.custom_liquid }}
+          </div>
+        {% endif %}
+
       </div>
     </div>
 
@@ -285,7 +294,10 @@
     { "type": "range", "id": "padding_top_mobile", "min": 0, "max": 100, "step": 4, "default": 20, "label": "Top" },
     { "type": "range", "id": "padding_bottom_mobile", "min": 0, "max": 100, "step": 4, "default": 20, "label": "Bottom" },
     { "type": "range", "id": "padding_left_mobile", "min": 0, "max": 100, "step": 4, "default": 20, "label": "Left" },
-    { "type": "range", "id": "padding_right_mobile", "min": 0, "max": 100, "step": 4, "default": 20, "label": "Right" }
+    { "type": "range", "id": "padding_right_mobile", "min": 0, "max": 100, "step": 4, "default": 20, "label": "Right" },
+    
+    { "type": "header", "content": "Custom Customization" },
+    { "type": "liquid", "id": "custom_liquid", "label": "Custom Liquid", "info": "Add embedded custom code." }
   ],
   "presets": [
     {

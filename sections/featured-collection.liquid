@@ -47,7 +47,14 @@
           {%- endfor -%}
         {%- endfor -%}
       </ul>
+      </ul>
     </div>
+    
+    {%- if section.settings.custom_liquid != blank -%}
+      <div class="featured-collection__custom-liquid" style="margin-top: 2rem;">
+        {{ section.settings.custom_liquid }}
+      </div>
+    {%- endif -%}
   </div>
 </div>
 

@@ -92,6 +92,12 @@
       </form>
     {%- endif -%}
   </div>
+  
+  {%- if section.settings.custom_liquid != blank -%}
+    <div class="cart__custom-liquid" style="margin-top: 3rem;">
+      {{ section.settings.custom_liquid }}
+    </div>
+  {%- endif -%}
 </div>
 
 <style>
@@ -178,8 +184,11 @@
       "max": 100,
       "step": 4,
       "default": 64,
+      "default": 64,
       "label": "Padding Bottom"
-    }
+    },
+    { "type": "header", "content": "Custom Customization" },
+    { "type": "liquid", "id": "custom_liquid", "label": "Custom Liquid", "info": "Add embedded custom code." }
   ]
 }
 {% endschema %}

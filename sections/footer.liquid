@@ -25,6 +25,9 @@
                 <h3 class="h4">{{ shop.name }}</h3>
               {% endif %}
               <div class="footer__rte">{{ block.settings.motivational_text }}</div>
+              {% if block.settings.custom_liquid != blank %}
+                 <div class="footer__custom-liquid">{{ block.settings.custom_liquid }}</div>
+              {% endif %}
             </div>
 
           {%- elsif block.type == 'contact_info' -%}
@@ -49,7 +52,15 @@
                   <p>{{ block.settings.address | newline_to_br }}</p>
                 </div>
               {% endif %}
+              
+              {% if block.settings.custom_liquid != blank %}
+                 <div class="footer__custom-liquid">{{ block.settings.custom_liquid }}</div>
+              {% endif %}
             </div>
+          {%- elsif block.type == 'custom_liquid_block' -%}
+             <div class="footer__custom-liquid-block">
+                {{ block.settings.custom_liquid }}
+             </div>
           {%- endif -%}
           
         </div>
@@ -182,7 +193,8 @@
       "settings": [
         { "type": "image_picker", "id": "logo", "label": "Footer Logo" },
         { "type": "range", "id": "logo_width", "min": 50, "max": 250, "step": 5, "default": 120, "label": "Logo Width" },
-        { "type": "richtext", "id": "motivational_text", "label": "Motivational Text", "default": "<p>Empowering your lifestyle with premium products.</p>" }
+        { "type": "richtext", "id": "motivational_text", "label": "Motivational Text", "default": "<p>Empowering your lifestyle with premium products.</p>" },
+        { "type": "liquid", "id": "custom_liquid", "label": "Custom Liquid", "info": "Add embedded custom code." }
       ]
     },
     {
@@ -201,10 +213,18 @@
         { "type": "text", "id": "heading", "default": "Get in Touch", "label": "Heading" },
         { "type": "textarea", "id": "address", "label": "Address", "default": "123 Commerce St, Dubai, UAE" },
         { "type": "checkbox", "id": "show_social", "label": "Show Social Icons", "default": true },
-        { "type": "checkbox", "id": "show_payment", "label": "Show Payment Icons", "default": true }
+        { "type": "checkbox", "id": "show_payment", "label": "Show Payment Icons", "default": true },
+        { "type": "liquid", "id": "custom_liquid", "label": "Custom Liquid", "info": "Add embedded custom code." }
+      ]
+    },
+    {
+      "type": "custom_liquid_block",
+      "name": "Custom Liquid",
+      "settings": [
+        { "type": "liquid", "id": "custom_liquid", "label": "Custom Liquid" }
       ]
     }
   ],
-  "max_blocks": 3,
+  "max_blocks": 4,
 }
 {% endschema %}

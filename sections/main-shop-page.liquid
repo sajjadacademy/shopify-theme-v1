@@ -133,6 +133,11 @@
           </div>
        </div>
     </div>
+    {%- if section.settings.custom_liquid != blank -%}
+      <div class="shop-page__custom-liquid container" style="margin-top: 3rem;">
+        {{ section.settings.custom_liquid }}
+      </div>
+    {%- endif -%}
   {% endpaginate %}
   
   <!-- MOBILE DRAWER (Filters + Sort) -->
@@ -398,7 +403,9 @@
        "id": "enable_sorting",
        "label": "Enable Sorting",
        "default": true
-    }
+    },
+    { "type": "header", "content": "Custom Customization" },
+    { "type": "liquid", "id": "custom_liquid", "label": "Custom Liquid", "info": "Add embedded custom code." }
   ]
 }
 {% endschema %}

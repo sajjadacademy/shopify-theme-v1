@@ -13,6 +13,12 @@
       </a>
     {%- endif -%}
   {%- endif -%}
+  
+  {%- if section.settings.custom_liquid != blank -%}
+    <div class="announcement-bar__custom-liquid" style="text-align: center;">
+      {{ section.settings.custom_liquid }}
+    </div>
+  {%- endif -%}
 </div>
 
 <style>
@@ -83,7 +89,14 @@
       "type": "color",
       "id": "text_color",
       "label": "Text Color",
+      "label": "Text Color",
       "default": "#ffffff"
+    },
+    {
+      "type": "liquid",
+      "id": "custom_liquid",
+      "label": "Custom Liquid",
+      "info": "Add embedded custom code."
     }
   ],
   "presets": [
