@@ -1,49 +1,64 @@
-<div class="recently-viewed-section container" style="display:none;">
+<div class="recently-viewed-section container">
     <h2 class="section-title">{{ section.settings.heading }}</h2>
     <div class="marketplace-grid" id="recently-viewed-grid">
-        <!-- Products injected via JS -->
+        <!-- Server-Side Fallback: Show Random/Popular Products to ensure not empty -->
+        {%- assign fallback_collection = collections['all'] -%}
+        {%- if fallback_collection.products_count > 0 -%}
+           {%- assign offset = 'now' | date: "%S" | modulo: 10 -%}
+           {%- for product in fallback_collection.products limit: section.settings.products_to_show offset: offset -%}
+               {% render 'product-card-marketplace', 
+                  product: product, 
+                  show_rating: true, 
+                  show_quick_add: true,
+                  quick_add_type: 'button' 
+               %}
+           {%- endfor -%}
+        {%- else -%}
+           <!-- Safe fallback if 'all' is empty or weird -->
+           <p class="text-center" style="grid-column: 1/-1;">Check out our latest products.</p>
+        {%- endif -%}
     </div>
 </div>
 
 <script>
-  // Ultra-simple Recently Viewed Handler
   (function() {
      const KEY = 'recently_viewed_handles';
      const LIMIT = {{ section.settings.products_to_show }};
      const currentHandle = "{{ product.handle }}";
 
-     // 1. Update LocalStorage
+     // 1. Update Storage
      let handles = JSON.parse(localStorage.getItem(KEY) || '[]');
-     // Remove current if exists (to push to top)
      if(currentHandle && handles.indexOf(currentHandle) !== -1) {
         handles = handles.filter(h => h !== currentHandle);
      }
-     // Add current to top
      if(currentHandle) {
         handles.unshift(currentHandle);
      }
-     // Slice to limit (store a few more just in case)
      handles = handles.slice(0, 12);
      localStorage.setItem(KEY, JSON.stringify(handles));
 
-     // 2. Fetch Logic (only if we have other handles)
-     // Filter out current product for display if desired, or keep it. usually exclude current.
+     // 2. Fetch History (if available)
+     // Use "search" trick or recommended products API if possible. Search is easiest for handle lookup.
      const displayHandles = handles.filter(h => h !== currentHandle).slice(0, LIMIT);
 
      if(displayHandles.length > 0) {
         const query = displayHandles.map(h => 'handle:' + h).join(' OR ');
         const url = `/search?view=recently&type=product&q=${encodeURIComponent(query)}`;
-
+        
         fetch(url)
            .then(res => res.text())
            .then(html => {
-              const grid = document.getElementById('recently-viewed-grid');
-              if(grid && html.trim().length > 0) {
-                  grid.innerHTML = html;
-                  document.querySelector('.recently-viewed-section').style.display = 'block';
+              // Only replace if we actually got a grid back (requires search.recently.liquid template or similar response)
+              // If the search view template isn't set up, this might fail, so we wrap somewhat safely.
+              if(html.includes('product-card-marketplace')) {
+                  const grid = document.getElementById('recently-viewed-grid');
+                  if(grid) grid.innerHTML = html;
               }
            })
-           .catch(err => console.error('Recent Fetch Error:', err));
+           .catch(err => {
+              // Fail silently, leaving the Server-Side Fallback (Random Products) visible
+              console.log('Using fallback history', err);
+           });
      }
   })();
 </script>
