@@ -14,18 +14,21 @@
       <ul class="product-grid grid--{{ section.settings.columns_desktop }}-col-desktop grid--{{ section.settings.columns_mobile }}-col-tablet-down">
         {%- for product in collection.products limit: section.settings.products_to_show -%}
           <li class="grid__item">
-             <div class="product-card-wrapper" style="height: 100%;">
+           <li class="grid__item">
                {% render 'product-card-marketplace', 
                   product: product,
                   show_rating: section.settings.show_rating,
                   show_badge: section.settings.show_badge,
                   show_wishlist: section.settings.show_wishlist,
                   show_quick_add: section.settings.show_quick_add,
-                  quick_add_type: section.settings.quick_add_type,
+                  quick_add_type: 'button',
                   enable_fake_discount: section.settings.enable_fake_discount,
-                  fake_discount_percentage: section.settings.fake_discount_percentage
+                  fake_discount_percentage: section.settings.fake_discount_percentage,
+                  enable_random_reviews: true,
+                  random_review_min: 100,
+                  random_review_max: 5000
                %}
-             </div>
+           </li>
           </li>
         {%- else -%}
           <!-- Placeholder Loop -->
