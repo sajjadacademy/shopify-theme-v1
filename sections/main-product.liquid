@@ -517,9 +517,13 @@
   }
 
   /* Media Gallery */
-  .product-media-wrapper { display: flex; flex-direction: column; gap: 1rem; }
+  .product-media-wrapper { 
+    display: flex; flex-direction: column; gap: 1rem; 
+    width: 100%; max-width: 600px; margin: 0 auto; /* Center everything */
+  }
   .product-media-main {
     width: 100%;
+    /* Removed max-width/margin from here to use wrapper */
     aspect-ratio: 1;
     background: #f8f8f8;
     border-radius: 12px;
@@ -642,8 +646,9 @@
   /* Desktop Grid */
   @media screen and (min-width: 900px) {
     .product-layout {
-       grid-template-columns: 1.4fr 0.8fr; /* Image Left (Larger), Info Right (Smaller) */
-       gap: 5rem; /* Increased Gap */
+       grid-template-columns: 1fr 1fr; /* Balanced 50/50 Split */
+       gap: 4rem;
+       align-items: start;
     }
   }
 </style>
