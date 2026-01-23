@@ -219,10 +219,10 @@
           "type": "banner",
           "settings": {
             "image_desktop": "shopify://shop_images/ChatGPT_Image_Jan_22_2026_09_03_37_PM.png",
-            "heading": "Women",
-            "text": "<p>Description of the offer.</p>",
-            "cta_text": "Shop Women",
-            "cta_link": "/collections/all",
+            "heading": "Best Deal",
+            "text": "<p>Find the best Deals here.</p>",
+            "cta_text": "Best Deals",
+            "cta_link": "shopify://collections/all",
             "cta_style": "primary",
             "text_alignment": "center"
           }
