@@ -517,27 +517,51 @@
                   return response.json();
               })
               .then(data => {
+                  if(data.status && data.status === 422) {
+                      throw new Error(data.description || 'Could not add to cart.');
+                  }
+                  
+                  // SUCCESS: Check for Discount Code to Apply (Attribute)
+                  const bundleContainer = document.querySelector('.bundle-selector');
+                  const bundleQtyInput = document.getElementById('bundle-qty-hidden');
+                  let discountCode = '';
+                  
+                  if(bundleContainer && bundleQtyInput) {
+                      const qty = parseInt(bundleQtyInput.value);
+                      const code2 = bundleContainer.getAttribute('data-tier2-code');
+                      const code3 = bundleContainer.getAttribute('data-tier3-code');
+                      
+                      if(qty >= 3 && code3) discountCode = code3;
+                      else if(qty >= 2 && code2) discountCode = code2;
+                  }
+                  
+                  // If Discount, save to Cart Attributes
+                  if(discountCode) {
+                      return fetch(window.Shopify.routes.root + 'cart/update.js', {
+                          method: 'POST',
+                          headers: { 'Content-Type': 'application/json' },
+                          body: JSON.stringify({ attributes: { 'discount_code': discountCode } })
+                      }).then(() => data); // Return original data
+                  }
+                  
+                  return data;
+              })
+              .then(data => {
                   btnAddToCart.textContent = 'Add to Cart';
                   btnAddToCart.disabled = false;
                   
-                  if(data.status && data.status === 422) {
-                      // Error (e.g. OOS)
-                      alert(data.description || 'Could not add to cart.');
+                  // Open Drawer
+                  if(window.openCartDrawer) {
+                      window.openCartDrawer();
                   } else {
-                      // Success: Open Drawer
-                      if(window.openCartDrawer) {
-                          window.openCartDrawer();
-                      } else {
-                          // Fallback if drawer fails
-                          window.location.href = '/cart';
-                      }
+                      window.location.href = '/cart';
                   }
               })
               .catch((error) => {
                   console.error('Error:', error);
                   btnAddToCart.textContent = 'Add to Cart';
                   btnAddToCart.disabled = false;
-                  alert('An error occurred.');
+                  alert(error.message || 'An error occurred.');
               });
           });
       }
