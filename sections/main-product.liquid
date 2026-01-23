@@ -265,9 +265,15 @@
     /* Visual */
     document.querySelectorAll('.bundle-option').forEach(el => el.classList.remove('active'));
     element.classList.add('active');
-    /* Logic: Update hidden input linked to form */
+    
+    /* Logic: Update hidden inputs */
+    // 1. The selector's own input (visual state)
     const input = document.getElementById('bundle-qty-hidden');
     if(input) input.value = qty;
+    
+    // 2. The REAL form input (submission state)
+    const realInput = document.getElementById('real-form-qty');
+    if(realInput) realInput.value = qty;
   }
   
   /* Variant Selection Handler (Simple) */

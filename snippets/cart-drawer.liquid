@@ -145,8 +145,17 @@
           let subtotal = cart.total_price;
           
           cart.items.forEach(item => {
-             // Check property
-             if(item.properties && (item.properties['_qty_offer_eligible'] || item.properties['qty_offer'])) {
+             // Check property (Robust)
+             let isEligible = false;
+             if(item.properties) {
+                 // Convert to array of keys to find match ignoring some specifics
+                 const props = item.properties;
+                 if(props['_qty_offer_eligible'] || props['qty_offer'] || props['_offer_eligible']) {
+                     isEligible = true;
+                 }
+             }
+             
+             if(isEligible) {
                  eligibleQty += item.quantity;
              }
              

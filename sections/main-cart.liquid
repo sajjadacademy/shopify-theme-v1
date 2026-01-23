@@ -108,9 +108,14 @@
       
       // Calculate Eligible Qty
       cartItems.forEach(item => {
-          if(item.properties && (item.properties['_qty_offer_eligible'] || item.properties['qty_offer'])) {
-              eligibleQty += item.quantity;
+          let isEligible = false;
+          if(item.properties) {
+              const props = item.properties;
+              if(props['_qty_offer_eligible'] || props['qty_offer'] || props['_offer_eligible']) {
+                  isEligible = true;
+              }
           }
+          if(isEligible) eligibleQty += item.quantity;
       });
       
       // Logic
