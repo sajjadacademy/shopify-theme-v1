@@ -1,7 +1,6 @@
 <div class="recently-viewed-section container">
     <h2 class="section-title">{{ section.settings.heading }}</h2>
     <div class="marketplace-grid" id="recently-viewed-grid">
-    <div class="marketplace-grid" id="recently-viewed-grid">
         <!-- Server-Side Fallback: Prioritize user-selected collection, then contextual, then global -->
         {%- liquid
            if section.settings.collection != blank
