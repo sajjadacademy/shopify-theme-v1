@@ -8,50 +8,51 @@
  * ------------------------------------------------------------
  */
 {
-    "name": "Footer",
-    "type": "footer",
-    "sections": {
-        "footer": {
-            "type": "footer",
-            "blocks": {
-                "brand_info": {
-                    "type": "brand_info",
-                    "settings": {
-                        "logo_width": 120,
-                        "motivational_text": "<p>Empowering your lifestyle with premium products needed for every day.</p>"
-                    }
-                },
-                "footer-menu": {
-                    "type": "link_list",
-                    "settings": {
-                        "heading": "Our Policy",
-                        "menu": "footer"
-                    }
-                },
-                "contact_info": {
-                    "type": "contact_info",
-                    "settings": {
-                        "heading": "Contact & Trust",
-                        "address": "123 Commerce St\nDubai, UAE",
-                        "show_social": true,
-                        "show_payment": true
-                    }
-                }
-            },
-            "block_order": [
-                "brand_info",
-                "footer-menu",
-                "contact_info"
-            ],
-            "settings": {
-                "bg_color": "#1a1a1a",
-                "text_color": "#ffffff",
-                "padding_top": 60,
-                "padding_bottom": 60
-            }
+  "name": "Footer",
+  "type": "footer",
+  "sections": {
+    "footer": {
+      "type": "footer",
+      "blocks": {
+        "brand_info": {
+          "type": "brand_info",
+          "settings": {
+            "logo": "shopify://shop_images/ChatGPT_Image_Jan_12_2026_11_33_33_PM_1.png",
+            "logo_width": 120,
+            "motivational_text": "<p>Empowering your lifestyle with premium products needed for every day.</p>"
+          }
+        },
+        "footer-menu": {
+          "type": "link_list",
+          "settings": {
+            "heading": "Our Policy",
+            "menu": "footer"
+          }
+        },
+        "contact_info": {
+          "type": "contact_info",
+          "settings": {
+            "heading": "Contact & Trust",
+            "address": "123 Commerce St\nDubai, UAE",
+            "show_social": true,
+            "show_payment": true
+          }
         }
-    },
-    "order": [
-        "footer"
-    ]
+      },
+      "block_order": [
+        "brand_info",
+        "footer-menu",
+        "contact_info"
+      ],
+      "settings": {
+        "bg_color": "#1a1a1a",
+        "text_color": "#ffffff",
+        "padding_top": 60,
+        "padding_bottom": 60
+      }
+    }
+  },
+  "order": [
+    "footer"
+  ]
 }
