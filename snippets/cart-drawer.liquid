@@ -139,21 +139,79 @@
              return;
           }
           
-          // Render Items
+          // Render Items & Calculate Discounts
           let html = '';
+          let eligibleQty = 0;
+          let subtotal = cart.total_price;
+          
           cart.items.forEach(item => {
+             // Check property
+             if(item.properties && (item.properties['_qty_offer_eligible'] || item.properties['qty_offer'])) {
+                 eligibleQty += item.quantity;
+             }
+             
              html += `
                 <div class="drawer-item">
                    <img src="${item.featured_image.url}" alt="${item.title}">
                    <div class="drawer-item-info">
                       <a href="${item.url}" class="drawer-item-title">${item.product_title}</a>
                       ${item.variant_title ? `<div class="drawer-item-variant">${item.variant_title}</div>` : ''}
-                      <div class="drawer-item-price">${formatMoney(item.line_price)} x ${item.quantity}</div>
+                      <div class="drawer-item-price">${formatMoney(item.line_price)}</div>
+                      <div class="drawer-item-qty" style="font-size:0.8rem; color:#666;">Qty: ${item.quantity}</div>
                    </div>
                 </div>
              `;
           });
+          
           body.innerHTML = html;
+          
+          // DISCOUNT LOGIC (The "Brain")
+          let discountCode = '';
+          let savings = 0;
+          let discountText = '';
+          
+          // Rule: Buy 3 -> 20%, Buy 2 -> 10%
+          if(eligibleQty >= 3) {
+              discountCode = 'BUY3SAVE20';
+              discountText = 'Buy 3 & Save 20%';
+              savings = subtotal * 0.20; // Estimated
+          } else if (eligibleQty >= 2) {
+              discountCode = 'BUY2SAVE10';
+              discountText = 'Buy 2 & Save 10%';
+              savings = subtotal * 0.10; // Estimated
+          }
+          
+          // UI Updates
+          const totalEl = document.getElementById('drawer-total-price');
+          
+          // Inject Discount Line if Savings exist
+          let discountLine = document.getElementById('drawer-discount-line');
+          if(savings > 0) {
+              if(!discountLine) {
+                 discountLine = document.createElement('div');
+                 discountLine.id = 'drawer-discount-line';
+                 discountLine.className = 'drawer-subtotal';
+                 discountLine.style.color = 'green';
+                 totalEl.parentElement.before(discountLine);
+              }
+              discountLine.innerHTML = `<span>${discountText}</span><span>- ${formatMoney(savings)}</span>`;
+              
+              // Update Final Total visual
+              totalEl.innerHTML = `<span style="text-decoration:line-through; color:#999; margin-right:5px;">${formatMoney(subtotal)}</span> ${formatMoney(subtotal - savings)}`;
+          } else {
+              if(discountLine) discountLine.remove();
+              totalEl.textContent = formatMoney(subtotal);
+          }
+          
+          // Checkout Button Logic
+          const checkoutBtn = document.querySelector('.btn-drawer-checkout');
+          if(checkoutBtn) {
+             if(discountCode) {
+                 checkoutBtn.href = `/checkout?discount=${discountCode}`;
+             } else {
+                 checkoutBtn.href = '/checkout';
+             }
+          }
        })
        .catch(err => console.error(err));
   }
