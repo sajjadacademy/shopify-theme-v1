@@ -1,8 +1,18 @@
 <div class="recently-viewed-section container">
     <h2 class="section-title">{{ section.settings.heading }}</h2>
     <div class="marketplace-grid" id="recently-viewed-grid">
-        <!-- Server-Side Fallback: Use same collection for better relevance and data safety -->
-        {%- assign fallback_collection = product.collections.first -%}
+    <div class="marketplace-grid" id="recently-viewed-grid">
+        <!-- Server-Side Fallback: Prioritize user-selected collection, then contextual, then global -->
+        {%- liquid
+           if section.settings.collection != blank
+              assign fallback_collection = collections[section.settings.collection]
+           elsif product.collections.first != blank
+              assign fallback_collection = product.collections.first
+           else
+              assign fallback_collection = collections['all']
+           endif
+        -%}
+
         {%- if fallback_collection.products_count > 0 -%}
            <!-- Simple offset randomization -->
            {%- assign offset = 'now' | date: "%S" | modulo: fallback_collection.products_count | minus: section.settings.products_to_show -%}
@@ -106,6 +116,12 @@
       "id": "heading",
       "default": "Recently Viewed",
       "label": "Heading"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Fallback Collection",
+      "info": "Select a collection (e.g. Best Sellers) to show if the user has no viewing history."
     },
     {
       "type": "range",
