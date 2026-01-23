@@ -147,6 +147,20 @@
         {{ section.settings.custom_liquid }}
       </div>
     {%- endif -%}
+    
+    <style>
+      /* Dynamic Button Coloring for this section */
+      #ProductGridContainer .pcm-atc-btn--full {
+           background-color: {{ section.settings.atc_button_background | default: '#000000' }};
+           color: {{ section.settings.atc_button_text | default: '#ffffff' }};
+           border-color: {{ section.settings.atc_button_background | default: '#000000' }};
+      }
+      #ProductGridContainer .pcm-atc-btn--full:hover {
+           background-color: {{ section.settings.atc_button_text | default: '#ffffff' }}; /* Invert on hover */
+           color: {{ section.settings.atc_button_background | default: '#000000' }};
+           border-color: {{ section.settings.atc_button_background | default: '#000000' }};
+      }
+    </style>
   {% endpaginate %}
   
   <!-- MOBILE DRAWER (Filters + Sort) -->
@@ -434,6 +448,22 @@
       ],
       "default": "button",
       "label": "Quick Add Style"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "atc_button_background",
+      "label": "Button Background",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "atc_button_text",
+      "label": "Button Text",
+      "default": "#ffffff"
     }
   ]
 }
