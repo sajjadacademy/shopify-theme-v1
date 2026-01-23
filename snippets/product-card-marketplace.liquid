@@ -140,7 +140,7 @@
     {%- if show_quick_add -%}
       {%- if product.available -%}
         <form method="post" action="/cart/add" class="pcm-form">
-          <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+          <input type="hidden" name="id" value="{{ product.first_available_variant.id }}">
           
           {%- if quick_add_type == 'button' -%}
             <button type="submit" class="pcm-atc-btn pcm-atc-btn--full">Add To Cart</button>
