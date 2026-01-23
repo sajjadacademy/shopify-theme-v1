@@ -98,126 +98,154 @@
 
   function updateCartDrawer() {
      const body = document.getElementById('drawer-items');
-     // body.innerHTML = '<div class="drawer-loading">Loading...</div>';
      
      fetch('/cart.js')
        .then(res => res.json())
        .then(cart => {
           try {
-             // Update Count in Header (if exists)
+             // 1. Update Header w/ Total Count
              const bubble = document.querySelector('.cart-count.bubble');
              if(bubble) bubble.textContent = cart.item_count;
              
-             // CHECKOUT DISCOUNT (Inject)
-             const checkoutBtn = document.querySelector('.btn-drawer-checkout');
-             if(checkoutBtn) {
-                if(cart.attributes && cart.attributes.discount_code) {
-                    checkoutBtn.href = `/checkout?discount=${cart.attributes.discount_code}`;
-                    // Indicator
-                    let msg = document.getElementById('drawer-discount-msg');
-                    if(!msg) {
-                        msg = document.createElement('div');
-                        msg.id = 'drawer-discount-msg';
-                        msg.style.color = 'green';
-                        msg.style.fontSize = '0.9rem';
-                        msg.style.textAlign = 'center';
-                        msg.style.marginBottom = '0.5rem';
-                        checkoutBtn.before(msg);
-                    }
-                    msg.innerText = `Discount Code '${cart.attributes.discount_code}' applied!`;
-                } else {
-                    checkoutBtn.href = '/checkout';
-                    const msg = document.getElementById('drawer-discount-msg');
-                    if(msg) msg.remove();
-                }
-             }
-             
-             // Update Total
-             const totalEl = document.getElementById('drawer-total-price');
-             if(totalEl) totalEl.textContent = formatMoney(cart.total_price);
-             
-             if(cart.item_count === 0) {
-                body.innerHTML = '<p class="text-center">Your cart is empty.</p>';
-                return;
-             }
-             
-             // Render Items & Calculate Discounts
-             let html = '';
-             let eligibleQty = 0;
-             let subtotal = cart.total_price;
+             // 2. Logic: Analyze Cart for "Same Product" Quantities
+             // Rule: If ANY item has Qty >= 3 -> Eligible for Tier 3 (20%)
+             // Else If ANY item has Qty >= 2 -> Eligible for Tier 2 (10%)
+             let maxItemQty = 0;
+             let potentialSavings = 0;
+             let appliedTier = 0; // 0, 2, or 3
              
              cart.items.forEach(item => {
-                // Check property (Robust)
-                let isEligible = false;
-                if(item.properties) {
-                    // Convert to array of keys to find match ignoring some specifics
-                    const props = item.properties;
-                    if(props['_qty_offer_eligible'] || props['qty_offer'] || props['_offer_eligible']) {
-                        isEligible = true;
-                    }
+                 if(item.quantity > maxItemQty) maxItemQty = item.quantity;
+             });
+             
+             if(maxItemQty >= 3) appliedTier = 3;
+             else if(maxItemQty >= 2) appliedTier = 2;
+             
+             // Determine Code
+             let discountCode = '';
+             let discountText = '';
+             let tierRate = 0;
+             
+             if(appliedTier === 3) {
+                 discountCode = 'BUY3SAVE20';
+                 discountText = 'Buy 3 & Save 20%';
+                 tierRate = 0.20;
+             } else if (appliedTier === 2) {
+                 discountCode = 'BUY2SAVE10';
+                 discountText = 'Buy 2 & Save 10%';
+                 tierRate = 0.10;
+             }
+             
+             // 3. Render Items & Calculate Visual Savings
+             let html = '';
+             
+             cart.items.forEach(item => {
+                // Per-Item Discount Logic (Visual Only)
+                // If this specific item meets requirements, show discount
+                let itemRate = 0;
+                if(item.quantity >= 3) itemRate = 0.20;
+                else if(item.quantity >= 2) itemRate = 0.10;
+                
+                // Calculate Price
+                let finalLinePrice = item.line_price;
+                let originalLinePrice = item.line_price;
+                
+                // Apply visual discount if this line qualifies
+                if(itemRate > 0) {
+                    let deduction = originalLinePrice * itemRate;
+                    potentialSavings += deduction;
+                    finalLinePrice = originalLinePrice - deduction;
                 }
                 
-                if(isEligible) {
-                    eligibleQty += item.quantity;
-                }
-                
+                const originalPriceFmt = formatMoney(item.original_price);
+                const finalPriceFmt = (itemRate > 0) 
+                     ? formatMoney(item.original_price * (1 - itemRate)) 
+                     : originalPriceFmt;
+
                 html += `
                    <div class="drawer-item">
                       <img src="${item.featured_image.url}" alt="${item.title}">
                       <div class="drawer-item-info">
                          <a href="${item.url}" class="drawer-item-title">${item.product_title}</a>
                          ${item.variant_title ? `<div class="drawer-item-variant">${item.variant_title}</div>` : ''}
-                         <div class="drawer-item-price">${formatMoney(item.line_price)}</div>
-                         <div class="drawer-item-qty" style="font-size:0.8rem; color:#666;">Qty: ${item.quantity}</div>
+                         
+                         <div class="drawer-item-price-row">
+                             ${itemRate > 0 
+                               ? `<span style="text-decoration:line-through; color:#999; font-size:0.85rem; margin-right:6px;">${originalPriceFmt}</span> <span style="font-weight:700; color:#b12704;">${finalPriceFmt}</span>` 
+                               : `<span style="font-weight:600;">${originalPriceFmt}</span>`
+                             }
+                         </div>
+                         
+                         <div class="drawer-item-qty" style="font-size:0.8rem; color:#555; margin-top:4px;">
+                             Qty: ${item.quantity} 
+                             ${itemRate > 0 ? `<span style="color:green; font-weight:bold; margin-left:6px;">(${itemRate * 100}% Off)</span>` : ''}
+                         </div>
                       </div>
                    </div>
                 `;
              });
              
-             body.innerHTML = html;
-             
-             // DISCOUNT LOGIC (The "Brain")
-             let discountCode = '';
-             let savings = 0;
-             let discountText = '';
-             
-             // Rule: Buy 3 -> 20%, Buy 2 -> 10%
-             if(eligibleQty >= 3) {
-                 discountCode = 'BUY3SAVE20';
-                 discountText = 'Buy 3 & Save 20%';
-                 savings = subtotal * 0.20; // Estimated
-             } else if (eligibleQty >= 2) {
-                 discountCode = 'BUY2SAVE10';
-                 discountText = 'Buy 2 & Save 10%';
-                 savings = subtotal * 0.10; // Estimated
+             if(cart.item_count === 0) {
+                body.innerHTML = '<p class="text-center" style="padding:2rem;">Your cart is empty.</p>';
+             } else {
+                body.innerHTML = html;
              }
              
-             // UI Updates
+             // 4. Update Footer Totals
+             const totalEl = document.getElementById('drawer-total-price');
              if(totalEl) {
-                 // Inject Discount Line if Savings exist
-                 let discountLine = document.getElementById('drawer-discount-line');
-                 if(savings > 0) {
-                     if(!discountLine) {
-                        discountLine = document.createElement('div');
-                        discountLine.id = 'drawer-discount-line';
-                        discountLine.className = 'drawer-subtotal';
-                        discountLine.style.color = 'green';
-                        totalEl.parentElement.before(discountLine);
-                     }
-                     discountLine.innerHTML = `<span>${discountText}</span><span>- ${formatMoney(savings)}</span>`;
+                 if(potentialSavings > 0) {
+                     // Show Subtotal with Strike
+                     // Note: subtotal is cart.total_price (which might be pre-discount if code not yet applied, or post. 
+                     // Since we auto-apply via URL, cart.total_price usually reflects raw unless scripts run.
+                     // We visualy calculate 'Estimated Total'
                      
-                     // Update Final Total visual
-                     totalEl.innerHTML = `<span style="text-decoration:line-through; color:#999; margin-right:5px;">${formatMoney(subtotal)}</span> ${formatMoney(subtotal - savings)}`;
+                     let rawTotal = cart.total_price;
+                     let estTotal = rawTotal - potentialSavings;
+                     
+                     // Show Discount Line
+                     let discountLine = document.getElementById('drawer-discount-line');
+                     if(!discountLine) {
+                         discountLine = document.createElement('div');
+                         discountLine.id = 'drawer-discount-line';
+                         discountLine.className = 'drawer-subtotal';
+                         discountLine.style.color = 'green';
+                         totalEl.parentElement.before(discountLine);
+                     }
+                     discountLine.innerHTML = `<span>Savings</span><span>- ${formatMoney(potentialSavings)}</span>`;
+                     
+                     // Update Total Display
+                     totalEl.innerHTML = `<span style="text-decoration:line-through; color:#999; margin-right:5px;">${formatMoney(rawTotal)}</span> ${formatMoney(estTotal)}`;
                  } else {
-                     if(discountLine) discountLine.remove();
-                     totalEl.textContent = formatMoney(subtotal);
+                     // Reset
+                     const dLine = document.getElementById('drawer-discount-line');
+                     if(dLine) dLine.remove();
+                     totalEl.textContent = formatMoney(cart.total_price);
                  }
              }
-             
-             // Re-apply Checkout Button Logic specifically for computed discount
-             if(checkoutBtn && discountCode) {
-                 checkoutBtn.href = `/checkout?discount=${discountCode}`;
+
+             // 5. Checkout Button & Auto-Apply
+             const checkoutBtn = document.querySelector('.btn-drawer-checkout');
+             if(checkoutBtn) {
+                if(discountCode) {
+                    checkoutBtn.href = `/checkout?discount=${discountCode}`;
+                    
+                    // Banner
+                    let msg = document.getElementById('drawer-discount-msg');
+                    if(!msg) {
+                         msg = document.createElement('div');
+                         msg.id = 'drawer-discount-msg';
+                         msg.style.cssText = 'color: #fff; background: #000; font-size: 0.85rem; text-align: center; padding: 6px; border-radius: 4px; margin-bottom: 8px;';
+                         checkoutBtn.before(msg);
+                    }
+                    msg.innerText = `Offer Unlocked: ${discountText}`;
+                } else {
+                    checkoutBtn.href = '/checkout';
+                    const msg = document.getElementById('drawer-discount-msg');
+                    if(msg) msg.remove();
+                }
              }
+
           } catch(e) {
              console.error('Drawer Error:', e);
              body.innerHTML = '<p class="text-center" style="color:red">Error loading cart.</p>';
