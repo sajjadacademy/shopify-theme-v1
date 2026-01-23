@@ -84,33 +84,80 @@
     display: grid;
     grid-template-columns: repeat({{ section.settings.columns_desktop }}, 1fr);
     gap: 2rem;
-    margin-top: 2rem;
+    margin-top: 3rem;
   }
   
-  @media screen and (max-width: 768px) {
+  @media screen and (max-width: 900px) {
+    .collection-list-grid {
+      grid-template-columns: repeat(2, 1fr); /* Tablet fallback */
+    }
+  }
+  
+  @media screen and (max-width: 600px) {
     .collection-list-grid {
       grid-template-columns: repeat({{ section.settings.columns_mobile }}, 1fr);
        gap: 1rem;
     }
   }
 
+  /* Premium Card Design */
   .collection-card-item {
-     border-radius: 8px; overflow: hidden;
-     transition: transform 0.2s ease;
+     position: relative;
+     border-radius: 16px; 
+     overflow: hidden;
+     transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+     box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+     background: #fff;
   }
-  .collection-card-item:hover { transform: translateY(-3px); }
+  
+  .collection-card-item:hover { 
+      transform: translateY(-8px); 
+      box-shadow: 0 12px 30px rgba(0,0,0,0.12);
+  }
+  
+  .collection-card-link {
+     text-decoration: none; color: inherit; display: block; height: 100%;
+     display: flex; flex-direction: column;
+  }
   
   .collection-card-image {
-     aspect-ratio: 16/9; /* Or adjustable */
-     overflow: hidden; background: #f0f0f0;
+     aspect-ratio: 1/1; /* Square for premium feel, or settings adjustable */
+     overflow: hidden; 
+     position: relative;
   }
-  .collection-card-image img {
-     width: 100%; height: 100%; object-fit: cover; transition: scale 0.4s;
-  }
-  .collection-card-item:hover .collection-card-image img { scale: 1.05; }
   
-  .collection-card-info { padding: 1rem 0; text-align: center; }
-  .collection-count { font-size: 0.85rem; color: #666; }
+  .collection-card-image img {
+     width: 100%; height: 100%; object-fit: cover; 
+     transition: transform 0.6s ease;
+  }
+  
+  .collection-card-item:hover .collection-card-image img { 
+     transform: scale(1.1); 
+  }
+  
+  /* Text Content */
+  .collection-card-info { 
+     padding: 1.5rem; 
+     text-align: center; 
+     background: #fff;
+     flex-grow: 1;
+     display: flex; flex-direction: column; justify-content: center; align-items: center;
+  }
+  
+  .collection-card-info h3 {
+     margin: 0 0 0.5rem 0;
+     font-size: 1.25rem; font-weight: 700; letter-spacing: -0.02em;
+     color: #111;
+  }
+  
+  .collection-count { 
+     font-size: 0.9rem; color: #777; font-weight: 500;
+     display: inline-block;
+     padding: 4px 12px;
+     background: #f5f5f5; border-radius: 20px;
+  }
+  
+  /* Optional Glass Overlay Mode (if we want text ON image) - keeping below image for now for clean look */
 </style>
 
 {% schema %}
