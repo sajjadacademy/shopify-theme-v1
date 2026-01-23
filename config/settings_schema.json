@@ -1,1 +1,53 @@
-[]
+[
+    {
+        "name": "Social Media",
+        "settings": [
+            {
+                "type": "header",
+                "content": "Social Media Profiles"
+            },
+            {
+                "type": "text",
+                "id": "social_facebook_link",
+                "label": "Facebook",
+                "info": "https://facebook.com/your-page"
+            },
+            {
+                "type": "text",
+                "id": "social_instagram_link",
+                "label": "Instagram",
+                "info": "https://instagram.com/your-handle"
+            },
+            {
+                "type": "text",
+                "id": "social_youtube_link",
+                "label": "YouTube",
+                "info": "https://youtube.com/your-channel"
+            },
+            {
+                "type": "text",
+                "id": "social_tiktok_link",
+                "label": "TikTok",
+                "info": "https://tiktok.com/@your-handle"
+            },
+            {
+                "type": "text",
+                "id": "social_twitter_link",
+                "label": "Twitter",
+                "info": "https://twitter.com/your-handle"
+            },
+            {
+                "type": "text",
+                "id": "social_snapchat_link",
+                "label": "Snapchat",
+                "info": "https://snapchat.com/add/your-handle"
+            },
+            {
+                "type": "text",
+                "id": "social_pinterest_link",
+                "label": "Pinterest",
+                "info": "https://pinterest.com/your-handle"
+            }
+        ]
+    }
+]
