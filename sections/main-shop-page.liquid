@@ -111,15 +111,16 @@
                 </div>
              {%- else -%}
                 <div class="product-grid shop-grid shop-grid--{{ section.settings.columns_desktop }}">
-                   {%- for product in collection.products -%}
+                  {%- for product in collection.products -%}
                       <div class="grid-item">
-                         {% render 'product-card-marketplace', 
-                             product_card_product: product, 
-                             show_rating: true, 
-                             show_quick_add: true 
-                         %}
+                          {% render 'product-card-marketplace', 
+                              product_card_product: product, 
+                              show_rating: true, 
+                              show_quick_add: section.settings.show_quick_add,
+                              quick_add_type: section.settings.quick_add_type
+                          %}
                       </div>
-                   {%- endfor -%}
+                  {%- endfor -%}
                 </div>
                 
                 {%- if paginate.pages > 1 -%}
@@ -405,7 +406,27 @@
        "default": true
     },
     { "type": "header", "content": "Custom Customization" },
-    { "type": "liquid", "id": "custom_liquid", "label": "Custom Liquid", "info": "Add embedded custom code." }
+    { "type": "liquid", "id": "custom_liquid", "label": "Custom Liquid", "info": "Add embedded custom code." },
+    {
+      "type": "header",
+      "content": "Product Card Settings"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_quick_add",
+      "default": true,
+      "label": "Show Add to Cart Button"
+    },
+    {
+      "type": "select",
+      "id": "quick_add_type",
+      "options": [
+        { "value": "button", "label": "Button (Pill)" },
+        { "value": "icon", "label": "Icon (+)" }
+      ],
+      "default": "button",
+      "label": "Quick Add Style"
+    }
   ]
 }
 {% endschema %}
