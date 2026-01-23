@@ -13,16 +13,22 @@
       "header": {
         "type": "header",
         "settings": {
-          "logo": "shopify://shop_images/ChatGPT_Image_Jan_12_2026_11_33_33_PM_1.png",
           "logo_width": 130,
           "logo_position": "left",
           "menu": "main-menu",
           "menu_position": "center",
+          "header_menu_font_size_desktop": 16,
+          "header_menu_font_weight": "700",
+          "header_menu_letter_spacing": 2,
+          "header_menu_text_transform": "none",
           "enable_sticky": true,
           "show_search": true,
           "search_style": "icon",
+          "enable_wishlist": true,
+          "wishlist_icon_style": "stroke",
           "bg_color": "#0e1b4d",
-          "text_color": "#ffffff"
+          "text_color": "#ffffff",
+          "custom_liquid": ""
         }
       },
       "app-bottom-bar": {
