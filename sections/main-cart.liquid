@@ -100,6 +100,62 @@
   {%- endif -%}
 </div>
 
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+      const cartItems = {{ cart.items | json }};
+      const subtotal = {{ cart.total_price }};
+      let eligibleQty = 0;
+      
+      // Calculate Eligible Qty
+      cartItems.forEach(item => {
+          if(item.properties && (item.properties['_qty_offer_eligible'] || item.properties['qty_offer'])) {
+              eligibleQty += item.quantity;
+          }
+      });
+      
+      // Logic
+      let discountCode = '';
+      let savings = 0;
+      let discountText = '';
+      
+      if(eligibleQty >= 3) {
+          discountCode = 'BUY3SAVE20';
+          discountText = 'Buy 3 & Save 20%';
+          savings = subtotal * 0.20; 
+      } else if (eligibleQty >= 2) {
+          discountCode = 'BUY2SAVE10';
+          discountText = 'Buy 2 & Save 10%';
+          savings = subtotal * 0.10; 
+      }
+      
+      // Update Checkout Button
+      const checkoutBtn = document.querySelector('button[name="checkout"]');
+      if(checkoutBtn && discountCode) {
+          // Convert button to link for standard redirect or use hidden input injection if using form submit
+          // Standard cart form submits to /cart with name=checkout. 
+          // To apply discount code via URL we need to intercept or change action.
+          
+          checkoutBtn.type = 'button'; // Stop form submit
+          checkoutBtn.addEventListener('click', (e) => {
+              e.preventDefault();
+              window.location.href = `/checkout?discount=${discountCode}`;
+          });
+          
+          // Visuals
+          const summaryBox = document.querySelector('.summary-box');
+          if(summaryBox && savings > 0) {
+              const discountRow = document.createElement('div');
+              discountRow.className = 'summary-row';
+              discountRow.style.color = 'green';
+              discountRow.innerHTML = `<span>${discountText}</span><span>- ${(savings/100).toFixed(2)} AED</span>`;
+              
+              const totalRow = document.querySelector('.summary-row:last-of-type'); 
+              if(totalRow) totalRow.before(discountRow);
+          }
+      }
+  });
+</script>
+
 <style>
   .page-title { margin-bottom: 3rem; font-size: 2.5rem; font-weight: 800; }
   .text-center { text-align: center; }
