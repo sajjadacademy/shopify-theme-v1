@@ -113,10 +113,12 @@
                 <div class="product-grid shop-grid shop-grid--{{ section.settings.columns_desktop }}">
                   {%- for product in collection.products -%}
                       <div class="grid-item">
+                          {% assign show_qa = true %}
+                          {% if section.settings.show_quick_add == false %}{% assign show_qa = false %}{% endif %}
                           {% render 'product-card-marketplace', 
-                              product_card_product: product, 
+                              product: product, 
                               show_rating: true, 
-                              show_quick_add: section.settings.show_quick_add,
+                              show_quick_add: show_qa,
                               quick_add_type: section.settings.quick_add_type
                           %}
                       </div>

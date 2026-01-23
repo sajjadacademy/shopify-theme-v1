@@ -88,7 +88,14 @@
               <ul class="collection-product-grid">
                 {% for product in collection.products %}
                   <li class="grid-item">
-                    {% render 'product-card-marketplace', product: product %}
+                    {% assign show_qa = true %}
+                    {% if section.settings.show_quick_add == false %}{% assign show_qa = false %}{% endif %}
+                    {% render 'product-card-marketplace', 
+                      product: product, 
+                      show_rating: true, 
+                      show_quick_add: show_qa,
+                      quick_add_type: section.settings.quick_add_type
+                    %}
                   </li>
                 {% else %}
                    <li style="grid-column: 1 / -1; text-align: center; padding: 2rem;">
