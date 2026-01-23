@@ -4,10 +4,10 @@
 
 <div class="section-{{ section.id }}-padding">
   <div class="container">
-    <h1 class="collection-title text-center">{{ collection.title }}</h1>
+    <h1 class="collection-title" style="text-align: center; margin: 0 auto; width: 100%;">{{ collection.title }}</h1>
     
     {% if collection.description != blank %}
-      <div class="collection-description rte text-center" style="max-width: 800px; margin: 0 auto 2rem;">
+      <div class="collection-description rte" style="text-align: center; max-width: 800px; margin: 0 auto 2rem;">
         {{ collection.description }}
       </div>
     {% endif %}
