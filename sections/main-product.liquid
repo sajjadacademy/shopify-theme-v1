@@ -117,37 +117,52 @@
 
             <!-- Bundle Selector (Restored) -->
             {%- when 'bundle_selector' -%}
-              <div class="bundle-selector" {{ block.shopify_attributes }}>
+              <div class="bundle-selector" {{ block.shopify_attributes }}
+                   data-tier2-qty="2" 
+                   data-tier2-code="{{ block.settings.tier_2_code | escape }}"
+                   data-tier3-qty="3" 
+                   data-tier3-code="{{ block.settings.tier_3_code | escape }}">
+                   
                  <h3 class="h4" style="font-size: 1rem; margin-bottom: 0.5rem;">Select Quantity</h3>
                  
                  <input type="hidden" name="quantity" value="1" form="product-form-installment" id="bundle-qty-hidden">
                  
                  <div class="bundle-options">
+                   <!-- Tier 1: Buy 1 -->
                    <label class="bundle-option active" onclick="selectBundle(1, this)">
                      <span class="radio-circle"></span>
                      <div class="bundle-details">
                        <span class="bundle-title">Buy 1</span>
-                       <!-- Using the inflated/fake price logic for consistency if desired, or just raw price -->
                        <span class="bundle-price">{{ product.price | money }}/each</span>
                      </div>
                    </label>
+                   
+                   <!-- Tier 2 -->
+                   {%- assign t2_pct = block.settings.tier_2_percent | default: 10 -%}
+                   {%- assign t2_mult = 100.0 | minus: t2_pct | divided_by: 100.0 -%}
+                   {%- assign t2_price = product.price | times: t2_mult -%}
                    
                    <label class="bundle-option" onclick="selectBundle(2, this)">
                      <span class="radio-circle"></span>
                      <div class="bundle-details">
                        <div class="flex-between">
-                         <span class="bundle-title">Buy 2 & Save 10%</span>
+                         <span class="bundle-title">Buy 2 & Save {{ t2_pct }}%</span>
                          <span class="badge-best-seller">Best Seller</span>
                        </div>
-                       <span class="bundle-price">{{ product.price | times: 0.9 | money }}/each</span>
+                       <span class="bundle-price">{{ t2_price | money }}/each</span>
                      </div>
                    </label>
+                   
+                   <!-- Tier 3 -->
+                   {%- assign t3_pct = block.settings.tier_3_percent | default: 20 -%}
+                   {%- assign t3_mult = 100.0 | minus: t3_pct | divided_by: 100.0 -%}
+                   {%- assign t3_price = product.price | times: t3_mult -%}
                    
                    <label class="bundle-option" onclick="selectBundle(3, this)">
                      <span class="radio-circle"></span>
                      <div class="bundle-details">
-                       <span class="bundle-title">Buy 3 & Save 20%</span>
-                       <span class="bundle-price">{{ product.price | times: 0.8 | money }}/each</span>
+                       <span class="bundle-title">Buy 3 & Save {{ t3_pct }}%</span>
+                       <span class="bundle-price">{{ t3_price | money }}/each</span>
                      </div>
                    </label>
                  </div>
@@ -418,6 +433,32 @@
               }
               input.value = '/checkout';
               
+              // CRITICAL: Handle Dynamic Discount for "Buy Now" based on Qty
+              const bundleContainer = document.querySelector('.bundle-selector');
+              const bundleQtyInput = document.getElementById('bundle-qty-hidden');
+              if(bundleContainer && bundleQtyInput) {
+                  const qty = parseInt(bundleQtyInput.value);
+                  let discountCode = '';
+                  
+                  // Read data attributes
+                  const code2 = bundleContainer.getAttribute('data-tier2-code');
+                  const code3 = bundleContainer.getAttribute('data-tier3-code');
+                  
+                  if(qty >= 3 && code3) {
+                      discountCode = code3;
+                  } else if(qty >= 2 && code2) {
+                      discountCode = code2;
+                  }
+                  
+                  // If we have a code, construct checkout URL manually
+                  if(discountCode) {
+                      // e.g. /cart/ID:QTY?discount=CODE
+                      const checkoutUrl = `/cart/${currentId}:${qty}?discount=${discountCode}`;
+                      window.location.href = checkoutUrl;
+                      return; // Stop form submit logic
+                  }
+              }
+
               // 3. Submit
               form.submit();
           });
@@ -774,7 +815,20 @@
         }
       ]
     },
-    { "type": "bundle_selector", "name": "Bundle Selector", "limit": 1 },
+    { 
+      "type": "bundle_selector", 
+      "name": "Bundle Selector", 
+      "limit": 1,
+      "settings": [
+         { "type": "header", "content": "Tier 2 (Buy 2)" },
+         { "type": "range", "id": "tier_2_percent", "min": 0, "max": 90, "step": 5, "default": 10, "label": "Discount %" },
+         { "type": "text", "id": "tier_2_code", "label": "Discount Code (Optional)", "info": "Code to apply at checkout for 'Buy Now'." },
+         
+         { "type": "header", "content": "Tier 3 (Buy 3)" },
+         { "type": "range", "id": "tier_3_percent", "min": 0, "max": 90, "step": 5, "default": 20, "label": "Discount %" },
+         { "type": "text", "id": "tier_3_code", "label": "Discount Code (Optional)", "info": "Code to apply at checkout for 'Buy Now'." }
+      ]
+    },
     { "type": "buy_buttons", "name": "Buy Actions", "limit": 1 },
     { "type": "trust_icons", "name": "Trust Badges", "limit": 1 },
     { "type": "specifications", "name": "Specifications", "limit": 1 },
