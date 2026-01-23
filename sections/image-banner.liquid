@@ -29,7 +29,7 @@
             <div class="image-banner__text">{{ block.settings.text }}</div>
           {% endif %}
           {% if block.settings.cta_text != blank %}
-            <a href="{{ block.settings.cta_link }}" class="btn btn-{{ block.settings.cta_style }}">
+            <a href="{{ block.settings.cta_link }}" class="btn btn-{{ block.settings.cta_style }}" style="background-color: {{ block.settings.button_bg_color }}; color: {{ block.settings.button_text_color }}; border-color: {{ block.settings.button_bg_color }};">
               {{ block.settings.cta_text }}
             </a>
           {% endif %}
@@ -213,6 +213,18 @@
            "type": "url",
            "id": "cta_link",
            "label": "Button Link"
+        },
+        {
+          "type": "color",
+          "id": "button_bg_color",
+          "label": "Button Background",
+          "default": "#111827"
+        },
+        {
+          "type": "color",
+          "id": "button_text_color",
+          "label": "Button Text",
+          "default": "#ffffff"
         },
         {
            "type": "select",
