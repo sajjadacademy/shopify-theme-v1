@@ -96,7 +96,7 @@
         "heading": "Daily Deals",
         "heading_alignment": "left",
         "collection": "all",
-        "products_to_show": 8,
+        "products_to_show": 12,
         "enable_random_reviews": true,
         "review_min": 500,
         "review_max": 2500,
