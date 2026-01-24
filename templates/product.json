@@ -67,7 +67,7 @@
         "custom_liquid_D7WLtW": {
           "type": "custom_liquid",
           "settings": {
-            "custom_liquid": "<div class=\"reviews-container\">\n  <div class=\"star-reviews\">\n <img\n    class=\"shopify-image\"\n    width = \"65\" src=\"https://cdn.shopify.com/s/files/1/0798/4267/2987/files/Revive_39.png?v=1733346031\"\n    alt=\"shopifyImage\"\n  />\n  </div>\n  <span class=\"text-grey\">\nrated <strong>4.5/5</strong> based on <strong>+650 Reviews</strong>\n</span>\n</div>\n\n<style>\n  .reviews-container {\n    display: flex;\n    align-items: center;\n\n  }\n\n\n  .text-grey {\n    font-weight: normal;\n    font-size: 19px;\n    color: #868686;\n  line-height: 0px;\n\n  }\n\n  .text-grey strong {\n    font-weight: 800;\n\ncolor: #2e2f3c\n  }\n  .star-reviews{\n  width: 65px;\nmargin-right: 5px;\n  }\n\n</style>"
+            "custom_liquid": "<div class=\"reviews-container\">\n  <div class=\"star-reviews\">\n <img\n    class=\"shopify-image\"\n    width = \"65\" src=\"https://cdn.shopify.com/s/files/1/0798/4267/2987/files/Revive_39.png?v=1733346031\"\n    alt=\"shopifyImage\"\n  />\n  </div>\n  <span class=\"text-grey\">\nrated <strong>4.5/5</strong> based on <strong>+650 Reviews</strong>\n</span>\n</div>\n\n<style>\n  .reviews-container {\n    display: flex;\n    align-items: center;\n\n  }\n\n\n  .text-grey {\n    font-weight: normal;\n    font-size: 15px;\n    color: #868686;\n  line-height: 0px;\n\n  }\n\n  .text-grey strong {\n    font-weight: 800;\n\ncolor: #2e2f3c\n  }\n  .star-reviews{\n  width: 65px;\nmargin-right: 5px;\n  }\n\n</style>"
           }
         },
         "custom_liquid_Vtjdta": {
