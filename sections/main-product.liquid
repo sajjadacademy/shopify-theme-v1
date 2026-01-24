@@ -280,6 +280,20 @@
         thumbEl.classList.add('active');
      }
   }
+
+  /* Bundle Selection Logic */
+  function selectBundle(qty, element) {
+     // 1. Visual Update
+     const container = element.closest('.bundle-options');
+     if(container) {
+         container.querySelectorAll('.bundle-option').forEach(opt => opt.classList.remove('active'));
+         element.classList.add('active');
+     }
+
+     // 2. Update Hidden Input
+     const input = document.getElementById('bundle-qty-hidden');
+     if(input) input.value = qty;
+  }
   
   /* Variant Selection Handler */
   document.addEventListener('DOMContentLoaded', () => {
