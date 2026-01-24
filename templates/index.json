@@ -62,7 +62,7 @@
         "m1": {
           "type": "text",
           "settings": {
-            "text": "Free Shipping on Orders Over AED 150"
+            "text": "Free Shipping on Orders Over AED 100"
           }
         },
         "m2": {
