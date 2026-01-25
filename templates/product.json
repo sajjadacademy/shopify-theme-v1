@@ -22,6 +22,12 @@
           "type": "title",
           "settings": {}
         },
+        "custom_liquid_gQhXVJ": {
+          "type": "custom_liquid",
+          "settings": {
+            "custom_liquid": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <link rel=\"stylesheet\" href=\"styles.css\">\n  <title>Product View Counter</title>\n  <style>\n    .view-container {\n      display: flex;\n      align-items: center;\n      font-family: Arial, sans-serif;\n    }\n.view-badge {\n    background-color: #f3e6e2;\n    color: #d74f33;\n    border-radius: 16px;\n    font-weight: bold;\n    margin-right: 10px;\n    padding: 0px 8px;\n    font-size: 11px;\n    line-height: 20px;\n}\n    .view-text {\n      font-size: 12px;\nline-height:19px;\nfont-weight: normal;\ncolor #474747\n    }\n  </style>\n</head>\n<body>\n  <div class=\"view-container\">\n    <div class=\"view-badge\">Views</div>\n    <div class=\"view-text\">During the last 24 hours, this product has been viewed <span id=\"view-count\">925</span> times.</div>\n  </div>\n\n  <script>\n    \n    const initialViewCount = 925;\n    const variation = Math.floor(Math.random() * 41) - 20;\n    const newViewCount = initialViewCount + variation;\n\n    \n    document.getElementById(\"view-count\").innerText = newViewCount;\n\n   \n    if (!localStorage.getItem(\"lastUpdated\") || Date.now() - localStorage.getItem(\"lastUpdated\") > 86400000) {\n      localStorage.setItem(\"viewCount\", newViewCount);\n      localStorage.setItem(\"lastUpdated\", Date.now());\n    } else {\n      document.getElementById(\"view-count\").innerText = localStorage.getItem(\"viewCount\");\n    }\n  </script>\n</body>\n</html>"
+          }
+        },
         "custom_liquid_JaHCkt": {
           "type": "custom_liquid",
           "settings": {
@@ -94,6 +100,7 @@
       "block_order": [
         "custom_liquid_pPmT3J",
         "title",
+        "custom_liquid_gQhXVJ",
         "custom_liquid_JaHCkt",
         "price",
         "custom_liquid_TgTqwG",
