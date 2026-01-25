@@ -34,9 +34,7 @@
           "type": "contact_info",
           "settings": {
             "heading": "Contact & Trust",
-            "address": "123 Commerce St\nDubai, UAE",
-            "show_social": true,
-            "show_payment": true,
+            "address": "Email : Help@zelvyra.com\n123 Commerce St\nDubai, UAE",
             "custom_liquid": ""
           }
         },
