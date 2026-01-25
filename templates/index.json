@@ -40,7 +40,7 @@
             "text_alignment_mobile": "center",
             "button_text": "Shop Now",
             "button_link": "shopify://collections/all",
-            "button_style": "solid",
+            "button_style": "outline",
             "button_size": "medium",
             "button_color_bg": "#0e1b4d",
             "button_color_text": "#ffffff"
@@ -88,7 +88,7 @@
             "text_alignment_mobile": "center",
             "button_text": "Shop Sale",
             "button_link": "shopify://collections/all",
-            "button_style": "solid",
+            "button_style": "outline",
             "button_size": "medium",
             "button_color_bg": "#0e1b4d",
             "button_color_text": "#ffffff"
@@ -102,8 +102,8 @@
       ],
       "settings": {
         "width_mode": "full",
-        "hero_height_desktop": 600,
-        "hero_height_mobile": 500,
+        "hero_height_desktop": 560,
+        "hero_height_mobile": 440,
         "autoplay": true,
         "autoplay_speed": 5,
         "padding_top": 20,
