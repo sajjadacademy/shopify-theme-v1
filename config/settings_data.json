@@ -46,7 +46,7 @@
         "type": "side-promo-label",
         "settings": {
           "enable_label": true,
-          "text": "Add More than 1 & GET 10% OFF - CODE: SALE10",
+          "text": "GET 10% OFF - USE CODE: SALE10",
           "background_color": "#0b1c3c",
           "text_color": "#ffffff",
           "position": "right",
