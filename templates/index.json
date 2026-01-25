@@ -12,11 +12,11 @@
     "announcement": {
       "type": "announcement-bar",
       "settings": {
-        "text": "LIMITED TIME: 20% OFF ALL ITEMS",
+        "text": "",
         "link": "",
         "bg_color": "#111827",
-        "text_color": "#ffffff",
-        "custom_liquid": ""
+        "text_color": "#ffa41c",
+        "custom_liquid": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"UTF-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n<title>Responsive Offer Text</title>\n<style>\n  .offer-text-container {\n    text-align: center;\n    font-family: Arial, sans-serif;\n    font-size: 20px; /* Default for desktop */\n  }\n\n  .offer-text-container .highlight {\n    font-weight: bold;\n    color: orange;\n    margin-right: 5px;\n  }\n\n  .offer-text-container .offer-text {\n    color: white;\n  }\n\n  /* Responsive for tablets */\n  @media (max-width: 768px) {\n    .offer-text-container {\n      font-size: 18px;\n    }\n  }\n\n  /* Responsive for mobile */\n  @media (max-width: 480px) {\n    .offer-text-container {\n      font-size: 10px;\n    }\n  }\n</style>\n</head>\n<body>\n\n<div class=\"offer-text-container\">\n  <span class=\"highlight\">LIMITED TIME:</span>\n  <span class=\"offer-text\">FREE SHIPPING ON ALL ORDERS ABOVE 100 AED</span>\n</div>\n\n</body>\n</html>"
       }
     },
     "hero_overlay": {
