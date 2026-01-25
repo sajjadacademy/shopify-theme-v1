@@ -1,4 +1,7 @@
 <div class="header-wrapper" data-sticky="{{ section.settings.enable_sticky }}">
+  {%- if section.settings.favicon != blank -%}
+    <link rel="icon" type="image/png" href="{{ section.settings.favicon | image_url: width: 32, height: 32 }}">
+  {%- endif -%}
 <style>
   .header-wrapper {
     background-color: {{ section.settings.bg_color }};
@@ -152,6 +155,12 @@
       "type": "image_picker",
       "id": "logo",
       "label": "Logo Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "favicon",
+      "label": "Favicon Image",
+      "info": "Upload a square image (32x32px recommended)"
     },
     {
       "type": "range",
