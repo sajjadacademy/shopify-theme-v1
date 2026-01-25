@@ -53,12 +53,40 @@
   }
   #shopify-section-{{ section.id }} .mobile-nav__item {
     color: {{ section.settings.text_color }};
+    border: 2px solid transparent; /* Prepare for border transition */
+    border-radius: 50%; /* Circle shape for the icon container */
+    padding: 5px;
+    transition: all 0.3s ease;
   }
-  #shopify-section-{{ section.id }} .mobile-nav__item.active,
+  #shopify-section-{{ section.id }} .mobile-nav__item.active {
+    /* Golden Border Style */
+    border-color: {{ section.settings.active_color }};
+    background-color: transparent !important; /* Ensure no fill */
+  }
   #shopify-section-{{ section.id }} .mobile-nav__item.active .mobile-nav__icon svg {
     color: {{ section.settings.active_color }};
     fill: {{ section.settings.active_color }};
   }
+  
+  /* Red Cart Count Circle */
+  .mobile-nav__count.bubble {
+      position: absolute;
+      top: -2px;
+      right: -2px;
+      background-color: #8B0000; /* Dark Red */
+      color: #FFFFFF;
+      font-size: 0.65rem;
+      font-weight: 700;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+      z-index: 2;
+  }
+  .mobile-nav__icon { position: relative; }
   /* Ensure it is visible and sticky on mobile */
   @media screen and (max-width: 768px) {
     #shopify-section-{{ section.id }} .mobile-nav-wrapper {
