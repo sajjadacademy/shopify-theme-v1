@@ -1,11 +1,23 @@
 <div class="color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding">
   <div class="section-group">
+    {%- comment -%} 1. Global Code {%- endcomment -%}
     {%- if section.settings.custom_liquid != blank -%}
       {{ section.settings.custom_liquid }}
-    {%- else -%}
+    {%- endif -%}
+
+    {%- comment -%} 2. Product Specific Code Blocks {%- endcomment -%}
+    {%- for block in section.blocks -%}
+      {%- if block.settings.target_product != blank and block.settings.target_product == product.handle -%}
+         <div class="specific-custom-code custom-code-block" {{ block.shopify_attributes }}>
+            {{ block.settings.custom_code }}
+         </div>
+      {%- endif -%}
+    {%- endfor -%}
+    
+    {%- if section.settings.custom_liquid == blank and section.blocks.size == 0 -%}
       <div class="page-width">
         <div class="center">
-          Add custom Liquid code in the section settings.
+          Add custom Liquid code in the section settings or add a block for specific products.
         </div>
       </div>
     {%- endif -%}
@@ -28,8 +40,8 @@
     {
       "type": "liquid",
       "id": "custom_liquid",
-      "label": "Custom Liquid",
-      "info": "Add app snippets or other Liquid code to create advanced customizations."
+      "label": "Global Custom Liquid",
+      "info": "This code will appear on ALL product pages where this section is added."
     },
     {
       "type": "select",
@@ -65,6 +77,26 @@
       "unit": "px",
       "label": "Bottom Padding",
       "default": 40
+    }
+  ],
+  "blocks": [
+    {
+      "type": "specific_code",
+      "name": "Specific Product Code",
+      "settings": [
+        {
+          "type": "product",
+          "id": "target_product",
+          "label": "Select Product",
+          "info": "This code will ONLY show when viewing this specific product."
+        },
+        {
+          "type": "liquid",
+          "id": "custom_code",
+          "label": "Specific Custom Code",
+          "info": "Add video/reviews/etc just for this product."
+        }
+      ]
     }
   ],
   "presets": [
