@@ -81,7 +81,7 @@
               {% endif %}
 
               {% if block.settings.button_text != blank and block.settings.button_link != blank %}
-                 <a href="{{ block.settings.button_link }}" class="btn btn-hero btn-{{ block.settings.button_size }} btn-{{ block.settings.button_style }}">
+                 <a href="{{ block.settings.button_link }}" class="btn btn-hero hero-btn-{{ block.id }} btn-{{ block.settings.button_size }} btn-{{ block.settings.button_style }}">
                    {{ block.settings.button_text }}
                  </a>
               {% endif %}
@@ -255,31 +255,33 @@
 
   /* Per-Slide Stylings */
   {%- for block in section.blocks -%}
-     #Slide-{{ section.id }}-{{ forloop.index }} .btn-solid {
-        background: {{ block.settings.button_color_bg }} !important;
-        border-color: {{ block.settings.button_color_bg }} !important;
+     .hero-btn-{{ block.id }} {
+        background-color: {{ block.settings.button_color_bg }} !important;
+        border: 2px solid {{ block.settings.button_color_bg }} !important;
         color: {{ block.settings.button_color_text }} !important;
         background-image: none !important;
+        box-shadow: none !important;
      }
-     #Slide-{{ section.id }}-{{ forloop.index }} .btn-solid:hover {
-        background: {{ block.settings.button_color_bg_hover }} !important;
+     .hero-btn-{{ block.id }}:hover {
+        background-color: {{ block.settings.button_color_bg_hover }} !important;
         border-color: {{ block.settings.button_color_bg_hover }} !important;
         color: {{ block.settings.button_color_text_hover }} !important;
         background-image: none !important;
      }
 
-     #Slide-{{ section.id }}-{{ forloop.index }} .btn-outline {
-        background: transparent !important;
-        border-color: {{ block.settings.text_color }} !important;
-        color: {{ block.settings.text_color }} !important;
-        background-image: none !important;
-     }
-     #Slide-{{ section.id }}-{{ forloop.index }} .btn-outline:hover {
-        background: {{ block.settings.button_color_bg_hover }} !important;
-        border-color: {{ block.settings.button_color_bg_hover }} !important;
-        color: {{ block.settings.button_color_text_hover }} !important;
-        background-image: none !important;
-     }
+     /* Outline Override */
+     {%- if block.settings.button_style == 'outline' -%}
+       .hero-btn-{{ block.id }} {
+          background-color: transparent !important;
+          border: 2px solid {{ block.settings.text_color }} !important;
+          color: {{ block.settings.text_color }} !important;
+       }
+       .hero-btn-{{ block.id }}:hover {
+          background-color: {{ block.settings.button_color_bg_hover }} !important;
+          border-color: {{ block.settings.button_color_bg_hover }} !important;
+          color: {{ block.settings.button_color_text_hover }} !important;
+       }
+     {%- endif -%}
   {%- endfor -%}
 {%- endstyle -%}
 
