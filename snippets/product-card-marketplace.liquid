@@ -85,6 +85,14 @@
           <!-- Express badge removed per user request, but structure kept for potential future use or other tags -->
        {%- endif -%}
     {%- endif -%}
+   {%- assign compare_at_price = product.compare_at_price -%}
+   {%- assign money_price = product.price | money -%}
+   {%- if compare_at_price > product.price -%}
+     {%- assign discount_percentage = compare_at_price | minus: product.price | times: 100.0 | divided_by: compare_at_price | round -%}
+     <div class="pcm-discount-circle">
+       <span class="discount-text">-{{ discount_percentage }}%</span>
+     </div>
+   {%- endif -%}
   </div>
 
   <!-- PHASE 2: Info Stack -->
@@ -114,7 +122,7 @@
 
     <!-- 3. Price Row -->
     <div class="pcm-price-row">
-      <span class="pcm-price-currency">AED</span>
+      <span class="pcm-price-currency">{{ cart.currency.iso_code }}</span>
       <span class="pcm-price-current">{{ product.price | money_without_currency }}</span>
       
       {%- assign compare_price = product.compare_at_price -%}
@@ -123,15 +131,11 @@
       {%- if compare_price > product_price -%}
         <!-- Real Discount -->
         <span class="pcm-price-original">{{ compare_price | money_without_currency }}</span>
-        {%- assign discount = compare_price | minus: product_price | times: 100.0 | divided_by: compare_price | round -%}
-        <span class="pcm-discount-badge">{{ discount }}% Off</span>
-        
       {%- elsif enable_fake_discount -%}
         <!-- Artificial Discount -->
         {%- assign inflation_factor = fake_discount_percentage | divided_by: 100.0 | plus: 1.0 -%}
         {%- assign fake_original = product_price | times: inflation_factor | round -%}
         <span class="pcm-price-original" style="opacity: 0.6;">{{ fake_original | money_without_currency }}</span>
-        <span class="pcm-discount-badge">{{ fake_discount_percentage }}% Off</span>
       {%- endif -%}
     </div>
 
@@ -319,5 +323,41 @@
   
   .pcm-atc-btn--disabled {
     background: #eee; color: #999; cursor: not-allowed; width: 100%; padding: 8px; border-radius: 4px;
+  }
+
+  .pcm-discount-circle {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    width: 45px;
+    height: 45px;
+    background-color: #ff0000; /* Red Circle */
+    color: #ffffff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 5;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  }
+
+  .discount-text {
+    font-size: 0.85rem;
+    font-weight: 700;
+    line-height: 1;
+  }
+  
+  .pcm-price-original {
+    color: #888;
+    text-decoration: line-through;
+    margin-left: 6px;
+    font-size: 0.9rem;
+    font-weight: 400;
+  }
+  
+  .pcm-price-current {
+    color: #000;
+    font-weight: 800;
+    font-size: 1.1rem;
   }
 </style>
