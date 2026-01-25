@@ -2,7 +2,7 @@
   {%- if section.settings.favicon != blank -%}
     <link rel="icon" type="image/png" href="{{ section.settings.favicon | image_url: width: 32, height: 32 }}">
   {%- endif -%}
-<style>
+  <style>
   .header-wrapper {
     background-color: {{ section.settings.bg_color }};
     color: {{ section.settings.text_color }};
@@ -33,9 +33,90 @@
     border-radius: var(--button-radius);
   }
   .icon-btn:hover svg { stroke: {{ section.settings.bg_color }}; }
+  
+  /* Mobile Header Styles */
+  @media screen and (max-width: 768px) {
+      .header {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          position: relative;
+      }
+      /* 1. Center Logo */
+      .header__logo {
+          position: absolute;
+          left: 50%;
+          transform: translateX(-50%);
+          z-index: 2;
+          text-align: center;
+      }
+      .header__logo img {
+          max-height: 40px; /* Restrict height on mobile */
+          width: auto;
+      }
+      
+      /* 2. Hamburger */
+      .header__mobile-toggle {
+          display: flex !important;
+          z-index: 3;
+      }
+      .header__nav {
+          display: none; /* Hidden by default on mobile */
+          position: absolute;
+          top: 100%;
+          left: 0;
+          width: 100%;
+          background: {{ section.settings.bg_color }};
+          padding: 20px;
+          flex-direction: column;
+          box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+          z-index: 9;
+      }
+      .header__nav.active {
+          display: flex;
+      }
+      .header__menu li {
+          display: block;
+          margin-bottom: 15px;
+          text-align: left;
+          padding: 0;
+      }
+      
+      .small-hide { display: none !important; }
+  }
+  
+  /* 3. Red Cart Count Circle */
+  .cart-count {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      background-color: #8B0000; /* Dark Red */
+      color: #FFFFFF;
+      font-size: 0.65rem;
+      font-weight: 700;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+  }
+  .cart-icon {
+      position: relative;
+  }
 </style>
   <header class="header container">
     
+    {%- comment -%} MOBILE MENU TRIGGER {%- endcomment -%}
+    <div class="header__mobile-toggle large-up-hide icon-btn" style="display: none; cursor:pointer;" onclick="this.nextElementSibling.nextElementSibling.classList.toggle('active')">
+       <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+       </svg>
+    </div>
+
     {%- comment -%} LOGO {%- endcomment -%}
     <div class="header__logo header__logo--{{ section.settings.logo_position }}">
       <a href="{{ routes.root_url }}">
@@ -50,8 +131,8 @@
       </a>
     </div>
 
-    {%- comment -%} NAVIGATION (Desktop) {%- endcomment -%}
-    <nav class="header__nav small-hide header__nav--{{ section.settings.menu_position }}">
+    {%- comment -%} NAVIGATION (Desktop + Mobile Dropdown) {%- endcomment -%}
+    <nav class="header__nav header__nav--{{ section.settings.menu_position }}">
       <ul class="header__menu list-unstyled">
         {% for link in section.settings.menu.links %}
           <li>
@@ -64,7 +145,7 @@
     {%- comment -%} SEARCH & ICONS {%- endcomment -%}
     <div class="header__icons">
       {% if section.settings.show_search %}
-        <div class="header__search">
+        <div class="header__search small-hide">
           {% if section.settings.search_style == 'bar' %}
             <form action="{{ routes.search_url }}" method="get" class="search-bar">
               <input type="text" name="q" placeholder="Search...">
