@@ -81,7 +81,14 @@
               {% endif %}
 
               {% if block.settings.button_text != blank and block.settings.button_link != blank %}
-                 <a href="{{ block.settings.button_link }}" class="btn btn-hero btn-{{ block.settings.button_size }} btn-{{ block.settings.button_style }}" style="--btn-bg: {{ block.settings.button_color_bg }}; --btn-text: {{ block.settings.button_color_text }}; --btn-bg-hover: {{ block.settings.button_color_bg_hover }}; --btn-text-hover: {{ block.settings.button_color_text_hover }}; --text-color: {{ block.settings.text_color }};">
+                 {%- assign btn_style_attr = '' -%}
+                 {%- if block.settings.button_style == 'solid' -%}
+                    {%- assign btn_style_attr = 'background: ' | append: block.settings.button_color_bg | append: ' !important; border-color: ' | append: block.settings.button_color_bg | append: ' !important; color: ' | append: block.settings.button_color_text | append: ' !important;' -%}
+                 {%- else -%}
+                    {%- assign btn_style_attr = 'background: transparent !important; border-color: ' | append: block.settings.text_color | append: ' !important; color: ' | append: block.settings.text_color | append: ' !important;' -%}
+                 {%- endif -%}
+                 
+                 <a href="{{ block.settings.button_link }}" class="btn btn-hero btn-{{ block.settings.button_size }} btn-{{ block.settings.button_style }}" style="{{ btn_style_attr }} --btn-bg-hover: {{ block.settings.button_color_bg_hover }}; --btn-text-hover: {{ block.settings.button_color_text_hover }};">
                    {{ block.settings.button_text }}
                  </a>
               {% endif %}
