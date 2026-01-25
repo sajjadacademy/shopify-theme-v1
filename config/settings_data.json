@@ -14,7 +14,7 @@
         "type": "header",
         "settings": {
           "logo": "shopify://shop_images/nano_banana_removed-removebg-preview.png",
-          "favicon": "shopify://shop_images/nano_banana_removed-removebg-preview.png",
+          "favicon": "shopify://shop_images/nano_banana_removed.png",
           "logo_width": 160,
           "logo_position": "left",
           "menu": "main-menu",
