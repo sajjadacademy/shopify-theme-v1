@@ -7,8 +7,10 @@
   - show_wishlist: {Boolean} Show wishlist heart button.
   - show_quick_add: {Boolean} Show quick add button.
   - quick_add_type: {String} 'icon' (plus) or 'button' (full text).
+  - quick_add_type: {String} 'icon' (plus) or 'button' (full text).
   - enable_fake_discount: {Boolean} Enable artificial discount if no compare price.
   - fake_discount_percentage: {Number} Percentage to inflate price by.
+  - force_tag_discount: {Boolean} Check for 'discount_X' tags.
 {% endcomment %}
 
 <div class="product-card-marketplace">
@@ -87,8 +89,23 @@
     {%- endif -%}
    {%- assign compare_at_price = product.compare_at_price -%}
    {%- assign money_price = product.price | money -%}
+   {%- assign discount_percentage = 0 -%}
+   {%- assign has_discount = false -%}
+
    {%- if compare_at_price > product.price -%}
+     {%- assign has_discount = true -%}
      {%- assign discount_percentage = compare_at_price | minus: product.price | times: 100.0 | divided_by: compare_at_price | round -%}
+   {%- else -%}
+      {%- for tag in product.tags -%}
+        {%- if tag contains 'discount_' -%}
+           {%- assign has_discount = true -%}
+           {%- assign discount_parts = tag | split: '_' -%}
+           {%- assign discount_percentage = discount_parts.last | plus: 0 -%}
+        {%- endif -%}
+      {%- endfor -%}
+   {%- endif -%}
+
+   {%- if has_discount -%}
      <div class="pcm-discount-circle">
        <span class="discount-text">-{{ discount_percentage }}%</span>
      </div>
@@ -125,17 +142,21 @@
       <span class="pcm-price-currency">{{ cart.currency.iso_code }}</span>
       <span class="pcm-price-current">{{ product.price | money_without_currency }}</span>
       
-      {%- assign compare_price = product.compare_at_price -%}
-      {%- assign product_price = product.price -%}
-      
-      {%- if compare_price > product_price -%}
+      {%- if compare_at_price > product.price -%}
         <!-- Real Discount -->
-        <span class="pcm-price-original">{{ compare_price | money_without_currency }}</span>
-      {%- elsif enable_fake_discount -%}
-        <!-- Artificial Discount -->
-        {%- assign inflation_factor = fake_discount_percentage | divided_by: 100.0 | plus: 1.0 -%}
-        {%- assign fake_original = product_price | times: inflation_factor | round -%}
-        <span class="pcm-price-original" style="opacity: 0.6;">{{ fake_original | money_without_currency }}</span>
+        <span class="pcm-price-original">{{ compare_at_price | money_without_currency }}</span>
+      {%- elsif has_discount and discount_percentage > 0 -%}
+        <!-- Tag Based Simulated Original Price -->
+        {%- assign inflation_factor = discount_percentage | divided_by: 100.0 -%}
+        {%- assign derived_original = product.price | divided_by: 1.0 | divided_by: 0.9 | round: 2 -%} 
+        {%- comment -%} Math for reverse discount: Original = Price / (1 - rate) {%- endcomment -%}
+        {%- assign rate = 1.0 | minus: inflation_factor -%}
+        {%- if rate > 0 -%}
+           {%- assign derived_original = product.price | times: 100.0 | divided_by: 100 | divided_by: 1.0 | minus: inflation_factor -%}
+           {%- assign oneminus = 100 | minus: discount_percentage -%}
+           {%- assign derived_original = product.price | times: 100 | divided_by: oneminus -%}
+           <span class="pcm-price-original" style="opacity: 0.6;">{{ derived_original | money_without_currency }}</span>
+        {%- endif -%}
       {%- endif -%}
     </div>
 
