@@ -1,12 +1,3 @@
-/*
- * ------------------------------------------------------------
- * IMPORTANT: The contents of this file are auto-generated.
- *
- * This file may be updated by the Shopify admin theme editor
- * or related systems. Please exercise caution as any changes
- * made to this file may be overwritten.
- * ------------------------------------------------------------
- */
 {
   "sections": {
     "announcement": {
@@ -21,39 +12,43 @@
     },
     "hero_overlay": {
       "type": "hero-background-overlay",
+      "blocks": {
+        "slide_1": {
+          "type": "slide",
+          "settings": {
+            "image_desktop": "shopify://shop_images/ChatGPT_Image_Jan_21_2026_03_08_25_PM.png",
+            "image_mobile": "shopify://shop_images/ChatGPT_Image_Jan_21_2026_12_19_10_PM.png",
+            "overlay_opacity": 70,
+            "overlay_color": "#000000",
+            "heading": "Trending Finds. Smart Prices. Delivered Fast.",
+            "heading_size": "h1",
+            "subheading": "<p>Discover the most in-demand products people are buying right now — curated daily for style, utility, and value.<br/></p>",
+            "content_max_width": 540,
+            "text_color": "#ffffff",
+            "enable_text_shadow": true,
+            "content_position": "center",
+            "text_alignment_desktop": "center",
+            "text_alignment_mobile": "center",
+            "button_text": "Shop Now",
+            "button_link": "shopify://collections/all",
+            "button_style": "solid",
+            "button_size": "medium",
+            "button_color_bg": "#0e1b4d",
+            "button_color_text": "#ffffff"
+          }
+        }
+      },
+      "block_order": [
+        "slide_1"
+      ],
       "settings": {
-        "hero_image_desktop": "shopify://shop_images/ChatGPT_Image_Jan_21_2026_03_08_25_PM.png",
-        "hero_image_mobile": "shopify://shop_images/ChatGPT_Image_Jan_21_2026_12_19_10_PM.png",
         "width_mode": "full",
         "hero_height_desktop": 600,
         "hero_height_mobile": 500,
-        "overlay_opacity": 70,
-        "overlay_color": "#000000",
-        "heading_tag": "h1",
-        "heading": "Trending Finds. Smart Prices. Delivered Fast.",
-        "subheading": "<p>Discover the most in-demand products people are buying right now — curated daily for style, utility, and value.<br/></p>",
-        "content_max_width": 540,
-        "content_position": "center",
-        "text_alignment_desktop": "center",
-        "text_alignment_mobile": "center",
-        "enable_text_shadow": true,
-        "text_color": "#ffffff",
-        "button_text": "Shop Now",
-        "button_link": "shopify://collections/all",
-        "button_style": "solid",
-        "button_size": "medium",
-        "button_radius": 4,
-        "button_color_bg": "#0e1b4d",
-        "button_color_text": "#ffffff",
+        "autoplay": false,
+        "autoplay_speed": 5,
         "padding_top": 20,
-        "padding_bottom": 20,
-        "padding_left": 20,
-        "padding_right": 20,
-        "padding_top_mobile": 20,
-        "padding_bottom_mobile": 20,
-        "padding_left_mobile": 20,
-        "padding_right_mobile": 20,
-        "custom_liquid": ""
+        "padding_bottom": 20
       }
     },
     "marquee": {

@@ -10,6 +10,15 @@
   <div class="hero-wrapper {% if section.settings.width_mode == 'contained' %}container{% else %}full-width{% endif %}">
     
     <div class="slider-container" id="Slider-{{ section.id }}">
+      {%- if section.blocks.size == 0 -%}
+         <div class="hero-slide" style="background: #222; display: flex; align-items: center; justify-content: center; color: white; text-align: center; padding: 2rem;">
+            <div>
+               <h2>Welcome to Hero Slider</h2>
+               <p>Click "Add Slide" in the theme editor to add images.</p>
+               {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg' }}
+            </div>
+         </div>
+      {%- endif -%}
       {%- for block in section.blocks -%}
         <div class="hero-slide" id="Slide-{{ section.id }}-{{ forloop.index }}" {{ block.shopify_attributes }}>
           
