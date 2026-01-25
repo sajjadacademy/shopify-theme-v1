@@ -47,10 +47,9 @@
         "settings": {
           "enable_label": true,
           "text": "GET 10% OFF - USE CODE: SALE10",
-          "link": "",
           "background_color": "#0b1c3c",
           "text_color": "#ffffff",
-          "position": "left",
+          "position": "right",
           "vertical_offset": 50
         }
       }
