@@ -108,7 +108,7 @@
       ],
       "settings": {
         "width_mode": "full",
-        "hero_height_desktop": 560,
+        "hero_height_desktop": 600,
         "hero_height_mobile": 440,
         "autoplay": true,
         "autoplay_speed": 5,
