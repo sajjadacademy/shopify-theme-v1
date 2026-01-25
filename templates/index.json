@@ -36,16 +36,66 @@
             "button_color_bg": "#0e1b4d",
             "button_color_text": "#ffffff"
           }
+        },
+        "slide_2": {
+          "type": "slide",
+          "settings": {
+            "image_desktop": "shopify://shop_images/ChatGPT_Image_Jan_21_2026_12_18_05_PM.png",
+            "image_mobile": "shopify://shop_images/ChatGPT_Image_Jan_21_2026_12_19_10_PM.png",
+            "overlay_opacity": 30,
+            "overlay_color": "#000000",
+            "heading": "New Season Arrivals",
+            "heading_size": "h1",
+            "subheading": "<p>Check out the latest trends for this season.</p>",
+            "content_max_width": 540,
+            "text_color": "#ffffff",
+            "enable_text_shadow": true,
+            "content_position": "center",
+            "text_alignment_desktop": "center",
+            "text_alignment_mobile": "center",
+            "button_text": "View Collection",
+            "button_link": "shopify://collections/all",
+            "button_style": "outline",
+            "button_size": "medium",
+            "button_color_bg": "#ffffff",
+            "button_color_text": "#000000"
+          }
+        },
+        "slide_3": {
+          "type": "slide",
+          "settings": {
+            "image_desktop": "shopify://shop_images/ChatGPT_Image_Jan_23_2026_09_08_42_AM.png",
+            "image_mobile": "shopify://shop_images/ChatGPT_Image_Jan_23_2026_09_09_38_AM.png",
+            "overlay_opacity": 40,
+            "overlay_color": "#000000",
+            "heading": "Exclusive Offers",
+            "heading_size": "h1",
+            "subheading": "<p>Don't miss out on our limited time deals.</p>",
+            "content_max_width": 540,
+            "text_color": "#ffffff",
+            "enable_text_shadow": true,
+            "content_position": "center",
+            "text_alignment_desktop": "center",
+            "text_alignment_mobile": "center",
+            "button_text": "Shop Sale",
+            "button_link": "shopify://collections/all",
+            "button_style": "solid",
+            "button_size": "medium",
+            "button_color_bg": "#b12704",
+            "button_color_text": "#ffffff"
+          }
         }
       },
       "block_order": [
-        "slide_1"
+        "slide_1",
+        "slide_2",
+        "slide_3"
       ],
       "settings": {
         "width_mode": "full",
         "hero_height_desktop": 600,
         "hero_height_mobile": 500,
-        "autoplay": false,
+        "autoplay": true,
         "autoplay_speed": 5,
         "padding_top": 20,
         "padding_bottom": 20
