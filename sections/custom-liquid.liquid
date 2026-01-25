@@ -7,10 +7,12 @@
 
     {%- comment -%} 2. Product Specific Code Blocks {%- endcomment -%}
     {%- for block in section.blocks -%}
-      {%- if block.settings.target_product != blank and block.settings.target_product == product.handle -%}
-         <div class="specific-custom-code custom-code-block" {{ block.shopify_attributes }}>
-            {{ block.settings.custom_code }}
-         </div>
+      {%- if block.settings.chosen_product != blank -%}
+         {%- if block.settings.chosen_product == product.handle -%}
+            <div class="specific-custom-code custom-code-block" {{ block.shopify_attributes }}>
+               {{ block.settings.custom_code }}
+            </div>
+         {%- endif -%}
       {%- endif -%}
     {%- endfor -%}
     
@@ -86,7 +88,7 @@
       "settings": [
         {
           "type": "product",
-          "id": "target_product",
+          "id": "chosen_product",
           "label": "Select Product",
           "info": "This code will ONLY show when viewing this specific product."
         },
@@ -101,7 +103,8 @@
   ],
   "presets": [
     {
-      "name": "Custom Liquid"
+      "name": "Custom Liquid",
+      "blocks": []
     }
   ]
 }
