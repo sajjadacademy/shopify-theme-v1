@@ -43,7 +43,9 @@
             "button_style": "outline",
             "button_size": "medium",
             "button_color_bg": "#0e1b4d",
-            "button_color_text": "#ffffff"
+            "button_color_text": "#ffffff",
+            "button_color_bg_hover": "#ffffff",
+            "button_color_text_hover": "#000000"
           }
         },
         "slide_2": {
@@ -67,7 +69,9 @@
             "button_style": "outline",
             "button_size": "medium",
             "button_color_bg": "#0e1b4d",
-            "button_color_text": "#ffffff"
+            "button_color_text": "#ffffff",
+            "button_color_bg_hover": "#ffffff",
+            "button_color_text_hover": "#000000"
           }
         },
         "slide_3": {
@@ -91,7 +95,9 @@
             "button_style": "outline",
             "button_size": "medium",
             "button_color_bg": "#0e1b4d",
-            "button_color_text": "#ffffff"
+            "button_color_text": "#ffffff",
+            "button_color_bg_hover": "#ffffff",
+            "button_color_text_hover": "#000000"
           }
         }
       },
