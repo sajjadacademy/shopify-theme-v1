@@ -81,14 +81,7 @@
               {% endif %}
 
               {% if block.settings.button_text != blank and block.settings.button_link != blank %}
-                 {%- assign btn_style_attr = '' -%}
-                 {%- if block.settings.button_style == 'solid' -%}
-                    {%- assign btn_style_attr = 'background: ' | append: block.settings.button_color_bg | append: ' !important; border-color: ' | append: block.settings.button_color_bg | append: ' !important; color: ' | append: block.settings.button_color_text | append: ' !important;' -%}
-                 {%- else -%}
-                    {%- assign btn_style_attr = 'background: transparent !important; border-color: ' | append: block.settings.text_color | append: ' !important; color: ' | append: block.settings.text_color | append: ' !important;' -%}
-                 {%- endif -%}
-                 
-                 <a href="{{ block.settings.button_link }}" class="btn btn-hero btn-{{ block.settings.button_size }} btn-{{ block.settings.button_style }}" style="{{ btn_style_attr }} --btn-bg-hover: {{ block.settings.button_color_bg_hover }}; --btn-text-hover: {{ block.settings.button_color_text_hover }};">
+                 <a href="{{ block.settings.button_link }}" class="btn btn-hero btn-{{ block.settings.button_size }} btn-{{ block.settings.button_style }}">
                    {{ block.settings.button_text }}
                  </a>
               {% endif %}
@@ -120,7 +113,9 @@
   </div>
 </div>
 
-<style>
+</style>
+
+{%- style -%}
   #shopify-section-{{ section.id }} .hero-slider-section {
     --hero-height-desktop: {{ section.settings.hero_height_desktop }}px;
     --hero-height-mobile: {{ section.settings.hero_height_mobile }}px;
@@ -218,28 +213,6 @@
   }
   .btn-hero:hover { opacity: 0.9; transform: translateY(-2px); }
   
-  .btn-solid {
-    background-color: var(--btn-bg) !important;
-    color: var(--btn-text) !important;
-    border-color: var(--btn-bg) !important;
-  }
-  .btn-solid:hover {
-    background-color: var(--btn-bg-hover) !important;
-    color: var(--btn-text-hover) !important;
-    border-color: var(--btn-bg-hover) !important;
-    opacity: 1; /* Remove default opacity */
-  }
-  .btn-outline {
-    background-color: transparent !important;
-    color: var(--text-color) !important;
-    border-color: var(--text-color) !important;
-  }
-  .btn-outline:hover {
-    background-color: var(--btn-bg-hover) !important;
-    color: var(--btn-text-hover) !important; 
-    border-color: var(--btn-bg-hover) !important;
-  }
-  
   .btn-small { padding: 8px 20px; font-size: 0.9rem; }
   .btn-medium { padding: 12px 30px; font-size: 1rem; }
   .btn-large { padding: 16px 40px; font-size: 1.2rem; }
@@ -279,7 +252,36 @@
     .hero-heading.h1 { font-size: 2.2rem; }
     .hero-heading.h2 { font-size: 1.8rem; }
   }
-</style>
+
+  /* Per-Slide Stylings */
+  {%- for block in section.blocks -%}
+     #Slide-{{ section.id }}-{{ forloop.index }} .btn-solid {
+        background: {{ block.settings.button_color_bg }} !important;
+        border-color: {{ block.settings.button_color_bg }} !important;
+        color: {{ block.settings.button_color_text }} !important;
+        background-image: none !important;
+     }
+     #Slide-{{ section.id }}-{{ forloop.index }} .btn-solid:hover {
+        background: {{ block.settings.button_color_bg_hover }} !important;
+        border-color: {{ block.settings.button_color_bg_hover }} !important;
+        color: {{ block.settings.button_color_text_hover }} !important;
+        background-image: none !important;
+     }
+
+     #Slide-{{ section.id }}-{{ forloop.index }} .btn-outline {
+        background: transparent !important;
+        border-color: {{ block.settings.text_color }} !important;
+        color: {{ block.settings.text_color }} !important;
+        background-image: none !important;
+     }
+     #Slide-{{ section.id }}-{{ forloop.index }} .btn-outline:hover {
+        background: {{ block.settings.button_color_bg_hover }} !important;
+        border-color: {{ block.settings.button_color_bg_hover }} !important;
+        color: {{ block.settings.button_color_text_hover }} !important;
+        background-image: none !important;
+     }
+  {%- endfor -%}
+{%- endstyle -%}
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
