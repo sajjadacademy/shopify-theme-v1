@@ -66,8 +66,8 @@
             "button_link": "shopify://collections/all",
             "button_style": "outline",
             "button_size": "medium",
-            "button_color_bg": "#ffffff",
-            "button_color_text": "#000000"
+            "button_color_bg": "#0e1b4d",
+            "button_color_text": "#ffffff"
           }
         },
         "slide_3": {
