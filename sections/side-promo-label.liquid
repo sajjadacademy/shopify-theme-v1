@@ -1,0 +1,110 @@
+{%- if section.settings.enable_label -%}
+<style>
+  .side-promo-label {
+    position: fixed;
+    top: {{ section.settings.vertical_offset }}%;
+    {% if section.settings.position == 'left' %}
+      left: 0;
+      border-radius: 0 0 8px 8px; /* Rounded bottom if vertical rl starts from top */
+    {% else %}
+      right: 0;
+      border-radius: 8px 8px 0 0; 
+    {% endif %}
+    z-index: 9999;
+    background-color: {{ section.settings.background_color }};
+    color: {{ section.settings.text_color }};
+    padding: 12px 8px;
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    transform: translateY(-50%) {% if section.settings.position == 'right' %} rotate(180deg) {% endif %};
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    font-weight: 700;
+    font-size: 1rem;
+    letter-spacing: 1px;
+    transition: transform 0.3s ease, background 0.3s;
+    text-transform: uppercase;
+    text-decoration: none;
+    border: 2px solid rgba(255,255,255,0.2);
+  }
+
+  .side-promo-label:hover {
+    background-color: {{ section.settings.text_color }};
+    color: {{ section.settings.background_color }};
+  }
+  
+  /* Mobile Adjustment */
+  @media screen and (max-width: 768px) {
+    .side-promo-label {
+      font-size: 0.8rem;
+      padding: 10px 6px;
+    }
+  }
+</style>
+
+<a href="{{ section.settings.link | default: '#' }}" class="side-promo-label">
+  {{ section.settings.text }}
+</a>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Side Promo Label",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "enable_label",
+      "label": "Enable Label",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "text",
+      "label": "Label Text",
+      "default": "GET 10% OFF - USE CODE: SALE10"
+    },
+    {
+      "type": "url",
+      "id": "link",
+      "label": "Link (Optional)"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background Color",
+      "default": "#0b1c3c"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "select",
+      "id": "position",
+      "label": "Screen Side",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "range",
+      "id": "vertical_offset",
+      "min": 10,
+      "max": 90,
+      "step": 5,
+      "unit": "%",
+      "label": "Vertical Position (from Top)",
+      "default": 50
+    }
+  ],
+  "presets": [
+    {
+      "name": "Side Promo Label"
+    }
+  ]
+}
+{% endschema %}
