@@ -259,6 +259,12 @@
   </div>
 </div>
 
+</div>
+
+<script type="application/json" id="ProductVariants-{{ section.id }}">
+  {{ product.variants | json }}
+</script>
+
 <script>
   /* Slider Logic */
   function moveSlide(direction, id) {
@@ -348,28 +354,71 @@
           });
           
           if(matchedVariant) {
-              updateFormId(matchedVariant.id);
-              // Update URL history without reload
-              window.history.replaceState({}, '', `?variant=${matchedVariant.id}`);
-              
-              // Scroll Slider to Matched Image
-              if(matchedVariant.featured_media && matchedVariant.featured_media.id) {
-                 const slide = document.getElementById('slide-' + matchedVariant.featured_media.id);
-                 if(slide) {
-                     const slider = document.getElementById('MainImageSlider-{{ section.id }}');
-                     const index = slide.getAttribute('data-index');
-                     if(slider && index !== null) {
-                         const width = slider.clientWidth;
-                         slider.scrollTo({ left: width * index, behavior: 'smooth' });
-                         
-                         // Update active thumbnail
-                         const thumbs = document.querySelectorAll('.thumbnail-item');
-                         thumbs.forEach(t => t.classList.remove('active'));
-                         if(thumbs[index]) thumbs[index].classList.add('active');
-                     }
-                 }
-              }
-          }
+               updateFormId(matchedVariant.id);
+               // Update URL history without reload
+               window.history.replaceState({}, '', `?variant=${matchedVariant.id}`);
+               
+               // --- PRICE UPDATE LOGIC ---
+               const priceContainer = document.querySelector('.price-container');
+               if(priceContainer) {
+                   // Helper to format money (cents -> decimal)
+                   const formatMoney = (cents) => (cents / 100).toFixed(2);
+                   
+                   // 1. Current Price
+                   const currentPriceEl = priceContainer.querySelector('.price-current');
+                   if(currentPriceEl) currentPriceEl.textContent = formatMoney(matchedVariant.price);
+                   
+                   // 2. Compare Price & Discount
+                   const originalPriceEl = priceContainer.querySelector('.price-original');
+                   const discountBadgeEl = priceContainer.querySelector('.discount-badge');
+                   
+                   // Check if we have a compare price
+                   if(matchedVariant.compare_at_price && matchedVariant.compare_at_price > matchedVariant.price) {
+                       // Real Discount
+                       if(originalPriceEl) {
+                           originalPriceEl.textContent = formatMoney(matchedVariant.compare_at_price);
+                           originalPriceEl.style.display = 'inline';
+                           originalPriceEl.style.textDecoration = 'line-through';
+                           originalPriceEl.style.opacity = '1'; 
+                       }
+                       if(discountBadgeEl) {
+                           const discount = Math.round(((matchedVariant.compare_at_price - matchedVariant.price) / matchedVariant.compare_at_price) * 100);
+                           discountBadgeEl.textContent = `${discount}% Off`;
+                           discountBadgeEl.style.display = 'inline-block';
+                       }
+                   } else {
+                        // Logic for "Fake" 10% discount if implemented in Liquid, or just hide/standardize
+                        // For now, let's replicate the liquid logic: if no compare price, we might show nothing OR fake it.
+                        // Let's hide real discount elements if no compare price
+                        if(originalPriceEl) {
+                             // Re-evaluate: Do checking for artificial discount setting? 
+                             // Simplify: Hide compare price if none
+                             originalPriceEl.style.display = 'none';
+                        }
+                        if(discountBadgeEl) {
+                             discountBadgeEl.style.display = 'none';
+                        }
+                   }
+               }
+
+               // Scroll Slider to Matched Image
+               if(matchedVariant.featured_media && matchedVariant.featured_media.id) {
+                  const slide = document.getElementById('slide-' + matchedVariant.featured_media.id);
+                  if(slide) {
+                      const slider = document.getElementById('MainImageSlider-{{ section.id }}');
+                      const index = slide.getAttribute('data-index');
+                      if(slider && index !== null) {
+                          const width = slider.clientWidth;
+                          slider.scrollTo({ left: width * index, behavior: 'smooth' });
+                          
+                          // Update active thumbnail
+                          const thumbs = document.querySelectorAll('.thumbnail-item');
+                          thumbs.forEach(t => t.classList.remove('active'));
+                          if(thumbs[index]) thumbs[index].classList.add('active');
+                      }
+                  }
+               }
+           }
       }
       
       // 5. Initial Run
