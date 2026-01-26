@@ -59,7 +59,7 @@
             {%- when 'price' -%}
               <div class="product-block-price" {{ block.shopify_attributes }}>
                  <div class="price-container">
-                    <span class="price-currency">AED</span>
+                    <span class="price-currency">{{ cart.currency.iso_code }}</span>
                     <span class="price-current">{{ product.price | money_without_currency }}</span>
                     
                     {%- assign compare_price = product.compare_at_price -%}
