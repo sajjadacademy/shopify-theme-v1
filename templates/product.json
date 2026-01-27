@@ -32,10 +32,10 @@
           "type": "price",
           "settings": {}
         },
-        "custom_liquid_TgTqwG": {
+        "custom_liquid_BhM4w8": {
           "type": "custom_liquid",
           "settings": {
-            "custom_liquid": "<style>\n        .cls-xj7hJ9K {\n            display: flex;\n            align-items: center;\n            font-family: Arial, sans-serif;\n            color: green;\n        }\n\n        .icon-xj7hJ9K {\n            margin-right: 8px;\n            color: green;\n            width: 8px; /* Genişlik ayarı */\n            height: 8px; /* Yükseklik ayarı */\n            animation: blink-xj7hJ9K 1s infinite, glow-xj7hJ9K 1.5s infinite;\n        }\n\n        @keyframes blink-xj7hJ9K {\n            0%, 100% {\n                opacity: 1;\n            }\n            50% {\n                opacity: 0.2;\n            }\n        }\n\n        @keyframes glow-xj7hJ9K {\n            0% {\n                text-shadow: 0 0 5px green;\n            }\n            50% {\n                text-shadow: 0 0 20px green;\n            }\n            100% {\n                text-shadow: 0 0 5px green;\n            }\n        }\n    </style>\n    <div class=\"cls-xj7hJ9K\">\n        <!-- SVGRepo'dan alınan daire ikonu -->\n        <svg class=\"icon-xj7hJ9K\" xmlns=\"http://www.w3.org/2000/svg\" fill=\"currentColor\" viewBox=\"0 0 16 16\">\n            <circle cx=\"8\" cy=\"8\" r=\"8\" />\n        </svg>\n        <span>Best Seller: #1 in Popular Products!</span>\n    </div>"
+            "custom_liquid": "<style>\n  .blink {\n    animation: blink-animation 1.5s steps(5, start) infinite;\n    color: red;\n    display: inline-block; /* Display as inline-block */\n    vertical-align: middle; /* Align vertically to middle */\n    font-size: 10px; /* Set font size */\n  }\n\n  @keyframes blink-animation {\n    to {\n      visibility: hidden;\n    }\n  }\n\n  .red-div {\n    background-color:#ffffff;\n    padding: 2px 10px; /* 6px vertical, 10px horizontal */\n    border-radius: 8px; /* Rounded corners */\n    display: inline-block; /* Display as inline-block */\n    text-align: center; /* Center align the content */\n    margin: 0 auto; /* Horizontally center the red-div */\n  }\n\n  .text {\n    display: inline-block; /* Display as inline-block */\n    vertical-align: middle; /* Align vertically to middle */\n    margin-left: 10px; /* Add some space between the dot and the text */\n    color: #faa700; /* Text color */\n    font-weight: 700; /* Medium font weight */\n    font-size: 15px; /* Set font size */\n    text-align: justify; /* Justify the text to the center */\n  }\n</style>\n\n<div class=\"red-div\">\n  <div class=\"blink\">&#9679;</div>\n  <div class=\"text\">Only 4 bags left at this price.</div>\n</div>"
           }
         },
         "variant_picker": {
@@ -114,7 +114,7 @@
         "title",
         "custom_liquid_gQhXVJ",
         "price",
-        "custom_liquid_TgTqwG",
+        "custom_liquid_BhM4w8",
         "variant_picker",
         "custom_liquid_fTepFn",
         "bundle",
