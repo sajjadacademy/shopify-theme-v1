@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "main": {
@@ -19,12 +28,6 @@
             "custom_liquid": "<style>\n    .view-container {\n      display: flex;\n      align-items: center;\n      font-family: Arial, sans-serif;\n    }\n.view-badge {\n    background-color: #f3e6e2;\n    color: #d74f33;\n    border-radius: 16px;\n    font-weight: bold;\n    margin-right: 10px;\n    padding: 0px 8px;\n    font-size: 11px;\n    line-height: 20px;\n}\n    .view-text {\n      font-size: 12px;\nline-height:19px;\nfont-weight: normal;\ncolor #474747\n    }\n  </style>\n  <div class=\"view-container\">\n    <div class=\"view-badge\">Views</div>\n    <div class=\"view-text\">During the last 24 hours, this product has been viewed <span id=\"view-count\">925</span> times.</div>\n  </div>\n\n  <script>\n    \n    const initialViewCount = 925;\n    const variation = Math.floor(Math.random() * 41) - 20;\n    const newViewCount = initialViewCount + variation;\n\n    \n    document.getElementById(\"view-count\").innerText = newViewCount;\n\n   \n    if (!localStorage.getItem(\"lastUpdated\") || Date.now() - localStorage.getItem(\"lastUpdated\") > 86400000) {\n      localStorage.setItem(\"viewCount\", newViewCount);\n      localStorage.setItem(\"lastUpdated\", Date.now());\n    } else {\n      document.getElementById(\"view-count\").innerText = localStorage.getItem(\"viewCount\");\n    }\n  </script>"
           }
         },
-        "custom_liquid_JaHCkt": {
-          "type": "custom_liquid",
-          "settings": {
-            "custom_liquid": "<style>\n.unique-body-Xyz123 {\n  font-family: Arial, sans-serif;\n  background-color: transparent;\n  color: #333;\n  display: flex;\n  justify-content: flex-start;\n  align-items: center;\n  margin-top: -15px;\n  padding: 0;\n  width: 100%;\n}\n\n.unique-container-Abc456 {\n  display: flex;\n  justify-content: flex-start;\n  align-items: center;\n  gap: 10px;\n  flex-wrap: wrap;\n}\n\n.unique-badge-Def789 {\n  display: inline-flex;\n  align-items: center;\n  background-color: #F8F8F8;\n  color: #004d00;\n  padding: 6px 10px;\n  border-radius: 4px;\n  font-size: 13px;\n  font-weight: 600;\n  border: 1px solid #e0e0e0;\n}\n\n.unique-icon-Jkl345 {\n  width: 16px;\n  height: 16px;\n  margin-right: 6px;\n  vertical-align: middle;\n}\n\n</style>\n\n<div class=\"unique-body-Xyz123\">\n<div class=\"unique-container-Abc456\">\n  <div class=\"unique-badge-Def789\">\n    <span>\n      <svg class=\"unique-icon-Jkl345\" viewBox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\">\n        <path fill=\"#2E7D32\" d=\"M12 2C9.24 2 7 4.24 7 7V10H5C3.9 10 3 10.9 3 12V19C3 20.1 3.9 21 5 21H19C20.1 21 21 20.1 21 19V12C21 10.9 20.1 10 19 10H17V7C17 4.24 14.76 2 12 2M12 4C13.66 4 15 5.34 15 7V10H9V7C9 5.34 10.34 4 12 4M12 12C13.1 12 14 12.9 14 14C14 15.1 13.1 16 12 16C10.9 16 10 15.1 10 14C10 12.9 10.9 12 12 12Z\"/>\n      </svg>\n      Expected delivery in 5-7 business days\n    </span>\n  </div>\n</div>\n</div>"
-          }
-        },
         "price": {
           "type": "price",
           "settings": {}
@@ -42,6 +45,12 @@
             "enable_ships_from": false
           }
         },
+        "custom_liquid_fTepFn": {
+          "type": "custom_liquid",
+          "settings": {
+            "custom_liquid": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Hurry Up!</title>\n    <style>\n        .custom-notification-1A2B3C {\n            display: flex;\n            align-items: center;\n            font-family: Arial, sans-serif;\n            font-size: 16px;\n            color: #333;\n            margin: 2px 0; /* Yukarı ve aşağı 2 px boşluk ekleme */\n        }\n        .custom-icon-4D5E6F {\n            margin-right: 5px; /* Metne daha yakın yapmak için azaltıldı */\n        }\n        .custom-icon-4D5E6F img {\n            width: 24px; /* İkonun boyutu büyütüldü */\n        }\n        .custom-text-7G8H9I {\n            font-weight: normal;\n        }\n        .custom-highlight-J1K2L3 {\n            color: #000; /* Daha koyu siyah renk */\n            font-weight: bold;\n            animation: custom-pulse-9X8Y7Z 1.5s infinite;\n        }\n        @keyframes custom-pulse-9X8Y7Z {\n            0%, 100% {\n                transform: scale(1);\n            }\n            50% {\n                transform: scale(1.1);\n            }\n        }\n    </style>\n</head>\n<body>\n    <div class=\"custom-notification-1A2B3C\">\n        <div class=\"custom-icon-4D5E6F\">\n            <img src=\"https://www.svgrepo.com/show/434246/rocket.svg\" alt=\"Rocket Icon\">\n        </div>\n        <span class=\"custom-text-7G8H9I\">Hurry up! <span class=\"custom-highlight-J1K2L3\">500+ items</span> have been sold</span>\n    </div>\n</body>\n</html>"
+          }
+        },
         "bundle": {
           "type": "bundle_selector",
           "settings": {
@@ -54,6 +63,12 @@
         "buy_buttons": {
           "type": "buy_buttons",
           "settings": {}
+        },
+        "custom_liquid_JaHCkt": {
+          "type": "custom_liquid",
+          "settings": {
+            "custom_liquid": "<style>\n.unique-body-Xyz123 {\n  font-family: Arial, sans-serif;\n  background-color: transparent;\n  color: #333;\n  display: flex;\n  justify-content: flex-start;\n  align-items: center;\n  margin-top: -15px;\n  padding: 0;\n  width: 100%;\n}\n\n.unique-container-Abc456 {\n  display: flex;\n  justify-content: flex-start;\n  align-items: center;\n  gap: 10px;\n  flex-wrap: wrap;\n}\n\n.unique-badge-Def789 {\n  display: inline-flex;\n  align-items: center;\n  background-color: #F8F8F8;\n  color: #004d00;\n  padding: 6px 10px;\n  border-radius: 4px;\n  font-size: 13px;\n  font-weight: 600;\n  border: 1px solid #e0e0e0;\n}\n\n.unique-icon-Jkl345 {\n  width: 16px;\n  height: 16px;\n  margin-right: 6px;\n  vertical-align: middle;\n}\n\n</style>\n\n<div class=\"unique-body-Xyz123\">\n<div class=\"unique-container-Abc456\">\n  <div class=\"unique-badge-Def789\">\n    <span>\n      <svg class=\"unique-icon-Jkl345\" viewBox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\">\n        <path fill=\"#2E7D32\" d=\"M12 2C9.24 2 7 4.24 7 7V10H5C3.9 10 3 10.9 3 12V19C3 20.1 3.9 21 5 21H19C20.1 21 21 20.1 21 19V12C21 10.9 20.1 10 19 10H17V7C17 4.24 14.76 2 12 2M12 4C13.66 4 15 5.34 15 7V10H9V7C9 5.34 10.34 4 12 4M12 12C13.1 12 14 12.9 14 14C14 15.1 13.1 16 12 16C10.9 16 10 15.1 10 14C10 12.9 10.9 12 12 12Z\"/>\n      </svg>\n      Expected delivery in 5-7 business days\n    </span>\n  </div>\n</div>\n</div>"
+          }
         },
         "custom_liquid_rMUtmT": {
           "type": "custom_liquid",
@@ -95,6 +110,7 @@
         "price",
         "custom_liquid_TgTqwG",
         "variant_picker",
+        "custom_liquid_fTepFn",
         "bundle",
         "buy_buttons",
         "custom_liquid_JaHCkt",
