@@ -1,97 +1,210 @@
 {% if section.settings.enable %}
 <div class="sticky-atc-wrapper" id="sticky-atc">
-  <div class="sticky-atc-container">
-    <div class="sticky-atc-info">
-      {% if section.settings.show_image %}
-        <img src="{{ product.featured_image | image_url: width: 60 }}" width="40" height="40" alt="{{ product.title }}">
-      {% endif %}
-      <div>
-        <div class="sticky-atc-title">{{ product.title | truncate: 20 }}</div>
-        <div class="sticky-atc-price">{{ product.price | money }}</div>
+  <div class="sticky-atc-pill">
+    {% if section.settings.show_image %}
+      <div class="sticky-atc-image">
+        <img src="{{ product.featured_image | image_url: width: 120 }}" width="50" height="50" alt="{{ product.title | escape }}">
       </div>
+    {% endif %}
+    
+    <div class="sticky-atc-info">
+      <div class="sticky-atc-title">{{ product.title | truncate: 18 }}</div>
+      <div class="sticky-atc-price">{{ product.price | money }}</div>
     </div>
-    <div class="sticky-atc-btn">
-       <button type="submit" name="add" form="product-form-{{ section.settings.product_form_id }}" class="btn btn-primary" onclick="document.querySelector('.product-form-block .btn-primary').click()">
-         Add To Cart
+
+    <div class="sticky-atc-action">
+       <button type="button" class="btn-sticky-add" id="btn-sticky-add">
+         Add to Cart
        </button>
     </div>
   </div>
 </div>
-{% endif %}
 
 <style>
-  .sticky-atc-wrapper {
-    position: fixed;
-    bottom: 60px; /* Above nav bar */
-    left: 0;
-    width: 100%;
-    background: #fff;
-    border-top: 1px solid var(--color-border);
-    padding: 10px 1rem;
-    z-index: 900;
-    box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
-    transform: translateY(100%);
-    transition: transform 0.3s ease-out;
-  }
-  
-  .sticky-atc-wrapper.visible {
-    transform: translateY(0);
-  }
-  
-  .sticky-atc-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    max-width: 600px; 
-    margin: 0 auto;
-  }
-  
-  .sticky-atc-info {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  .sticky-atc-info img { border-radius: 4px; object-fit: cover; }
-  
-  .sticky-atc-title { font-size: 0.8rem; font-weight: 600; }
-  .sticky-atc-price { font-size: 0.8rem; color: #B12704; font-weight: bold; }
-  
-  .sticky-atc-btn .btn {
-    padding: 0.5rem 1rem;
-    font-size: 0.9rem;
-  }
+/* Floating Pill Design */
+.sticky-atc-wrapper {
+  position: fixed;
+  bottom: 20px;
+  left: 0;
+  width: 100%;
+  pointer-events: none; /* Let clicks pass through outside the pill */
+  z-index: 999;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  opacity: 0;
+  transform: translateY(50px);
+  transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+}
 
-  @media screen and (min-width: 768px) {
-    .sticky-atc-wrapper { bottom: 0; } /* No nav bar on desktop */
+.sticky-atc-wrapper.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.sticky-atc-pill {
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(255, 255, 255, 0.85); /* Semi-transparent white */
+  backdrop-filter: blur(12px); /* Glassmorphism */
+  -webkit-backdrop-filter: blur(12px);
+  padding: 8px 12px 8px 8px; /* Less padding left for image */
+  border-radius: 50px;
+  box-shadow: 
+    0 10px 30px -10px rgba(0,0,0,0.15),
+    0 4px 10px rgba(0,0,0,0.05),
+    inset 0 0 0 1px rgba(255,255,255,0.6);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  width: auto;
+  max-width: 90%;
+  margin: 0 auto;
+}
+
+.sticky-atc-image img {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%; /* Circle image */
+  object-fit: cover;
+  display: block;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.sticky-atc-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0; /* Text truncation handling */
+  margin-right: 4px;
+}
+
+.sticky-atc-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #1a1a1a;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 140px;
+  line-height: 1.2;
+}
+
+.sticky-atc-price {
+  font-size: 12px;
+  color: #555;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+.sticky-atc-action .btn-sticky-add {
+  background: #000; /* Or theme primary color via settings */
+  color: #fff;
+  border: none;
+  border-radius: 20px;
+  padding: 8px 20px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  white-space: nowrap;
+}
+
+.sticky-atc-action .btn-sticky-add:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.sticky-atc-action .btn-sticky-add:active {
+  transform: scale(0.95);
+}
+
+/* Tablet/Desktop tweaks */
+@media screen and (min-width: 768px) {
+  .sticky-atc-wrapper {
+    bottom: 30px;
   }
+  .sticky-atc-pill {
+    padding: 10px 16px 10px 10px;
+    gap: 16px;
+  }
+  .sticky-atc-image img {
+    width: 50px;
+    height: 50px;
+  }
+  .sticky-atc-title {
+    font-size: 15px;
+    max-width: 200px;
+  }
+  .sticky-atc-price {
+    font-size: 13px;
+  }
+  .sticky-atc-action .btn-sticky-add {
+    font-size: 14px;
+    padding: 10px 24px;
+  }
+}
 </style>
 
 <script>
-  document.addEventListener('DOMContentLoaded', function() {
+  document.addEventListener('DOMContentLoaded', () => {
     const stickyBar = document.getElementById('sticky-atc');
-    if(!stickyBar) return;
+    const stickyBtn = document.getElementById('btn-sticky-add');
+    if (!stickyBar || !stickyBtn) return;
+
+    // Intersection Observer to toggle visibility
+    const triggerElement = document.getElementById('btn-add-to-cart') || document.querySelector('.product-form'); 
     
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        // When main buttons go OUT of view, show sticky bar
-        if (!entry.isIntersecting) {
-          stickyBar.classList.add('visible');
-        } else {
-          stickyBar.classList.remove('visible');
-        }
+    if (triggerElement) {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          // If trigger is NOT intersecting (scrolled out of view), show sticky bar
+          if (!entry.isIntersecting && entry.boundingClientRect.top < 0) {
+            stickyBar.classList.add('visible');
+          } else {
+            stickyBar.classList.remove('visible');
+          }
+        });
+      }, { threshold: 0 }); // Trigger as soon as it leaves
+      
+      observer.observe(triggerElement);
+    } else {
+      // Fallback if no trigger found, always show after scroll
+      window.addEventListener('scroll', () => {
+        if (window.scrollY > 600) stickyBar.classList.add('visible');
+        else stickyBar.classList.remove('visible');
       });
+    }
+
+    // Add to Cart Logic
+    stickyBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      
+      // Look for the main Add to Cart button to click it (triggers theme drawer/ajax)
+      const mainAtc = document.getElementById('btn-add-to-cart') || document.querySelector('button[name="add"]');
+      
+      if (mainAtc) {
+        mainAtc.click();
+        
+        // Optional: Feedback animation on floating button
+        const originalText = stickyBtn.textContent;
+        stickyBtn.textContent = 'Adding...';
+        setTimeout(() => {
+           stickyBtn.textContent = originalText;
+        }, 1000);
+      } else {
+        // Last resort: submit form directly
+        const form = document.getElementById('product-form-installment') || document.querySelector('form[action="/cart/add"]');
+        if (form) form.submit();
+      }
     });
-    
-    // Target the main buy button to trigger visibility
-    const mainBtn = document.querySelector('.product-form-block');
-    if(mainBtn) observer.observe(mainBtn);
   });
 </script>
+{% endif %}
 
 {% schema %}
 {
   "name": "Sticky ATC",
-  "limit": 1,
   "settings": [
     {
       "type": "checkbox",
@@ -102,14 +215,8 @@
     {
       "type": "checkbox",
       "id": "show_image",
-      "label": "Show Small Image",
+      "label": "Show Product Image",
       "default": true
-    },
-    {
-      "type": "text",
-      "id": "product_form_id",
-      "label": "Product Form ID (Usually matches Main Product Section ID)",
-      "info": "We'll assume the main product section renders first and its form ID is predictable or passed manually."
     }
   ],
   "presets": [
