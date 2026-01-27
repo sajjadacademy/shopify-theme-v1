@@ -1,12 +1,3 @@
-/*
- * ------------------------------------------------------------
- * IMPORTANT: The contents of this file are auto-generated.
- *
- * This file may be updated by the Shopify admin theme editor
- * or related systems. Please exercise caution as any changes
- * made to this file may be overwritten.
- * ------------------------------------------------------------
- */
 {
   "sections": {
     "main": {
@@ -64,7 +55,7 @@
           "type": "buy_buttons",
           "settings": {}
         },
-        "custom_liquid_rf6tap": {
+        "custom_liquid_rMUtmT": {
           "type": "custom_liquid",
           "settings": {
             "custom_liquid": "<div class=\"red-div\">\n  <span class=\"blink\">&#9679;</span>\n  <span id=\"cartCount\" style=\"color: #f0fc0d;\">4</span> people have this in their cart\n</div>\n\n<script>\n  // Function to update the random number every 15 seconds\n  function updateRandomNumber() {\n    // Generate a random number between 4 and 20\n    var randomCount = Math.floor(Math.random() * (20 - 4 + 1)) + 4;\n    // Display the random number in the HTML\n    document.getElementById(\"cartCount\").innerText = randomCount;\n  }\n\n  // Call the function immediately to set the initial random number\n  updateRandomNumber();\n\n  // Update the random number every 15 seconds\n  setInterval(updateRandomNumber, 15000);\n</script>\n\n<style>\n  .red-div {\n    background-color: #03800f;\n    padding: 6px 12px;\n    border-radius: 8px;\n    display: inline-flex;\n    align-items: center;\n    justify-content: center;\n    text-align: left;\n    color: #ffffff;\n    font-weight: 500;\n    font-size: 14px;\n    width: fit-content;\n    margin: 5px 0 10px 0;\n  }\n\n  .blink {\n    color: #4dfc5d;\n    margin-right: 8px;\n    font-size: 10px;\n    animation: blinker 1.5s linear infinite;\n  }\n  \n  @keyframes blinker {\n    50% { opacity: 0; }\n  }\n</style>"
@@ -107,7 +98,7 @@
         "bundle",
         "buy_buttons",
         "custom_liquid_JaHCkt",
-        "custom_liquid_rf6tap",
+        "custom_liquid_rMUtmT",
         "custom_liquid_D7WLtW",
         "custom_liquid_Vtjdta",
         "custom_liquid_A73LkV",

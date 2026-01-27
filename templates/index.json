@@ -16,7 +16,7 @@
         "link": "",
         "bg_color": "#111827",
         "text_color": "#ffa41c",
-        "custom_liquid": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"UTF-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n<title>Responsive Offer Text</title>\n<style>\n  .offer-text-container {\n    text-align: center;\n    font-family: Arial, sans-serif;\n    font-size: 20px; /* Default for desktop */\n  }\n\n  .offer-text-container .highlight {\n    font-weight: bold;\n    color: orange;\n    margin-right: 5px;\n  }\n\n  .offer-text-container .offer-text {\n    color: white;\n  }\n\n  /* Responsive for tablets */\n  @media (max-width: 768px) {\n    .offer-text-container {\n      font-size: 18px;\n    }\n  }\n\n  /* Responsive for mobile */\n  @media (max-width: 480px) {\n    .offer-text-container {\n      font-size: 10px;\n    }\n  }\n</style>\n</head>\n<body>\n\n<div class=\"offer-text-container\">\n  <span class=\"highlight\">LIMITED TIME OFFER:</span>\n  <span class=\"offer-text\">FREE SHIPPING ON ALL ORDERS ABOVE 100 AED</span>\n</div>\n\n</body>\n</html>"
+        "custom_liquid": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"UTF-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n<title>Responsive Offer Text</title>\n<style>\n  .offer-text-container {\n    text-align: center;\n    font-family: Arial, sans-serif;\n    font-size: 20px; /* Default for desktop */\n  }\n\n  .offer-text-container .highlight {\n    font-weight: bold;\n    color: orange;\n    margin-right: 5px;\n  }\n\n  .offer-text-container .offer-text {\n    color: white;\n  }\n\n  /* Responsive for tablets */\n  @media (max-width: 768px) {\n    .offer-text-container {\n      font-size: 18px;\n    }\n  }\n\n  /* Responsive for mobile */\n  @media (max-width: 480px) {\n    .offer-text-container {\n      font-size: 11px;\n    }\n  }\n</style>\n</head>\n<body>\n\n<div class=\"offer-text-container\">\n  <span class=\"highlight\">LIMITED TIME OFFER:</span>\n  <span class=\"offer-text\">FREE SHIPPING ON ALL PRODUCTS </span>\n</div>\n\n</body>\n</html>"
       }
     },
     "hero_overlay": {
@@ -55,7 +55,7 @@
             "image_mobile": "shopify://shop_images/ChatGPT_Image_Jan_21_2026_12_19_10_PM.png",
             "overlay_opacity": 70,
             "overlay_color": "#000000",
-            "heading": "Trending Finds. Smart Prices. Delivered Fast.",
+            "heading": "Trending Finds. Smart Prices.",
             "heading_size": "h1",
             "subheading": "<p>Discover the most in-demand products people are buying right now — curated daily for style, utility, and value.<br/></p>",
             "content_max_width": 540,
@@ -109,7 +109,7 @@
       "settings": {
         "width_mode": "full",
         "hero_height_desktop": 600,
-        "hero_height_mobile": 440,
+        "hero_height_mobile": 280,
         "autoplay": true,
         "autoplay_speed": 5,
         "padding_top": 0,
@@ -156,7 +156,7 @@
         "heading": "New Products",
         "heading_alignment": "left",
         "collection": "all",
-        "products_to_show": 4,
+        "products_to_show": 12,
         "enable_random_reviews": true,
         "review_min": 500,
         "review_max": 2500,
@@ -210,7 +210,7 @@
       ],
       "settings": {
         "layout": "full",
-        "mobile_height": 330,
+        "mobile_height": 200,
         "desktop_height": 320,
         "overlay_opacity": 45,
         "padding_top": 0,
@@ -230,22 +230,6 @@
     "banner_2": {
       "type": "image-banner",
       "blocks": {
-        "b_left": {
-          "type": "banner",
-          "settings": {
-            "image_desktop": "shopify://shop_images/ChatGPT_Image_Jan_21_2026_12_18_05_PM.png",
-            "image_mobile": "shopify://shop_images/ChatGPT_Image_Jan_21_2026_12_19_10_PM.png",
-            "heading": "Trending Products",
-            "text": "<p>Find the best Trending Product.</p>",
-            "cta_text": "Explore Now",
-            "cta_link": "shopify://collections/trending-products",
-            "button_bg_color": "#111827",
-            "button_text_color": "#ffffff",
-            "cta_style": "primary",
-            "text_alignment": "center",
-            "custom_liquid": ""
-          }
-        },
         "b_right": {
           "type": "banner",
           "settings": {
@@ -264,16 +248,15 @@
         }
       },
       "block_order": [
-        "b_left",
         "b_right"
       ],
       "settings": {
-        "layout": "split",
-        "mobile_height": 300,
-        "desktop_height": 500,
+        "layout": "full",
+        "mobile_height": 200,
+        "desktop_height": 300,
         "overlay_opacity": 30,
-        "padding_top": 20,
-        "padding_bottom": 20
+        "padding_top": 0,
+        "padding_bottom": 0
       }
     },
     "daily_deals_grid_bFFTnJ": {
