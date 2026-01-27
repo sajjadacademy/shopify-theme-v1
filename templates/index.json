@@ -109,7 +109,7 @@
       "settings": {
         "width_mode": "full",
         "hero_height_desktop": 600,
-        "hero_height_mobile": 440,
+        "hero_height_mobile": 280,
         "autoplay": true,
         "autoplay_speed": 5,
         "padding_top": 0,
@@ -156,7 +156,7 @@
         "heading": "New Products",
         "heading_alignment": "left",
         "collection": "all",
-        "products_to_show": 4,
+        "products_to_show": 12,
         "enable_random_reviews": true,
         "review_min": 500,
         "review_max": 2500,
@@ -210,7 +210,7 @@
       ],
       "settings": {
         "layout": "full",
-        "mobile_height": 330,
+        "mobile_height": 200,
         "desktop_height": 320,
         "overlay_opacity": 45,
         "padding_top": 0,
@@ -230,22 +230,6 @@
     "banner_2": {
       "type": "image-banner",
       "blocks": {
-        "b_left": {
-          "type": "banner",
-          "settings": {
-            "image_desktop": "shopify://shop_images/ChatGPT_Image_Jan_21_2026_12_18_05_PM.png",
-            "image_mobile": "shopify://shop_images/ChatGPT_Image_Jan_21_2026_12_19_10_PM.png",
-            "heading": "Trending Products",
-            "text": "<p>Find the best Trending Product.</p>",
-            "cta_text": "Explore Now",
-            "cta_link": "shopify://collections/trending-products",
-            "button_bg_color": "#111827",
-            "button_text_color": "#ffffff",
-            "cta_style": "primary",
-            "text_alignment": "center",
-            "custom_liquid": ""
-          }
-        },
         "b_right": {
           "type": "banner",
           "settings": {
@@ -264,13 +248,12 @@
         }
       },
       "block_order": [
-        "b_left",
         "b_right"
       ],
       "settings": {
-        "layout": "split",
-        "mobile_height": 300,
-        "desktop_height": 500,
+        "layout": "full",
+        "mobile_height": 200,
+        "desktop_height": 300,
         "overlay_opacity": 30,
         "padding_top": 20,
         "padding_bottom": 20
