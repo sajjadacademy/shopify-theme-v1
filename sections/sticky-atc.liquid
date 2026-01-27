@@ -24,16 +24,16 @@
 /* Floating Pill Design */
 .sticky-atc-wrapper {
   position: fixed;
-  bottom: 20px;
+  bottom: 90px; /* Adjusted to sit ABOVE the mobile bottom nav bar */
   left: 0;
   width: 100%;
   pointer-events: none; /* Let clicks pass through outside the pill */
-  z-index: 999;
+  z-index: 1000; /* Ensure it stays on top */
   display: flex;
   justify-content: center;
   align-items: flex-end;
   opacity: 0;
-  transform: translateY(50px);
+  transform: translateY(20px);
   transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
 }
 
@@ -47,7 +47,7 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  background: rgba(255, 255, 255, 0.85); /* Semi-transparent white */
+  background: rgba(255, 255, 255, 0.9); /* Slightly more opaque */
   backdrop-filter: blur(12px); /* Glassmorphism */
   -webkit-backdrop-filter: blur(12px);
   padding: 8px 12px 8px 8px; /* Less padding left for image */
@@ -122,7 +122,7 @@
 /* Tablet/Desktop tweaks */
 @media screen and (min-width: 768px) {
   .sticky-atc-wrapper {
-    bottom: 30px;
+    bottom: 30px; /* Reset for desktop */
   }
   .sticky-atc-pill {
     padding: 10px 16px 10px 10px;
@@ -152,48 +152,44 @@
     const stickyBtn = document.getElementById('btn-sticky-add');
     if (!stickyBar || !stickyBtn) return;
 
-    // Intersection Observer to toggle visibility
+    // Trigger on main Add to Cart button
     const triggerElement = document.getElementById('btn-add-to-cart') || document.querySelector('.product-form'); 
     
     if (triggerElement) {
       const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
-          // If trigger is NOT intersecting (scrolled out of view), show sticky bar
-          if (!entry.isIntersecting && entry.boundingClientRect.top < 0) {
+          // Logic: Show sticky bar WHENEVER the main button is NOT on screen
+          // This includes when it's below the fold (initial load) or scrolled past.
+          if (!entry.isIntersecting) {
             stickyBar.classList.add('visible');
           } else {
             stickyBar.classList.remove('visible');
           }
         });
-      }, { threshold: 0 }); // Trigger as soon as it leaves
+      }, { threshold: 0 }); // Trigger immediately when even 1px is visible/hidden
       
       observer.observe(triggerElement);
     } else {
-      // Fallback if no trigger found, always show after scroll
-      window.addEventListener('scroll', () => {
-        if (window.scrollY > 600) stickyBar.classList.add('visible');
-        else stickyBar.classList.remove('visible');
-      });
+      // Fallback
+      stickyBar.classList.add('visible');
     }
 
     // Add to Cart Logic
     stickyBtn.addEventListener('click', (e) => {
       e.preventDefault();
       
-      // Look for the main Add to Cart button to click it (triggers theme drawer/ajax)
       const mainAtc = document.getElementById('btn-add-to-cart') || document.querySelector('button[name="add"]');
       
       if (mainAtc) {
         mainAtc.click();
         
-        // Optional: Feedback animation on floating button
+        // Feedback animation
         const originalText = stickyBtn.textContent;
         stickyBtn.textContent = 'Adding...';
         setTimeout(() => {
            stickyBtn.textContent = originalText;
         }, 1000);
       } else {
-        // Last resort: submit form directly
         const form = document.getElementById('product-form-installment') || document.querySelector('form[action="/cart/add"]');
         if (form) form.submit();
       }
