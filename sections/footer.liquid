@@ -6,9 +6,8 @@
           
           {%- if block.type == 'link_list' -%}
             <div class="footer-menu-accordion">
-              <h4 class="footer__heading" onclick="this.classList.toggle('active')">
+              <h4 class="footer__heading">
                 {{ block.settings.heading }}
-                <span class="desktop-hidden">{% render 'icon-dynamic', icon: 'arrow' %}</span>
               </h4>
               <ul class="footer__list">
                 {%- for link in block.settings.menu.links -%}
@@ -157,15 +156,12 @@
   }
 
   /* Mobile Accordion */
+  /* Mobile Accordion Removed - List always visible */
   @media screen and (max-width: 767px) {
     .footer__list {
-      display: none; /* Hidden by default on mobile */
-      padding-left: 1rem;
+      display: block; 
+      padding-left: 0; /* Optional: remove indent if not needed, keeping it 0 for now or same as desktop */
     }
-    .footer__heading.active + .footer__list {
-      display: block;
-    }
-    .footer__heading.active svg { transform: rotate(180deg); }
   }
   /* New Footer Styles */
   .footer__logo { display: block; margin-bottom: 1rem; }
