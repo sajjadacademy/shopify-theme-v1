@@ -14,8 +14,9 @@
       "header": {
         "type": "header",
         "settings": {
-          "logo": "shopify://shop_images/nano_banana_removed-removebg-preview.png",
-          "logo_width": 160,
+          "logo": "shopify://shop_images/ChatGPT_Image_May_11_2026_01_26_31_PM.png",
+          "favicon": "shopify://shop_images/ChatGPT_Image_May_11_2026_01_13_07_PM.png",
+          "logo_width": 210,
           "logo_position": "left",
           "menu": "main-menu",
           "menu_position": "center",
@@ -47,6 +48,7 @@
         "settings": {
           "enable_label": true,
           "text": "GET 10% OFF - USE CODE: SALE10",
+          "coupon_code": "SALE10",
           "background_color": "#0b1c3c",
           "text_color": "#ffffff",
           "position": "right",
