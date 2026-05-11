@@ -16,7 +16,7 @@
         "settings": {
           "logo": "shopify://shop_images/ChatGPT_Image_May_11_2026_01_26_31_PM.png",
           "favicon": "shopify://shop_images/ChatGPT_Image_May_11_2026_01_13_07_PM.png",
-          "logo_width": 210,
+          "logo_width": 180,
           "logo_position": "left",
           "menu": "main-menu",
           "menu_position": "center",
