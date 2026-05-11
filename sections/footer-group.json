@@ -17,7 +17,7 @@
         "brand_info": {
           "type": "brand_info",
           "settings": {
-            "logo": "shopify://shop_images/nano_banana_removed-removebg-preview.png",
+            "logo": "shopify://shop_images/ChatGPT_Image_May_11_2026_01_26_31_PM.png",
             "logo_width": 120,
             "motivational_text": "<p>Empowering your lifestyle with premium products needed for every day.</p>",
             "custom_liquid": ""
@@ -34,7 +34,7 @@
           "type": "contact_info",
           "settings": {
             "heading": "Contact & Trust",
-            "address": "Email : Help@zelvyra.com\n123 Commerce St\nDubai, UAE",
+            "address": "Email : Help@petmodernhub.com\n123 Commerce St\nLA, United State",
             "custom_liquid": ""
           }
         },
