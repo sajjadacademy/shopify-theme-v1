@@ -197,6 +197,7 @@
         "b1": {
           "type": "banner",
           "settings": {
+            "image_desktop": "shopify://shop_images/baneers.png",
             "heading": "Best  Collection",
             "text": "<p>Upgrade your wardrobe with our latest styles.</p>",
             "cta_text": "Explore Now",
