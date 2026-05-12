@@ -26,6 +26,7 @@
           "type": "slide",
           "settings": {
             "image_desktop": "shopify://shop_images/slider1.png",
+            "image_mobile": "shopify://shop_images/mobsli.png",
             "overlay_opacity": 40,
             "overlay_color": "#000000",
             "heading": "Exclusive Offers",
@@ -128,6 +129,12 @@
             "text": "New Styles Added Daily"
           }
         },
+        "text_GT3KcX": {
+          "type": "text",
+          "settings": {
+            "text": "Free Shipping on All Orders"
+          }
+        },
         "m3": {
           "type": "text",
           "settings": {
@@ -138,6 +145,7 @@
       "block_order": [
         "m1",
         "m2",
+        "text_GT3KcX",
         "m3"
       ],
       "settings": {
