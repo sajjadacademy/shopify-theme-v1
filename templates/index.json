@@ -238,6 +238,7 @@
         "b_right": {
           "type": "banner",
           "settings": {
+            "image_desktop": "shopify://shop_images/banner_mid.png",
             "heading": "Products of the day",
             "text": "<p>Find your best Product of the day.</p>",
             "cta_text": "Explore Now",
