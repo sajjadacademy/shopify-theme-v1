@@ -25,8 +25,7 @@
         "slide_3": {
           "type": "slide",
           "settings": {
-            "image_desktop": "shopify://shop_images/Fitness.png",
-            "image_mobile": "shopify://shop_images/Fitness.png",
+            "image_desktop": "shopify://shop_images/slider1.png",
             "overlay_opacity": 40,
             "overlay_color": "#000000",
             "heading": "Exclusive Offers",
@@ -51,8 +50,7 @@
         "slide_1": {
           "type": "slide",
           "settings": {
-            "image_desktop": "shopify://shop_images/ChatGPT_Image_Jan_21_2026_03_08_25_PM.png",
-            "image_mobile": "shopify://shop_images/ChatGPT_Image_Jan_21_2026_12_19_10_PM.png",
+            "image_desktop": "shopify://shop_images/slider3.png",
             "overlay_opacity": 70,
             "overlay_color": "#000000",
             "heading": "Trending Finds. Smart Prices.",
@@ -77,8 +75,7 @@
         "slide_2": {
           "type": "slide",
           "settings": {
-            "image_desktop": "shopify://shop_images/ChatGPT_Image_Jan_21_2026_12_18_05_PM.png",
-            "image_mobile": "shopify://shop_images/ChatGPT_Image_Jan_21_2026_12_19_10_PM.png",
+            "image_desktop": "shopify://shop_images/slider2.png",
             "overlay_opacity": 30,
             "overlay_color": "#000000",
             "heading": "New Season Arrivals",
@@ -192,7 +189,6 @@
         "b1": {
           "type": "banner",
           "settings": {
-            "image_desktop": "shopify://shop_images/ChatGPT_Image_Jan_21_2026_12_18_05_PM.png",
             "heading": "Best  Collection",
             "text": "<p>Upgrade your wardrobe with our latest styles.</p>",
             "cta_text": "Explore Now",
@@ -233,8 +229,6 @@
         "b_right": {
           "type": "banner",
           "settings": {
-            "image_desktop": "shopify://shop_images/ChatGPT_Image_Jan_23_2026_09_08_42_AM.png",
-            "image_mobile": "shopify://shop_images/ChatGPT_Image_Jan_23_2026_09_09_38_AM.png",
             "heading": "Products of the day",
             "text": "<p>Find your best Product of the day.</p>",
             "cta_text": "Explore Now",
